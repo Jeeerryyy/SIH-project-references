@@ -5,6 +5,7 @@
 # Arogya Mitra • आरोग्य मित्र
 ### Rural-to-Tertiary Closed-Loop Clinical Continuum & Edge Tele-Health Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-sih--project--references--xeu2.vercel.app-00dfa2?style=for-the-badge&logo=vercel&logoColor=black)](https://sih-project-references-xeu2.vercel.app)
 [![ABDM](https://img.shields.io/badge/ABDM-M1%20%7C%20M2%20%7C%20M3%20Ready-10b981.svg?style=for-the-badge&logo=shield)](https://abdm.gov.in/)
 [![FHIR R4](https://img.shields.io/badge/Interoperability-HL7%20FHIR%20R4-2563eb.svg?style=for-the-badge&logo=hl7)](https://hl7.org/fhir/R4/)
 [![Offline Engine](https://img.shields.io/badge/Edge%20Storage-IndexedDB%20%2B%20CRDTs-7c3aed.svg?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
@@ -15,7 +16,9 @@
   <b>A unified, offline-first digital healthcare system connecting Frontline ASHA Workers, Hospital OPD Triage, Clinical Doctors, and Citizens into an auditable, GPS-guided continuum of care.</b>
 </p>
 
-[Explore Live Portals](#-interactive-workstation-suite) • [System Architecture](#-enterprise-system-architecture) • [Production Tech Stack](#-state-scale-production-tech-stack) • [Offline Protocol](#-hybrid-edge-to-cloud-data-storage) • [Vercel Deployment](#-1-click-deployment-guide)
+### 🔗 **Live Hosted URL:** [https://sih-project-references-xeu2.vercel.app](https://sih-project-references-xeu2.vercel.app)
+
+[🌐 Live Portals](#-live-deployed-workstations) • [System Architecture](#-enterprise-system-architecture) • [Production Tech Stack](#-state-scale-production-tech-stack) • [Offline Protocol](#-hybrid-edge-to-cloud-data-storage) • [Vercel Deployment](#-1-click-deployment-guide)
 
 </div>
 
@@ -38,19 +41,20 @@ In India's public healthcare ecosystem, **over 70% of fatal clinical dropouts oc
 
 ---
 
-## 🖥️ Interactive Workstation Suite
+## 🌐 Live Deployed Workstations
 
-The platform consists of five synchronized, role-based workstations accessible directly in any modern browser with **zero external framework dependencies**:
+You can test every role-based workstation live on Vercel without local setup:
 
-| Workstation | Interface File | Primary Persona | Key Functional Capabilities |
+| Workstation | Live Vercel Link | File | Key Capabilities |
 | :--- | :--- | :--- | :--- |
-| 🏠 **Portal Hub** | [`index.html`](index.html) | All Roles | Unified navigation deck and portal switcher for quick switching during field and clinical demonstrations. |
-| 🧑‍⚕️ **ASHA Field Station** | [`asha-worker.html`](asha-worker.html) | Frontline Health Worker | 100% offline vitals capture, high-risk maternal alerts (BP 154/98, Hb 7.4), daily field task manager, and offline GPS turn-by-turn routing. |
-| 📋 **OPD Queue Dispatcher** | [`queue-ticket.html`](queue-ticket.html) | Triage Nurse / Receptionist | 4-tier ESI priority lanes, HTML5 drag-and-drop patient reprioritization, room routing, and bilingual Web Speech API voice announcements. |
-| 👨‍⚕️ **Doctor Clinical Console** | [`dashboard.html`](dashboard.html) | Medical Officer / Specialist | Live video/audio consults, CDSS drug-interaction safety warnings, Jan Aushadhi generic formulary, and 1-click e-prescription signing. |
-| 📱 **Citizen Health App** | [`patient-app.html`](patient-app.html) | Citizen / Patient | Mobile ABHA QR wallet, live queue position & wait time tracker, bilingual health records, and prescription vault. |
-| 🏥 **Central Continuum Audit** | [`followup.html`](followup.html) | Health Administrator | Real-time audit trail tracking patient journeys from village survey to hospital discharge and verified ASHA home care. |
-| 📊 **System Flowcharts** | [`flowcharts.html`](flowcharts.html) | System Architect | Interactive architecture flowcharts, offline synchronization pipelines, and clinical data flow diagrams. |
+| 🏠 **Portal Hub** | [Launch Hub ↗](https://sih-project-references-xeu2.vercel.app/) | [`index.html`](index.html) | Unified navigation deck and workstation switcher for live demonstrations. |
+| 🧑‍⚕️ **ASHA Field Station** | [Launch ASHA Terminal ↗](https://sih-project-references-xeu2.vercel.app/asha-worker) | [`asha-worker.html`](asha-worker.html) | 100% offline vitals capture, high-risk maternal alerts (BP 154/98, Hb 7.4), and offline GPS routing. |
+| 📋 **OPD Queue Dispatcher** | [Launch Queue Dispatcher ↗](https://sih-project-references-xeu2.vercel.app/queue-ticket) | [`queue-ticket.html`](queue-ticket.html) | 4-tier ESI drag-and-drop triage, room routing, and bilingual Marathi/English voice announcements. |
+| 👨‍⚕️ **Doctor Clinical Console** | [Launch Doctor Console ↗](https://sih-project-references-xeu2.vercel.app/dashboard) | [`dashboard.html`](dashboard.html) | Live consults, CDSS drug-interaction warnings, Jan Aushadhi generic formulary, and eRx signing. |
+| 📱 **Citizen Health App** | [Launch Citizen App ↗](https://sih-project-references-xeu2.vercel.app/patient-app) | [`patient-app.html`](patient-app.html) | Mobile ABHA QR wallet, live queue delay tracker, health records, and prescription vault. |
+| 🏥 **Central Continuum Audit** | [Launch Central Audit ↗](https://sih-project-references-xeu2.vercel.app/followup) | [`followup.html`](followup.html) | Real-time audit trail tracking patient journeys from village survey to hospital discharge and ASHA home care. |
+| 📊 **System Flowcharts** | [Launch Architecture Flow ↗](https://sih-project-references-xeu2.vercel.app/flowcharts) | [`flowcharts.html`](flowcharts.html) | Interactive architecture flowcharts, offline sync pipelines, and clinical data flow diagrams. |
+| 🏛️ **AI Council Report** | [View Council Verdict ↗](https://sih-project-references-xeu2.vercel.app/council-report-sih-demo) | [`council-report-sih-demo.html`](council-report-sih-demo.html) | 5-agent AI Council review transcript, jury scoring, and architectural stress tests. |
 
 ---
 
@@ -137,16 +141,14 @@ Arogya Mitra is designed for multi-tier state scale, supporting millions of dail
 
 ---
 
-## ⚡ 1-Click Deployment Guide
+## ⚡ Deployment & Hosting
 
-### Option 1: Instant Vercel Deployment (Zero-Config)
-1. Fork or import this repository into your GitHub account.
-2. Go to [vercel.com/new](https://vercel.com/new) and select **`SIH-project-references`**.
-3. Leave all default settings unchanged (root contains `vercel.json` and static files).
-4. Click **Deploy**. Vercel will generate your live production URL in under 15 seconds.
+### 🌐 Live Production Deployment
+* **Live App URL:** [https://sih-project-references-xeu2.vercel.app](https://sih-project-references-xeu2.vercel.app)
+* **Hosted on:** Vercel Global Edge Network with zero-config clean URL routing.
 
-### Option 2: Local Development Server
-No build tools, node_modules, or compilation steps required. Run directly using any static web server:
+### 💻 Local Development Server
+No build tools or external package installations required. Run directly using any static web server:
 
 ```bash
 # Using Python 3 built-in server
@@ -208,6 +210,7 @@ npx serve .
 ## 👥 Core Team & Project References
 
 * **Platform Name:** Arogya Mitra (आरोग्य मित्र)
+* **Live Deployment:** [https://sih-project-references-xeu2.vercel.app](https://sih-project-references-xeu2.vercel.app)
 * **Target Competition:** Smart India Hackathon (Grand Finale)
 * **Master Pitch & Jury Defense:** [`SIH_PITCH_AND_TECHNICAL_DEFENSE.md`](SIH_PITCH_AND_TECHNICAL_DEFENSE.md)
 * **AI Council Evaluation Report:** [`council-report-sih-demo.html`](council-report-sih-demo.html)

@@ -2,7 +2,9 @@
 
 **Project Name:** Arogya Mitra — Rural-to-Tertiary Closed-Loop Clinical Continuum & Field Tele-Health Platform  
 **Target Domain:** Smart India Hackathon (HealthTech / Public Health Systems / ABDM)  
+**Live Production Deployment:** [https://sih-project-references-xeu2.vercel.app](https://sih-project-references-xeu2.vercel.app)  
 **System Repository:** `mccphp/demo` (`index.html`, `dashboard.html`, `queue-ticket.html`, `asha-worker.html`, `patient-app.html`, `followup.html`, `flowcharts.html`)
+
 
 ---
 
