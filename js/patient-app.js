@@ -98,8 +98,8 @@ function showScreen(screenId) {
     target.classList.add('active');
   }
 
-  // Handle Login mode vs App mode navigation visibility
-  if (screenId === 'screenLogin') {
+  // Handle Login mode / Video Call mode vs App mode navigation visibility
+  if (screenId === 'screenLogin' || screenId === 'screenVideoCall') {
     if (deviceFrame) deviceFrame.classList.add('in-login-mode');
     if (navBar) navBar.style.display = 'none';
   } else {
@@ -763,6 +763,12 @@ function submitAppointmentBooking() {
     if (queuePos) queuePos.innerText = '#4 in Queue';
     if (estWait) estWait.innerText = '~ 15 Mins wait';
     if (scanNote) scanNote.innerText = 'Scan at hospital counter for instant check-in';
+
+    // Toggle Join Video Call button visibility
+    const btnTicketJoin = document.getElementById('btnTicketJoinVideoRoom');
+    if (btnTicketJoin) btnTicketJoin.style.display = 'none';
+    const btnHomeJoin = document.getElementById('btnHomeJoinCall');
+    if (btnHomeJoin) btnHomeJoin.style.display = 'none';
   } else {
     const virtSelect = document.getElementById('selectVirtualSpecialty');
     const specName = virtSelect ? virtSelect.value.replace('🩺 ', '').replace('👶 ', '').replace('🧠 ', '').replace('🤰 ', '') : 'General Physician';
@@ -778,6 +784,12 @@ function submitAppointmentBooking() {
     if (queuePos) queuePos.innerText = '#2 in Video Room';
     if (estWait) estWait.innerText = '~ 5 Mins wait';
     if (scanNote) scanNote.innerText = 'Encrypted video call activates 5 mins before slot';
+
+    // Toggle Join Video Call button visibility
+    const btnTicketJoin = document.getElementById('btnTicketJoinVideoRoom');
+    if (btnTicketJoin) btnTicketJoin.style.display = 'flex';
+    const btnHomeJoin = document.getElementById('btnHomeJoinCall');
+    if (btnHomeJoin) btnHomeJoin.style.display = 'flex';
   }
 
   if (dateSlot) dateSlot.innerText = `${selectedAppointmentDate}, ${selectedAppointmentSlot.split(' - ')[0]}`;
@@ -825,4 +837,269 @@ function cancelActiveToken(e) {
 function downloadAppointmentPass() {
   const token = document.getElementById('ticketTokenNumber')?.innerText || '#TK-OPD-108';
   showToast(`Downloading Official OPD Boarding Pass (${token}.pdf)`);
+}
+
+/* ==========================================================================
+   14. TELECONSULTATION VIDEO CALL CONTROLLER (Interactive WebRTC Simulator)
+   ========================================================================== */
+let callTimerInterval = null;
+let callDurationSeconds = 0;
+let isMicMuted = false;
+let isCamOff = false;
+let isRearCamera = false;
+let callCaptionTimer = null;
+
+const liveDoctorCaptions = [
+  "Namaste Parth! I'm Dr. Ramesh Patil. I am reviewing your connected ABHA health records.",
+  "I see your recent blood pressure was logged by ASHA worker Sangita during the morning field visit.",
+  "Your blood pressure readings are slightly elevated (138/88). Are you taking Telmisartan regularly?",
+  "I am adjusting your medication to 40mg morning dosage and adding a lifestyle dietary advisory.",
+  "I have digitally signed and issued your e-Prescription with UHID sync. Your local ASHA worker is notified.",
+  "Please monitor your morning readings for 7 days. If you experience dizziness, connect immediately."
+];
+let currentCaptionIdx = 0;
+
+function startVideoCallSession() {
+  // Close any open queue ticket modal
+  const ticketModal = document.getElementById('modalAppointmentQueueTicket');
+  if (ticketModal) ticketModal.classList.remove('active');
+
+  // Switch to Video Call Screen
+  showScreen('screenVideoCall');
+  showToast('Connecting to Dr. Ramesh Patil (Encrypted WebRTC Session)...');
+
+  // Play connection chime
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.4);
+  } catch(e) {}
+
+  // Reset & Start Call Timer
+  callDurationSeconds = 0;
+  updateCallTimerDisplay();
+  if (callTimerInterval) clearInterval(callTimerInterval);
+  callTimerInterval = setInterval(() => {
+    callDurationSeconds++;
+    updateCallTimerDisplay();
+  }, 1000);
+
+  // Start Live Clinical Caption Rotation
+  currentCaptionIdx = 0;
+  if (callCaptionTimer) clearInterval(callCaptionTimer);
+  const captionBox = document.getElementById('liveConsultationCaption');
+  const captionEl = document.getElementById('liveCaptionText');
+  if (captionBox) captionBox.style.display = 'block';
+  if (captionEl) captionEl.innerText = `"${liveDoctorCaptions[0]}"`;
+
+  callCaptionTimer = setInterval(() => {
+    currentCaptionIdx = (currentCaptionIdx + 1) % liveDoctorCaptions.length;
+    if (captionEl) {
+      captionEl.style.opacity = '0';
+      setTimeout(() => {
+        captionEl.innerText = `"${liveDoctorCaptions[currentCaptionIdx]}"`;
+        captionEl.style.opacity = '1';
+      }, 300);
+    }
+  }, 7500);
+
+  // Reset Controls UI
+  isMicMuted = false;
+  isCamOff = false;
+  const btnMic = document.getElementById('btnCallToggleMic');
+  if (btnMic) {
+    btnMic.className = 'call-control-btn active';
+    btnMic.innerHTML = '<i class="fas fa-microphone"></i><span id="lblCallMic">Mic On</span>';
+  }
+  const btnCam = document.getElementById('btnCallToggleCam');
+  if (btnCam) {
+    btnCam.className = 'call-control-btn active';
+    btnCam.innerHTML = '<i class="fas fa-video"></i><span id="lblCallCam">Camera</span>';
+  }
+}
+
+function updateCallTimerDisplay() {
+  const timerEl = document.getElementById('callDurationTimer');
+  if (!timerEl) return;
+  const mins = Math.floor(callDurationSeconds / 60).toString().padStart(2, '0');
+  const secs = (callDurationSeconds % 60).toString().padStart(2, '0');
+  timerEl.innerText = `${mins}:${secs}`;
+}
+
+function toggleCallMic() {
+  isMicMuted = !isMicMuted;
+  const btnMic = document.getElementById('btnCallToggleMic');
+  if (!btnMic) return;
+  if (isMicMuted) {
+    btnMic.className = 'call-control-btn muted';
+    btnMic.innerHTML = '<i class="fas fa-microphone-slash"></i><span id="lblCallMic">Muted</span>';
+    showToast('Microphone muted');
+  } else {
+    btnMic.className = 'call-control-btn active';
+    btnMic.innerHTML = '<i class="fas fa-microphone"></i><span id="lblCallMic">Mic On</span>';
+    showToast('Microphone unmuted');
+  }
+}
+
+function toggleCallCam() {
+  isCamOff = !isCamOff;
+  const btnCam = document.getElementById('btnCallToggleCam');
+  const pipTile = document.getElementById('patientPipTile');
+  if (!btnCam) return;
+  if (isCamOff) {
+    btnCam.className = 'call-control-btn muted';
+    btnCam.innerHTML = '<i class="fas fa-video-slash"></i><span id="lblCallCam">Cam Off</span>';
+    if (pipTile) pipTile.style.opacity = '0.3';
+    showToast('Camera turned off');
+  } else {
+    btnCam.className = 'call-control-btn active';
+    btnCam.innerHTML = '<i class="fas fa-video"></i><span id="lblCallCam">Camera</span>';
+    if (pipTile) pipTile.style.opacity = '1';
+    showToast('Camera turned on');
+  }
+}
+
+function flipCameraPreview() {
+  isRearCamera = !isRearCamera;
+  const pipName = document.querySelector('.pip-name-tag');
+  if (pipName) {
+    pipName.innerText = isRearCamera ? 'Rear Camera' : 'You (Parth)';
+  }
+  showToast(isRearCamera ? 'Switched to Rear Camera' : 'Switched to Front Camera');
+}
+
+function toggleInCallNotes() {
+  const body = document.getElementById('inCallNotesBody');
+  if (body) {
+    const isVisible = body.style.display !== 'none';
+    body.style.display = isVisible ? 'none' : 'block';
+  }
+}
+
+function openInCallReportShare() {
+  const modal = document.getElementById('modalInCallShareReports');
+  if (modal) modal.classList.add('active');
+}
+
+function shareReportWithDoctor(reportName) {
+  const modal = document.getElementById('modalInCallShareReports');
+  if (modal) modal.classList.remove('active');
+  showToast(`Streaming ${reportName} to Dr. Ramesh's screen ✓`);
+  
+  // Update doctor caption to acknowledge the report
+  const captionEl = document.getElementById('liveCaptionText');
+  if (captionEl) {
+    captionEl.style.opacity = '0';
+    setTimeout(() => {
+      captionEl.innerText = `"Received ${reportName}. Vitals match our clinical database."`;
+      captionEl.style.opacity = '1';
+    }, 300);
+  }
+}
+
+function openInCallChat() {
+  const modal = document.getElementById('modalInCallChat');
+  if (modal) {
+    modal.classList.add('active');
+    setTimeout(() => {
+      const input = document.getElementById('inputInCallChatMessage');
+      if (input) input.focus();
+    }, 150);
+  }
+}
+
+function sendInCallMessage() {
+  const input = document.getElementById('inputInCallChatMessage');
+  const chatContainer = document.getElementById('inCallChatMessages');
+  if (!input || !chatContainer || !input.value.trim()) return;
+
+  const userMsg = input.value.trim();
+  input.value = '';
+
+  // Append user message bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'flex items-start gap-2 justify-end';
+  userBubble.innerHTML = `
+    <div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[80%]">
+      ${userMsg}
+    </div>
+  `;
+  chatContainer.appendChild(userBubble);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  // Simulate doctor reply after 1.2 seconds
+  setTimeout(() => {
+    const docBubble = document.createElement('div');
+    docBubble.className = 'flex items-start gap-2';
+    docBubble.innerHTML = `
+      <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center flex-shrink-0">DR</div>
+      <div class="bg-slate-100 p-2.5 rounded-2xl rounded-tl-none text-slate-800 max-w-[80%]">
+        Noted. I have entered this in your digital consultation notes.
+      </div>
+    `;
+    chatContainer.appendChild(docBubble);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 1200);
+}
+
+function minimizeOrEndVideoCall() {
+  if (confirm('Leave video teleconsultation room?')) {
+    endVideoCallConsultation();
+  }
+}
+
+function endVideoCallConsultation() {
+  // Clear timers
+  if (callTimerInterval) clearInterval(callTimerInterval);
+  if (callCaptionTimer) clearInterval(callCaptionTimer);
+
+  // Play disconnect sound
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(220, audioCtx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.35);
+  } catch(e) {}
+
+  // Hide in-call modals if any
+  const shareModal = document.getElementById('modalInCallShareReports');
+  if (shareModal) shareModal.classList.remove('active');
+  const chatModal = document.getElementById('modalInCallChat');
+  if (chatModal) chatModal.classList.remove('active');
+
+  // Open Post-Call Summary Modal
+  const summaryModal = document.getElementById('modalPostCallSummary');
+  if (summaryModal) summaryModal.classList.add('active');
+}
+
+function closePostCallSummary() {
+  const summaryModal = document.getElementById('modalPostCallSummary');
+  if (summaryModal) summaryModal.classList.remove('active');
+
+  // Remove active queue token banner from home
+  const homeBanner = document.getElementById('homeActiveTokenBanner');
+  if (homeBanner) homeBanner.style.display = 'none';
+
+  // Navigate back to home
+  showScreen('screenHome');
+  showToast('Teleconsultation ended. e-Prescription saved to My Records.');
+}
+
+function downloadDigitalPrescription() {
+  showToast('Downloading Digitally Signed Prescription (eRx-2026-0891.pdf)...');
 }

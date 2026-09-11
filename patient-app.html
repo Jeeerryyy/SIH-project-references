@@ -191,7 +191,7 @@
           <div id="homeActiveTokenBanner" class="active-token-banner" style="display: none;">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wide" id="homeTokenBadge">Live OPD Queue Token</span>
               </div>
               <span class="text-[11px] font-bold text-emerald-700" id="homeTokenEstWait">~ 15 mins wait</span>
@@ -209,6 +209,12 @@
               </button>
             </div>
 
+            <!-- Virtual Video Call Direct Launch Action -->
+            <button id="btnHomeJoinCall" type="button" onclick="startVideoCallSession()" class="mt-2.5 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition" style="display: none;">
+              <i class="fas fa-video animate-pulse"></i>
+              <span>Join Live Doctor Video Room</span>
+            </button>
+
             <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
               <div class="text-slate-600">
                 <span class="font-semibold text-slate-900" id="homeTokenPosition">#4 in Queue</span> • <span id="homeTokenSlot">Today, 10:30 AM</span>
@@ -218,6 +224,7 @@
               </button>
             </div>
           </div>
+
 
           <!-- HORIZONTAL 5 ACTION CARDS CAROUSEL (Simplified Plain Language) -->
           <div class="horizontal-cards-carousel">
@@ -378,7 +385,7 @@
             </div>
 
             <!-- Tile 3: Online Doctor Consultation -->
-            <div class="health-service-tile" data-route="screenCreateCase">
+            <div class="health-service-tile" onclick="openAppointmentBooking('virtual')">
               <div class="tile-icon-box text-indigo-600">
                 <i class="fas fa-video text-2xl"></i>
               </div>
@@ -1290,6 +1297,157 @@
 
         </div><!-- End screenBookAppointment -->
 
+
+        <!-- ====================================================================
+             SCREEN 8: TELECONSULTATION VIDEO CALL INTERFACE (screenVideoCall)
+             ==================================================================== -->
+        <div id="screenVideoCall" class="app-view-screen" style="display: none;">
+          <div class="video-call-container">
+            
+            <!-- Top Call Header Bar -->
+            <div class="video-call-top-bar">
+              <button type="button" class="call-minimize-btn" onclick="minimizeOrEndVideoCall()" title="Minimize / Return">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <div class="call-info-badge">
+                <span class="call-pulse-dot"></span>
+                <span class="call-timer" id="callDurationTimer">00:00</span>
+                <span class="call-crypto-badge"><i class="fas fa-shield-alt text-[9px]"></i> TLS 1.3</span>
+              </div>
+              <button type="button" class="call-quality-btn" onclick="showToast('WebRTC Mesh: 1080p @ 60fps • Latency 38ms • Loss 0.0%')" title="Network Quality">
+                <i class="fas fa-signal text-emerald-400 text-xs"></i>
+                <span class="text-[10px] font-bold text-white">5G HD</span>
+              </button>
+            </div>
+
+            <!-- Main Doctor Video Stream Feed -->
+            <div class="video-main-feed" id="videoMainFeed">
+              
+              <!-- Doctor Video Stage -->
+              <div class="doctor-video-frame">
+                
+                <!-- Doctor Avatar & Speaking Animation Stage -->
+                <div class="doctor-video-avatar-stage">
+                  <div class="doc-speaking-indicator-ring"></div>
+                  <div class="doctor-avatar-circle">
+                    <i class="fas fa-user-md text-6xl text-blue-600"></i>
+                  </div>
+                </div>
+
+                <!-- Upper Tag Overlay -->
+                <div class="flex items-center justify-between">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] text-emerald-400 font-bold border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>Consulting Live</span>
+                  </div>
+                  <div class="text-[10px] font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-md">
+                    OPD-RM-104
+                  </div>
+                </div>
+
+                <!-- Lower Doctor Overlay & Real-Time Captions -->
+                <div class="space-y-2">
+                  <!-- Doctor Feed Overlay Details -->
+                  <div class="doctor-feed-overlay">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <h3 class="font-extrabold text-sm text-white drop-shadow">Dr. Ramesh Patil (MD)</h3>
+                          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/90 text-white shadow-xs">Medical Officer</span>
+                        </div>
+                        <p class="text-[11px] text-slate-200 drop-shadow">District Hospital Nashik • General Medicine</p>
+                      </div>
+                      <div class="audio-wave-visualizer" title="Doctor Audio Stream Active">
+                        <span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Live Closed Caption Box -->
+                  <div class="live-consultation-caption-box" id="liveConsultationCaption">
+                    <div class="caption-speaker"><i class="fas fa-stethoscope text-emerald-400 text-xs"></i> Dr. Ramesh Patil (Live):</div>
+                    <div class="caption-text" id="liveCaptionText">"Namaste Parth! I'm reviewing your ABHA records. Your vitals logged by ASHA worker Sangita look stable. I'm updating your prescription now."</div>
+                  </div>
+
+                  <!-- In-Call Floating Prescription / Notes Toggle Tab -->
+                  <div class="in-call-floating-notes" id="inCallClinicalNotes">
+                    <div class="in-call-notes-header" onclick="toggleInCallNotes()">
+                      <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                        <i class="fas fa-file-prescription text-emerald-600"></i>
+                        <span>Live Doctor e-Prescription</span>
+                      </div>
+                      <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">CDSS Verified ✓</span>
+                    </div>
+                    <div class="in-call-notes-body" id="inCallNotesBody" style="display: none;">
+                      <div class="text-[11px] space-y-1.5 text-slate-700">
+                        <div class="flex justify-between border-b pb-1 border-slate-100">
+                          <span class="font-semibold">Rx 1: Metformin 500mg</span>
+                          <span class="font-bold text-blue-700">1 - 0 - 1 (After Meals)</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-1 border-slate-100">
+                          <span class="font-semibold">Rx 2: Tab Telmisartan 40mg</span>
+                          <span class="font-bold text-blue-700">1 - 0 - 0 (Morning)</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 pt-0.5">
+                          📍 Auto-synced to ASHA Worker Sangita for home verification.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Self Picture-in-Picture (PiP) Stream -->
+              <div class="patient-pip-tile" id="patientPipTile" onclick="flipCameraPreview()" title="Tap to switch camera / self preview">
+                <div class="pip-video-inner" id="pipVideoInner">
+                  <div class="patient-avatar-mini-pip">PR</div>
+                  <div class="pip-name-tag">You (Parth)</div>
+                </div>
+                <button type="button" class="pip-flip-btn" title="Flip Camera">
+                  <i class="fas fa-sync-alt text-[9px]"></i>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- In-Call Control Dock (Glassmorphism) -->
+            <div class="video-call-dock-controls">
+              <!-- Mic Button -->
+              <button type="button" class="call-control-btn active" id="btnCallToggleMic" onclick="toggleCallMic()" title="Mute / Unmute Mic">
+                <i class="fas fa-microphone"></i>
+                <span id="lblCallMic">Mic On</span>
+              </button>
+
+              <!-- Camera Button -->
+              <button type="button" class="call-control-btn active" id="btnCallToggleCam" onclick="toggleCallCam()" title="Turn Camera On / Off">
+                <i class="fas fa-video"></i>
+                <span id="lblCallCam">Camera</span>
+              </button>
+
+              <!-- Share Reports Button -->
+              <button type="button" class="call-control-btn" id="btnCallShareRecords" onclick="openInCallReportShare()" title="Share ABHA Lab Reports">
+                <i class="fas fa-file-medical-alt"></i>
+                <span>Share Lab</span>
+              </button>
+
+              <!-- In-Call Chat Button -->
+              <button type="button" class="call-control-btn" id="btnCallChat" onclick="openInCallChat()" title="Chat with Doctor">
+                <i class="fas fa-comment-dots"></i>
+                <span>Chat</span>
+              </button>
+
+              <!-- End Call Button (Red) -->
+              <button type="button" class="call-control-btn end-call-btn" id="btnEndVideoCall" onclick="endVideoCallConsultation()" title="End Teleconsultation">
+                <i class="fas fa-phone-slash"></i>
+                <span>End Call</span>
+              </button>
+            </div>
+
+          </div>
+        </div><!-- End screenVideoCall -->
+
+
       </div><!-- End app-screen-scroll-body -->
 
 
@@ -1848,10 +2006,17 @@
 
         <!-- Clean Action Buttons -->
         <div class="space-y-1.5">
-          <button onclick="downloadAppointmentPass()" class="w-full py-3 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs shadow transition flex items-center justify-center gap-2">
-            <i class="fas fa-download text-xs"></i>
-            <span>Download Queue Ticket (PDF)</span>
+          <!-- Virtual Video Call Enter Room Button (Shown only for Virtual appointments) -->
+          <button id="btnTicketJoinVideoRoom" onclick="startVideoCallSession()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-2xl text-xs shadow-md transition flex items-center justify-center gap-2" style="display: none;">
+            <i class="fas fa-video animate-pulse"></i>
+            <span>Enter Doctor Video Room Now</span>
           </button>
+
+          <button onclick="downloadAppointmentPass()" class="w-full py-2.5 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs shadow transition flex items-center justify-center gap-2">
+            <i class="fas fa-download text-xs"></i>
+            <span>Download Queue Pass (PDF)</span>
+          </button>
+          
           <button onclick="closeQueueTicketModal()" class="w-full py-2 text-slate-500 hover:text-slate-800 font-bold text-xs text-center transition">
             Done &amp; Return to Home
           </button>
@@ -1859,6 +2024,154 @@
 
       </div>
 
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 5: IN-CALL REPORT SHARE DRAWER
+       ==================================================================== -->
+  <div id="modalInCallShareReports" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl animate-fade-in border border-slate-100">
+      <div class="flex items-center justify-between mb-3 border-b pb-2.5 border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-share-alt text-blue-600 text-sm"></i>
+          <h3 class="font-bold text-sm text-slate-900">Share Report with Dr. Ramesh</h3>
+        </div>
+        <button onclick="document.getElementById('modalInCallShareReports').classList.remove('active')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+
+      <p class="text-[11px] text-slate-500 mb-3">Select connected ABHA diagnostic record to stream to doctor's clinical screen:</p>
+
+      <div class="space-y-2 text-xs mb-4 max-h-56 overflow-y-auto">
+        <div class="p-2.5 rounded-xl border border-blue-400 bg-blue-50/60 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Blood Glucose & HbA1c Panel (6.8%)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs">🩸</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Blood Glucose &amp; HbA1c Panel</span>
+              <span class="text-[10px] text-slate-500">District Lab Nashik • 3 Days Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+
+        <div class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Digital ECG Rhythm Strip (Normal Sinus)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">📈</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Digital ECG 12-Lead Strip</span>
+              <span class="text-[10px] text-slate-500">Trimbak PHC • 1 Week Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+
+        <div class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Previous Discharge Summary (Chest Infection)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs">📋</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Hospital Discharge Summary</span>
+              <span class="text-[10px] text-slate-500">Sub-District Hospital • 1 Month Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('modalInCallShareReports').classList.remove('active')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 6: IN-CALL LIVE TEXT CHAT
+       ==================================================================== -->
+  <div id="modalInCallChat" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl animate-fade-in border border-slate-100 flex flex-col h-[420px]">
+      <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">DR</div>
+          <div>
+            <h3 class="font-bold text-xs text-slate-900">Dr. Ramesh Patil</h3>
+            <span class="text-[10px] text-emerald-600 font-semibold">Online • Video Call Active</span>
+          </div>
+        </div>
+        <button onclick="document.getElementById('modalInCallChat').classList.remove('active')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Chat Messages Scroll Area -->
+      <div class="flex-1 overflow-y-auto py-3 space-y-2.5 text-xs" id="inCallChatMessages">
+        <div class="flex items-start gap-2">
+          <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center flex-shrink-0">DR</div>
+          <div class="bg-slate-100 p-2.5 rounded-2xl rounded-tl-none text-slate-800 max-w-[80%]">
+            Hello Parth, I am reviewing your blood pressure logs and current medications.
+          </div>
+        </div>
+        <div class="flex items-start gap-2 justify-end">
+          <div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[80%]">
+            Yes doctor, I have been feeling mild dizziness in the mornings.
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center flex-shrink-0">DR</div>
+          <div class="bg-slate-100 p-2.5 rounded-2xl rounded-tl-none text-slate-800 max-w-[80%]">
+            Understood. I will adjust the Telmisartan dosage and notify your local ASHA worker to check your morning BP.
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+        <input type="text" id="inputInCallChatMessage" placeholder="Type message to doctor..." class="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500" onkeydown="if(event.key==='Enter') sendInCallMessage()">
+        <button onclick="sendInCallMessage()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
+          <i class="fas fa-paper-plane text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 7: POST-CONSULTATION SUMMARY & e-PRESCRIPTION
+       ==================================================================== -->
+  <div id="modalPostCallSummary" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl animate-fade-in border border-emerald-100 text-center">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fas fa-check-circle"></i>
+      </div>
+
+      <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider">Teleconsultation Completed</span>
+      <h3 class="font-extrabold text-base text-slate-900 mt-2">Consultation Summary</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Dr. Ramesh Patil (MD) • District Hospital Nashik</p>
+
+      <!-- Prescription Summary Card -->
+      <div class="my-3.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-left text-xs space-y-2">
+        <div class="flex justify-between items-center border-b pb-1.5 border-slate-200">
+          <span class="text-[11px] font-bold text-slate-700">Digital eRx Token:</span>
+          <span class="font-mono font-bold text-blue-700">#ERX-2026-0891</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+          <span class="text-slate-500">Prescription Status:</span>
+          <span class="font-bold text-emerald-700">Digitally Signed &amp; Synced ✓</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+          <span class="text-slate-500">Community Continuum:</span>
+          <span class="font-bold text-purple-700">ASHA Task Created (GPS-tagged)</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="downloadDigitalPrescription()" class="w-full py-3 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs shadow transition flex items-center justify-center gap-2">
+          <i class="fas fa-file-download"></i>
+          <span>Download Digitally Signed eRx (PDF)</span>
+        </button>
+        <button onclick="closePostCallSummary()" class="w-full py-2.5 text-slate-600 hover:text-slate-900 font-bold text-xs text-center transition">
+          Return to Health Dashboard
+        </button>
+      </div>
     </div>
   </div>
 

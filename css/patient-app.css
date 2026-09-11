@@ -1886,3 +1886,427 @@
   margin-bottom: 22px;
 }
 
+/* --------------------------------------------------------------------------
+   CITIZEN TELECONSULTATION VIDEO CALL UI (e-Sanjeevani / WebRTC P2P)
+   -------------------------------------------------------------------------- */
+.video-call-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 720px;
+  background: #0b132b;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.phone-device-frame.desktop-mode .video-call-container {
+  min-height: 760px;
+}
+
+/* Top Call Header Bar */
+.video-call-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(11, 19, 43, 0.85) 0%, rgba(11, 19, 43, 0) 100%);
+  backdrop-filter: blur(8px);
+}
+
+.call-minimize-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.call-minimize-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.call-info-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  backdrop-filter: blur(6px);
+}
+
+.call-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: liveDotPulse 1.8s infinite;
+}
+
+@keyframes liveDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.call-timer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.5px;
+}
+
+.call-crypto-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #93c5fd;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.call-quality-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 5px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.call-quality-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Main Doctor Video Feed Area */
+.video-main-feed {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 70px 14px 100px 14px;
+  background: radial-gradient(circle at 50% 30%, #1c2541 0%, #0b132b 100%);
+  overflow: hidden;
+}
+
+.doctor-video-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 18px;
+}
+
+.phone-device-frame.desktop-mode .doctor-video-frame {
+  min-height: 520px;
+}
+
+/* Doctor Avatar & Speaking Animation Stage */
+.doctor-video-avatar-stage {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-speaking-indicator-ring {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #10b981;
+  opacity: 0.6;
+  animation: docSpeakingPulse 2.2s infinite ease-out;
+}
+
+@keyframes docSpeakingPulse {
+  0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.15); opacity: 0.3; box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
+  100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 rgba(16, 185, 129, 0.4); }
+}
+
+.doctor-avatar-circle {
+  position: relative;
+  z-index: 10;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  border: 3px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Doctor Feed Overlay Details */
+.doctor-feed-overlay {
+  position: relative;
+  z-index: 20;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 14px;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+/* Audio Wave Visualizer */
+.audio-wave-visualizer {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.audio-wave-visualizer span {
+  width: 3px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 3px;
+  animation: wavePulse 1.2s infinite ease-in-out;
+}
+
+.audio-wave-visualizer span:nth-child(2) { animation-delay: 0.2s; height: 12px; }
+.audio-wave-visualizer span:nth-child(3) { animation-delay: 0.4s; height: 18px; }
+.audio-wave-visualizer span:nth-child(4) { animation-delay: 0.6s; height: 10px; }
+.audio-wave-visualizer span:nth-child(5) { animation-delay: 0.8s; height: 14px; }
+
+@keyframes wavePulse {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+/* Real-time Subtitles / Live Closed Caption Box */
+.live-consultation-caption-box {
+  position: relative;
+  z-index: 20;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  padding: 10px 14px;
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  margin-top: 10px;
+}
+
+.caption-speaker {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+
+.caption-text {
+  font-size: 11.5px;
+  color: #f1f5f9;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+/* Self Picture-in-Picture (PiP) Stream */
+.patient-pip-tile {
+  position: absolute;
+  top: 80px;
+  right: 24px;
+  z-index: 30;
+  width: 96px;
+  height: 130px;
+  border-radius: 18px;
+  background: #0f172a;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.patient-pip-tile:hover {
+  transform: scale(1.04);
+  border-color: #60a5fa;
+}
+
+.pip-video-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.patient-avatar-mini-pip {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.pip-name-tag {
+  position: absolute;
+  bottom: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.pip-flip-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Floating Live e-Prescription Sync Tab */
+.in-call-floating-notes {
+  position: relative;
+  z-index: 25;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  color: #0f172a;
+}
+
+.in-call-notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.in-call-notes-body {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* In-Call Control Dock (Glassmorphism) */
+.video-call-dock-controls {
+  position: absolute;
+  bottom: 16px;
+  left: 14px;
+  right: 14px;
+  z-index: 40;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 26px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.call-control-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 58px;
+  transition: all 150ms ease;
+}
+
+.call-control-btn i {
+  font-size: 15px;
+}
+
+.call-control-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+.call-control-btn.active {
+  background: rgba(37, 99, 235, 0.35);
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+.call-control-btn.muted {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.call-control-btn.end-call-btn {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+  min-width: 64px;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+}
+
+.call-control-btn.end-call-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-2px) scale(1.04);
+}
+
+
