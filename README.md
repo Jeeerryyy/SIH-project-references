@@ -16,7 +16,11 @@
   <b>A unified, offline-first digital healthcare system connecting Frontline ASHA Workers, Hospital OPD Triage, Clinical Doctors, and Citizens into an auditable, GPS-guided continuum of care.</b>
 </p>
 
-### 🔗 **Live Hosted URL:** [https://sih-project-references-xeu2.vercel.app](https://sih-project-references-xeu2.vercel.app)
+<p align="center">
+  🌐 <b>Live Vercel Link:</b> <a href="https://sih-project-references-xeu2.vercel.app"><b>https://sih-project-references-xeu2.vercel.app</b></a>
+</p>
+
+<br/>
 
 [🌐 Live Portals](#-live-deployed-workstations) • [System Architecture](#-enterprise-system-architecture) • [Production Tech Stack](#-state-scale-production-tech-stack) • [Offline Protocol](#-hybrid-edge-to-cloud-data-storage) • [Vercel Deployment](#-1-click-deployment-guide)
 
