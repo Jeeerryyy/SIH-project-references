@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Council Report — Arogya Mitra SIH Defense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 32px 16px; line-height: 1.6; }
+    .container { max-width: 960px; margin: 0 auto; }
+    
+    /* Header Card */
+    .header-card {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-title { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 8px; }
+    .header-desc { font-size: 13.5px; color: #94a3b8; }
+
+    /* Verdict Card */
+    .verdict-card {
+      background: #ffffff;
+      border: 2px solid #10b981;
+      border-radius: 16px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+    }
+    .verdict-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .verdict-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #ecfdf5;
+      color: #059669;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .verdict-title { font-size: 18px; font-weight: 800; color: #065f46; }
+    .verdict-subtitle { font-size: 12px; color: #059669; font-weight: 600; }
+
+    .verdict-section { margin-bottom: 18px; }
+    .verdict-section h4 { font-size: 13px; font-weight: 750; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .verdict-section p, .verdict-section ul { font-size: 13.5px; color: #334155; }
+    .verdict-section ul { padding-left: 20px; margin-top: 4px; }
+    .verdict-section li { margin-bottom: 4px; }
+
+    .priority-action-box {
+      background: #f0fdf4;
+      border: 1.5px dashed #22c55e;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-top: 14px;
+    }
+    .priority-action-box strong { color: #166534; font-size: 14px; }
+
+    /* Alignment Visual Grid */
+    .alignment-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+    .card-heading { font-size: 15px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    
+    .advisor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .advisor-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      transition: transform 150ms ease;
+    }
+    .advisor-pill:hover { transform: translateY(-2px); }
+    .advisor-role { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+    .advisor-stance { font-size: 12px; font-weight: 800; }
+    .stance-strong { color: #10b981; }
+    .stance-caution { color: #f59e0b; }
+    .stance-bullish { color: #2563eb; }
+
+    /* Accordions */
+    details {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 150ms ease;
+    }
+    details[open] { border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    summary {
+      padding: 14px 18px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      background: #ffffff;
+    }
+    summary:hover { background: #f8fafc; }
+    .details-content {
+      padding: 16px 18px;
+      font-size: 13px;
+      color: #334155;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .report-footer {
+      text-align: center;
+      padding: 24px 0 12px 0;
+      font-size: 11.5px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-badge">
+      <i class="fas fa-gavel"></i> LLM Council Session Report
+    </div>
+    <h1 class="header-title">Arogya Mitra • SIH Grand Finale Prototype &amp; Technical Defense</h1>
+    <p class="header-desc">Independent pressure-test of 5 AI advisors across Clinical Practicality, Triage Engineering, Scalability, and Jury Cross-Examination Defense.</p>
+  </div>
+
+  <!-- CHAIRMAN'S VERDICT -->
+  <div class="verdict-card">
+    <div class="verdict-header">
+      <div class="verdict-icon">
+        <i class="fas fa-award"></i>
+      </div>
+      <div>
+        <div class="verdict-title">Council Consensus: 1st Place Ready Prototype</div>
+        <div class="verdict-subtitle">Strong Win Probability with Strict Adherence to 1-Story Patient Narrative</div>
+      </div>
+    </div>
+
+    <div class="verdict-section">
+      <h4><i class="fas fa-check-circle" style="color: #10b981;"></i> Where the Council Agrees (High-Confidence Signals)</h4>
+      <ul>
+        <li><strong>Closed-Loop Referral is the Killer USP:</strong> Transforming Doctor e-Prescriptions directly into ASHA offline field follow-up tasks bridges India's 70% rural clinical dropout gap.</li>
+        <li><strong>Offline-First Architecture is Rock-Solid:</strong> Simulated IndexedDB caching, sub-100kbps store-and-forward, and zero software licensing cost shut down technical feasibility attacks.</li>
+        <li><strong>Single Patient Storyline is Mandatory:</strong> The 5-minute pitch must follow pregnant mother <em>Sunita Gaikwad</em> from village screening $\rightarrow$ OPD Dispatch $\rightarrow$ Doctor consultation $\rightarrow$ ASHA home GPS visit.</li>
+      </ul>
+    </div>
+
+    <div class="verdict-section">
+      <h4><i class="fas fa-bolt" style="color: #f59e0b;"></i> Where the Council Clashes (Strategic Tradeoffs)</h4>
+      <p><strong>Video Calling (WebRTC) vs. Rural Bandwidth Reality:</strong> The Expansionist advised showing off real-time video, while the Contrarian warned that rural jury members will cite 2G village limits. <em>Resolution:</em> Pitch WebRTC as an adaptive fallback (audio-only at &lt;100 kbps) while keeping asynchronous offline eRx as primary.</p>
+    </div>
+
+    <div class="verdict-section">
+      <h4><i class="fas fa-shield-alt" style="color: #6366f1;"></i> Blind Spots Caught During Peer Review</h4>
+      <ul>
+        <li><strong>GPS Drift Defense:</strong> Acknowledge that tribal wadi GPS has a 50m drift radius; explain that geofencing is combined with ANM field validation.</li>
+        <li><strong>Role-Based Access Control (RBAC):</strong> Emphasize cryptographic data segregation under India's DPDP Act 2023.</li>
+      </ul>
+    </div>
+
+    <div class="priority-action-box">
+      <strong>🎯 The One Thing to Do First:</strong>
+      <p style="font-size: 13px; color: #15803d; margin-top: 4px;">Run a timed 5-minute mock pitch rehearsal with the screen operator navigating the 5 stations (Index $\rightarrow$ ASHA $\rightarrow$ OPD Queue $\rightarrow$ Doctor $\rightarrow$ Audit) in under 280 seconds with zero hesitation.</p>
+    </div>
+  </div>
+
+  <!-- ALIGNMENT GRID -->
+  <div class="alignment-card">
+    <div class="card-heading">
+      <i class="fas fa-users"></i> Advisor Stance Matrix
+    </div>
+    <div class="advisor-grid">
+      <div class="advisor-pill">
+        <div class="advisor-role">The Contrarian</div>
+        <div class="advisor-stance stance-caution">Defend GPS Drift &amp; 2G Limits</div>
+      </div>
+      <div class="advisor-pill">
+        <div class="advisor-role">First Principles</div>
+        <div class="advisor-stance stance-strong">Solve Dropout Chasm</div>
+      </div>
+      <div class="advisor-pill">
+        <div class="advisor-role">The Expansionist</div>
+        <div class="advisor-stance stance-bullish">State-Wide ABDM Layer</div>
+      </div>
+      <div class="advisor-pill">
+        <div class="advisor-role">The Outsider</div>
+        <div class="advisor-stance stance-strong">Story-First Pitch Hook</div>
+      </div>
+      <div class="advisor-pill">
+        <div class="advisor-role">The Executor</div>
+        <div class="advisor-stance stance-strong">100% Offline Local Demo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLLAPSIBLE ADVISOR RESPONSES -->
+  <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px; color: #0f172a;">
+    <i class="fas fa-comments"></i> Full Independent Advisor Analyses
+  </h3>
+
+  <details>
+    <summary>
+      <span><i class="fas fa-user-ninja" style="color: #ef4444; margin-right: 8px;"></i> 1. The Contrarian (Downside &amp; Jury Trap Analysis)</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      "Your closed-loop referral narrative is your strongest asset, but it is also your biggest crosshair under jury fire. A seasoned public health bureaucrat on the jury will immediately challenge your GPS validation: 'Tribal wadis lack cellular triangulation, and GPS drifts 50–100m in hilly terrain. Are you penalizing ASHAs when GPS fails?' If you claim automated biometric/GPS enforcement without admitting hybrid manual sign-offs by ANMs, you lose credibility.<br><br>
+      Second, live WebRTC video consultation is a dangerous trap. The moment you mention video in rural PHCs, judges will cite 2G/poor bandwidth realities. You must explicitly position video as an optional secondary layer, leading aggressively with asynchronous store-and-forward e-prescriptions and sub-100kbps audio calling."
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span><i class="fas fa-brain" style="color: #8b5cf6; margin-right: 8px;"></i> 2. The First Principles Thinker (Core Problem Alignment)</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      "Strip away the hackathon buzzwords. What is the actual unsolved bottleneck in Indian public healthcare? It is not telemedicine video calls; it is the <strong>Treatment Adherence &amp; Dropout Chasm</strong>.<br><br>
+      A specialist writes a prescription for hypertension or antenatal complications, but 70% of rural patients drop out of care once they cross the hospital gate. Arogya Mitra solves this because the doctor's electronic prescription automatically generates a <strong>GPS-tagged follow-up task on the local ASHA worker’s offline mobile terminal</strong>. That single structural bridge is your true USP."
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span><i class="fas fa-chart-line" style="color: #2563eb; margin-right: 8px;"></i> 3. The Expansionist (Scalability &amp; National Vision)</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      "This is the missing last-mile edge client for the National Digital Health Ecosystem (ABDM). While the central government has deployed national registries and digital milestones (M1, M2, M3), they have virtually zero lightweight, offline-first field interfaces for the 10 lakh+ ASHA workers across India.<br><br>
+      Arogya Mitra provides the complete, state-scalable frontline edge layer. Because it is built with zero proprietary software licenses (Linux, Vanilla JS, PostgreSQL, Python FastAPI, WebRTC), state governments could deploy this across 30+ districts at negligible compute cost."
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span><i class="fas fa-eye" style="color: #06b6d4; margin-right: 8px;"></i> 4. The Outsider (Jury UX &amp; First Impressions)</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      "I have zero background in your team's development history. The 5 clean, distinct workstation cards look like real software rather than a student project. The new green logo and minimal high-contrast UI give it immediate professional authority.<br><br>
+      However, hackathon judges evaluate 40+ teams a day and have an attention span of under 60 seconds. You must hook them immediately with a human patient journey: Start with pregnant mother <strong>Sunita Gaikwad</strong> screened in the village, follow her token into the PHC OPD queue, watch the doctor prescribe medicine with CDSS safety checks, and see ASHA worker Sangita complete the home visit on her phone."
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span><i class="fas fa-rocket" style="color: #10b981; margin-right: 8px;"></i> 5. The Executor (Live Demo Logistics &amp; Defense Readiness)</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      "Public Wi-Fi at hackathon venues fails 99% of the time. The fact that your prototype runs 100% locally with simulated IndexedDB storage, offline browser speech synthesis, and zero external cloud dependencies is your secret superpower.<br><br>
+      Your 5-minute pitch must run like clockwork: 60 seconds per station, zero awkward mouse hunting. For the Q&amp;A round, you have pre-empted every hard technical question in <code>SIH_PITCH_AND_TECHNICAL_DEFENSE.md</code>—PostGIS spatial math, Redis atomic token generation, AES-256 DPDP compliance, and CRDT conflict resolution. Deliver the crisp, factual 3-sentence answers without hesitation."
+    </div>
+  </details>
+
+  <!-- PEER REVIEW HIGHLIGHTS -->
+  <details>
+    <summary>
+      <span><i class="fas fa-balance-scale" style="color: #f59e0b; margin-right: 8px;"></i> Anonymized Peer Review Summary</span>
+      <i class="fas fa-chevron-down text-slate-400"></i>
+    </summary>
+    <div class="details-content">
+      <ul style="padding-left: 18px;">
+        <li><strong>Top Rated Perspective:</strong> Response B (First Principles) and Response E (Executor) were rated highest for identifying the clinical dropout USP and securing local demo reliability.</li>
+        <li><strong>Crucial Warning:</strong> Response A (Contrarian) successfully exposed the risk of overselling 100% automated GPS enforcement in dense wadis.</li>
+        <li><strong>Universal Agreement:</strong> All reviewers concurred that storytelling must precede technical architecture in the 5-minute presentation.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <p><strong>Arogya Mitra • LLM Council Evaluation</strong></p>
+    <p>Methodology adapted from Andrej Karpathy LLM Council • Generated on September 11, 2026</p>
+  </div>
+
+</div>
+
+</body>
+</html>

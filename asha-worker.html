@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="mr-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arogya Mitra — ASHA / ANM Frontline Field Station (आशा सेविका पोर्टल)</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Design Tokens & Styles -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/asha-worker.css">
+</head>
+<body>
+
+<!-- Top Global Navigation Header -->
+<header style="background: #0D1B2A; color: #ffffff; border-bottom: 1px solid #334155; padding: 10px 24px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.12); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+        </div>
+        <div>
+          <h1 style="font-size: 15px; font-weight: 800; line-height: 1.2; color: #ffffff; margin: 0;">ASHA Frontline Field Station</h1>
+          <p style="font-size: 11px; color: #fda4af; margin: 0; font-weight: 500;">आशा सेविका पोर्टल • Dindori PHC Sub-Center 03</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick Actions & Links -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="offline-sync-pill" id="connStatusPillHeader" style="padding: 4px 10px; font-size: 11px; background: #1e293b; border-color: #334155; color: #e2e8f0;">
+        <span class="status-dot" id="connDotHeader"></span>
+        <span id="connStatusTextHeader">Online (Live Sync)</span>
+      </div>
+
+      <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #e2e8f0; background: #1e293b; padding: 6px 12px; border-radius: 8px; border: 1px solid #475569; text-decoration: none;">
+        <i class="fas fa-th-large"></i> Home Hub
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="asha-canvas-wrapper">
+
+  <!-- Universal Device Mode Switcher Toolbar -->
+  <div class="view-mode-toolbar">
+    <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Screen Mode:</span>
+    <button id="btnViewMobile" class="view-mode-btn active" title="View in Smartphone Shell">
+      <i class="fas fa-mobile-alt"></i> Mobile App Simulator
+    </button>
+    <button id="btnViewDesktop" class="view-mode-btn" title="Expand layout for full desktop screen">
+      <i class="fas fa-desktop"></i> Desktop View (Expanded)
+    </button>
+    <button id="btnToggleLoginScreen" class="view-mode-btn login-btn-toggle" title="Toggle Frontline Worker Sign In">
+      <i class="fas fa-id-badge"></i> <span id="lblLoginToggle">View Login Screen</span>
+    </button>
+  </div>
+
+  <!-- SMARTPHONE DEVICE FRAME / DESKTOP EXPANDED CONTAINER -->
+  <div id="phoneDeviceFrame" class="phone-device-frame">
+    
+    <!-- SIMULATED MOBILE STATUS BAR (3:52, VoLTE, 5G, 63% Battery) -->
+    <div class="mobile-status-bar">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span>3:52</span>
+        <i class="far fa-comment-dots" style="font-size: 11px; opacity: 0.8;"></i>
+      </div>
+      <div class="status-bar-icons">
+        <span style="font-size: 9px; font-family: monospace;">32.4 KB/s</span>
+        <span style="font-size: 9px; font-weight: 700; border: 1px solid #cbd5e1; padding: 0 3px; border-radius: 3px;">VoLTE</span>
+        <i class="fas fa-signal" style="font-size: 11px;"></i>
+        <span style="font-size: 10px; font-weight: 700;">5G</span>
+        <span class="status-battery-pill">63</span>
+      </div>
+    </div>
+
+    <!-- SCROLLABLE SCREEN BODY -->
+    <div class="phone-screen-scroll-body">
+      
+      <!-- ====================================================================
+           SCREEN 0: ASHA WORKER LOGIN SCREEN (screenLogin)
+           ==================================================================== -->
+      <div id="screenLogin" class="portal-login-screen" style="display: none;">
+        <div class="portal-login-card">
+          <div class="portal-brand-badge badge-red">
+            <i class="fas fa-hand-holding-medical"></i>
+          </div>
+          
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">आशा सेविका / ANM लॉगिन</h2>
+            <p style="font-size: 12px; color: #64748b;">ASHA Frontline Field Worker Portal • National Health Mission</p>
+          </div>
+
+          <!-- Emergency 108 Hotline Card -->
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 20px;">🚨</span>
+              <div>
+                <strong style="font-size: 12px; color: #be123c; display: block;">१०८ आपत्कालीन रुग्णवाहिका</strong>
+                <span style="font-size: 11px; color: #e11d48;">तातडीच्या प्रसंगी थेट संपर्क (Direct Access)</span>
+              </div>
+            </div>
+            <button onclick="switchAshaTab('tab-emergency'); showScreen('screenMainApp');" style="background: #e11d48; color: #ffffff; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;">
+              १०८ बोलवा
+            </button>
+          </div>
+
+          <form onsubmit="event.preventDefault(); loginAsAshaWorker();">
+            <div class="login-form-group">
+              <label>ASHA ID / AADHAAR NUMBER</label>
+              <input type="text" class="login-input" value="ASHA-MH-NSK-0842" placeholder="e.g. ASHA-MH-NSK-0842">
+            </div>
+
+            <div class="login-form-group">
+              <label>SUB-CENTER / VILLAGE ALLOTMENT</label>
+              <input type="text" class="login-input" value="Dindori PHC • Sub-Center 03 (Gaikwad Wadi)" readonly style="background: #f8fafc;">
+            </div>
+
+            <div class="login-form-group">
+              <label>AUTHENTICATION PIN / OTP</label>
+              <input type="password" class="login-input" value="123456" placeholder="Enter 6-digit MPIN">
+            </div>
+
+            <button type="submit" class="btn-login-submit" style="background: #e11d48;">
+              <i class="fas fa-sign-in-alt"></i> लॉगिन करा (Login to Field Station)
+            </button>
+          </form>
+
+          <button type="button" class="login-quick-demo-btn" onclick="loginAsAshaWorker()">
+            <span>⚡ 1-Click Fast Login (Sangita Patil • ASHA Worker)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SCREEN 1: MAIN ASHA FIELD STATION DASHBOARD (screenMainApp)
+           ==================================================================== -->
+      <div id="screenMainApp" style="display: block; width: 100%;">
+        
+        <!-- Mobile App Top Header (Visible in Mobile Simulator) -->
+        <div class="app-mobile-top-header">
+          <div class="app-mobile-user-info">
+            <div class="app-mobile-avatar" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-weight: 800;">
+              SP
+            </div>
+            <div>
+              <div class="app-mobile-greeting">नमस्ते संगीता ताई!</div>
+              <div class="app-mobile-status-subtitle">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                <span>Sub-Center 03 • Live Sync</span>
+              </div>
+            </div>
+          </div>
+          <div class="app-mobile-header-actions">
+            <button class="mobile-header-sos-btn" onclick="switchAshaTab('tab-emergency')" title="108 Ambulance">
+              🚨 <span>108</span>
+            </button>
+            <button class="mobile-header-action-btn" onclick="toggleLanguage()" title="Change Language (भाषा बदला)">
+              <i class="fas fa-language text-slate-700" style="font-size: 13px;"></i>
+            </button>
+            <button class="mobile-header-action-btn" onclick="triggerManualSync()" title="Sync Records">
+              <i class="fas fa-sync-alt" style="font-size: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- FLOATING MAIN APP WINDOW CARD -->
+        <div class="asha-window-card">
+    
+    <!-- EXPANDED NAVY VERTICAL NAVIGATION SIDEBAR -->
+    <aside class="window-internal-sidebar asha-sidebar-panel">
+      <!-- Sidebar Header / Branding -->
+      <div class="sidebar-top-section">
+        <div class="sidebar-brand-row" onclick="location.href='index.html'" title="Return to Arogya Mitra Home Hub">
+          <div class="window-logo-mark">
+            <img src="assets/arogya-mitra-logo.png" alt="Arogya Mitra Logo" style="width: 26px; height: 26px; object-fit: contain;">
+          </div>
+          <div class="sidebar-brand-text">
+            <span class="brand-title">Arogya Mitra</span>
+            <span class="brand-sub">ASHA Field Station</span>
+          </div>
+        </div>
+
+        <!-- ASHA Worker Identity Card -->
+        <div class="sidebar-worker-card">
+          <div class="sidebar-worker-avatar">SP</div>
+          <div class="sidebar-worker-info">
+            <strong class="worker-name">संगीता पाटील</strong>
+            <span class="worker-sub">Dindori Sub-Center 03</span>
+            <div class="worker-status-live">
+              <span class="status-dot"></span>
+              <span id="connStatusText">Online (Live Sync)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Vertical Navigation Menu -->
+      <nav class="asha-sidebar-nav">
+        <!-- 1. Daily Field Overview -->
+        <button class="asha-nav-item active" data-tab="tab-overview" onclick="switchAshaTab('tab-overview')">
+          <span class="nav-icon"><i class="fas fa-th-large"></i></span>
+          <span class="nav-label" data-i18n="tab_overview">Daily Overview</span>
+        </button>
+
+        <!-- 2. Pregnancy & Maternal Care -->
+        <button class="asha-nav-item" data-tab="tab-anc" onclick="switchAshaTab('tab-anc')">
+          <span class="nav-icon"><i class="fas fa-female"></i></span>
+          <span class="nav-label" data-i18n="tab_anc">Pregnancy &amp; Newborn Health</span>
+          <span class="tab-badge-alert">3 High-Risk</span>
+        </button>
+
+        <!-- 3. Family Health Survey & Digital Health Card -->
+        <button class="asha-nav-item" data-tab="tab-survey" onclick="switchAshaTab('tab-survey')">
+          <span class="nav-icon"><i class="fas fa-clipboard-list"></i></span>
+          <span class="nav-label" data-i18n="tab_survey">Family Health Survey &amp; Health Card</span>
+        </button>
+
+        <!-- 4. BP & Diabetes Checkup -->
+        <button class="asha-nav-item" data-tab="tab-ncd" onclick="switchAshaTab('tab-ncd')">
+          <span class="nav-icon"><i class="fas fa-heartbeat"></i></span>
+          <span class="nav-label" data-i18n="tab_ncd">Blood Pressure &amp; Diabetes Checkup</span>
+        </button>
+
+        <!-- 5. Hospital Referrals & Follow-Up Tracking -->
+        <button class="asha-nav-item" data-tab="tab-referrals" onclick="switchAshaTab('tab-referrals')">
+          <span class="nav-icon"><i class="fas fa-route"></i></span>
+          <span class="nav-label" data-i18n="tab_referrals">Referrals &amp; Follow-Ups</span>
+          <span class="tab-badge-count">4 Active</span>
+        </button>
+
+        <!-- 6. 108 Emergency Ambulance Help -->
+        <button class="asha-nav-item nav-item-emergency" data-tab="tab-emergency" onclick="switchAshaTab('tab-emergency')">
+          <span class="nav-icon"><i class="fas fa-ambulance"></i></span>
+          <span class="nav-label" data-i18n="tab_emergency">Emergency Ambulance &amp; SOS</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer (Language & Sync) -->
+      <div class="sidebar-bottom-section">
+        <button class="sidebar-action-btn" id="btnLangToggle" onclick="toggleLanguage()" title="Switch Language">
+          <i class="fas fa-globe"></i>
+          <span id="langLabel">English</span>
+        </button>
+        <button class="sidebar-action-btn" onclick="triggerManualSync()" title="Synchronize Records">
+          <i class="fas fa-sync-alt"></i>
+          <span id="lblSyncBtn">Sync (0 Queued)</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- WINDOW MAIN CONTENT BODY -->
+    <div class="window-content-body">
+      <!-- TAB PANELS CONTAINER -->
+      <div class="asha-content-panels">
+        
+        <!-- ====================================================================
+             TAB 1: DAILY OVERVIEW & SYNCHRONIZATION SUMMARY
+             ==================================================================== -->
+        <section id="tab-overview" class="asha-panel active">
+          
+          <!-- KPI METRICS -->
+          <div class="asha-kpi-grid">
+            <div class="asha-kpi-card">
+              <div class="lbl" data-i18n="kpi_households">Assigned Daily Field Tasks</div>
+              <div class="val">12 Field Tasks</div>
+              <div class="sub">8 Completed • 4 Pending Today</div>
+            </div>
+            <div class="asha-kpi-card">
+              <div class="lbl" data-i18n="kpi_anc_count">Pregnant Mothers Registered</div>
+              <div class="val">14 Mothers</div>
+              <div class="sub" style="color: #e11d48; font-weight: 700;">3 High-Risk Warnings</div>
+            </div>
+            <div class="asha-kpi-card">
+              <div class="lbl" data-i18n="kpi_abha_rate">Health Cards Created (ABHA)</div>
+              <div class="val">91.4%</div>
+              <div class="sub">1,024 Verified Health Cards</div>
+            </div>
+            <div class="asha-kpi-card">
+              <div class="lbl" data-i18n="kpi_visits_today">Today's Home Visits</div>
+              <div class="val">6 of 8 Done</div>
+              <div class="sub">2 Remaining Today</div>
+            </div>
+          </div>
+
+          <!-- RED ALERT CRITICAL ACTION BANNER -->
+          <div class="red-alert-banner">
+            <div class="alert-left">
+              <div class="alert-icon-wrap">🚨</div>
+              <div class="alert-text">
+                <h4 data-i18n="alert_banner_title">High-Risk Warning: Sunita Gaikwad (34 Yrs • 32 Weeks Pregnant)</h4>
+                <p data-i18n="alert_banner_desc">High Blood Pressure in pregnancy (BP 154/98 mmHg, Hemoglobin 7.4 g/dL). Enqueued to District Hospital Nashik Room 108.</p>
+              </div>
+            </div>
+            <button class="btn-emergency-108" onclick="switchAshaTab('tab-emergency')">
+              <span>🚨</span>
+              <span data-i18n="btn_view_emergency">Call 108 Ambulance</span>
+            </button>
+          </div>
+
+          <!-- TODAY'S HOME VISIT SCHEDULE TABLE -->
+          <div class="field-table-card">
+            <div class="field-table-header">
+              <h3 data-i18n="tbl_visits_title">Today's Home Visit Checklist (आजच्या गृहभेटी)</h3>
+              <button class="btn-sync-action" onclick="toggleOfflineModeSimulation()">
+                <span id="btnToggleOfflineLabel">Simulate Offline Mode</span>
+              </button>
+            </div>
+            <table class="field-table">
+              <thead>
+                <tr>
+                  <th data-i18n="th_patient">Beneficiary / Patient</th>
+                  <th data-i18n="th_village">Village / Wadi</th>
+                  <th data-i18n="th_category">Purpose of Visit</th>
+                  <th data-i18n="th_status">Current Health Vitals</th>
+                  <th data-i18n="th_actions">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sunita Gaikwad</strong> (34 F)<br><span style="font-size: 11px; color: #64748b;">Health ID: MH-2026-008910</span></td>
+                  <td>Gaikwad Wadi, House #14</td>
+                  <td><span class="risk-tag-critical">Pregnancy 3rd Trimester • High BP Warning</span></td>
+                  <td><strong>BP 154/98 • Hemoglobin 7.4 g/dL</strong></td>
+                  <td><button class="btn-table-refer" onclick="initiateEmergencyReferral('Sunita Gaikwad')">Send to Hospital</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Lata Thorat</strong> (39 F)<br><span style="font-size: 11px; color: #64748b;">Health ID: MH-2026-009124</span></td>
+                  <td>Navnath Nagar, House #22</td>
+                  <td><span class="risk-tag-critical">Pregnancy 2nd Trimester • Severe Anemia</span></td>
+                  <td><strong>Hemoglobin 7.1 g/dL • Very Pale</strong></td>
+                  <td><button class="btn-table-refer" onclick="initiateEmergencyReferral('Lata Thorat')">Iron Injection Ref</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Ramesh Pawar</strong> (52 M)<br><span style="font-size: 11px; color: #64748b;">Health ID: MH-2026-004291</span></td>
+                  <td>Main Road, House #05</td>
+                  <td><span class="risk-tag-moderate">Diabetes &amp; Blood Pressure Checkup</span></td>
+                  <td><strong>Blood Sugar: 218 mg/dL • BP 138/88</strong></td>
+                  <td><button class="btn-table-action" onclick="openCarePlan('MH-2026-004291')">View Medicine Plan</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Anaya Shinde</strong> (4 Months F)<br><span style="font-size: 11px; color: #64748b;">Health ID: MH-2026-009411</span></td>
+                  <td>Shinde Vasti, House #09</td>
+                  <td><span class="risk-tag-safe">Baby Vaccination (Pentavalent-3 Vaccine)</span></td>
+                  <td><strong>Baby Weight: 5.8 kg • Healthy</strong></td>
+                  <td><button class="btn-table-action" onclick="recordImmunization()">Mark Vaccine Given</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             TAB 2: PREGNANCY & NEWBORN HEALTH REGISTER
+             ==================================================================== -->
+        <section id="tab-anc" class="asha-panel" style="display: none;">
+          
+          <div class="field-table-card">
+            <div class="field-table-header">
+              <h3 data-i18n="anc_reg_title">Pregnancy &amp; Newborn Health Register (गरोदरपण व नवजात बाळ नोंदवही)</h3>
+              <button class="btn-sync-action" onclick="openNewANCModal()">+ Register New Pregnant Mother</button>
+            </div>
+            
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">
+              Automatically highlights pregnant mothers with Blood Pressure &gt; 140/90, Low Hemoglobin (&lt; 8.0 g/dL), High Blood Sugar in pregnancy, or previous cesarean delivery.
+            </p>
+
+            <table class="field-table">
+              <thead>
+                <tr>
+                  <th>Mother Name &amp; Age</th>
+                  <th>Pregnancy Week &amp; Delivery Date</th>
+                  <th>Past Pregnancies</th>
+                  <th>Health Warnings &amp; Vitals</th>
+                  <th>Assigned Hospital Doctor</th>
+                  <th>Hospital Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sunita Gaikwad</strong> (34 F)<br><span style="font-size: 11px; color: #64748b;">Health Card: 91-8841-2091-8832</span></td>
+                  <td>32 Weeks<br><span style="font-size: 11px; color: #64748b;">Expected Date: 18-Nov-2026</span></td>
+                  <td>2nd Pregnancy (1 Child)</td>
+                  <td><span class="risk-tag-critical">BP 154/98 • High BP Warning • Hb 7.4</span></td>
+                  <td>Dr. Anil Kadam (District Hospital)</td>
+                  <td><span class="risk-tag-critical">Waiting Room 108</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Lata Thorat</strong> (39 F)<br><span style="font-size: 11px; color: #64748b;">Health Card: 91-4402-1192-3341</span></td>
+                  <td>26 Weeks<br><span style="font-size: 11px; color: #64748b;">Expected Date: 28-Dec-2026</span></td>
+                  <td>3rd Pregnancy (2 Children)</td>
+                  <td><span class="risk-tag-critical">Hemoglobin 7.1 g/dL • Severe Anemia</span></td>
+                  <td>Dr. Sneha Shinde (Dindori PHC)</td>
+                  <td><button class="btn-table-refer" onclick="initiateEmergencyReferral('Lata Thorat')">Refer to Hospital</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Pooja Salve</strong> (24 F)<br><span style="font-size: 11px; color: #64748b;">Health Card: 91-5509-8812-4410</span></td>
+                  <td>14 Weeks<br><span style="font-size: 11px; color: #64748b;">Expected Date: 20-Mar-2027</span></td>
+                  <td>1st Pregnancy</td>
+                  <td><span class="risk-tag-moderate">Fasting Blood Sugar 142 mg/dL (High Sugar)</span></td>
+                  <td>Dr. Ramesh Patil (District Hospital)</td>
+                  <td><button class="btn-table-action" onclick="showToast('Diet & Insulin plan scheduled')">Diet Advice</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Rekha Sonawane</strong> (29 F)<br><span style="font-size: 11px; color: #64748b;">Health Card: 91-1184-7729-0021</span></td>
+                  <td>36 Weeks<br><span style="font-size: 11px; color: #64748b;">Expected Date: 22-Oct-2026</span></td>
+                  <td>2nd Pregnancy (Past Cesarean)</td>
+                  <td><span class="risk-tag-safe">BP 118/76 • Hemoglobin 11.2 (Healthy)</span></td>
+                  <td>Dr. Anil Kadam (District Hospital)</td>
+                  <td><span class="risk-tag-safe">Hospital Delivery Booked</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             TAB 3: FAMILY HEALTH SURVEY & HEALTH CARD (ABHA)
+             ==================================================================== -->
+        <section id="tab-survey" class="asha-panel" style="display: none;">
+          
+          <div class="asha-form-container">
+            
+            <!-- LEFT: HOUSEHOLD ENROLLMENT FORM -->
+            <div class="form-box">
+              <h3 style="margin-bottom: 6px; font-size: 15px; color: #0d1b2a;" data-i18n="form_hh_title">Family Health Survey &amp; Health Card Creation (नवीन कुटुंब नोंदणी)</h3>
+              <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">Create instant 14-digit National Health Card (ABHA) for family members with Aadhaar verification.</p>
+
+              <form id="householdForm" onsubmit="event.preventDefault(); submitHouseholdRecord();">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Village / Wadi (गाव / वाडी)</label>
+                    <input type="text" class="field-input" value="Gaikwad Wadi, Dindori" required>
+                  </div>
+                  <div class="field-group">
+                    <label>House No. / Ration Card No.</label>
+                    <input type="text" class="field-input" value="H-042 / RC-991204" required>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Head of Household Name (कुटुंब प्रमुखाचे नाव)</label>
+                    <input type="text" id="hhHeadName" class="field-input" placeholder="e.g. Tukaram Gaikwad" value="Tukaram Gaikwad" required>
+                  </div>
+                  <div class="field-group">
+                    <label>Mobile Number (मोबाईल क्रमांक)</label>
+                    <input type="tel" class="field-input" value="+91 98231 44091" required>
+                  </div>
+                </div>
+
+                <div class="form-grid-3">
+                  <div class="field-group">
+                    <label>Total Family Members</label>
+                    <input type="number" class="field-input" value="5" min="1">
+                  </div>
+                  <div class="field-group">
+                    <label>Children Under 5</label>
+                    <input type="number" class="field-input" value="1">
+                  </div>
+                  <div class="field-group">
+                    <label>Pregnant Mothers</label>
+                    <input type="number" class="field-input" value="1">
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label>Aadhaar Number for Instant Health Card (ABHA ID)</label>
+                  <div style="display: flex; gap: 8px;">
+                    <input type="text" class="field-input" placeholder="XXXX-XXXX-XXXX (12 Digits)" value="8912-3341-9921">
+                    <button type="button" class="btn-sync-action" onclick="showToast('Aadhaar OTP sent to +91 98231 ••••. Health Card ABHA Generated.')">Create Health Card</button>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+                  <button type="reset" class="btn-table-action">Reset</button>
+                  <button type="submit" class="btn-sync-action" style="background: #ff6a38; border-color: #ff6a38; color: #ffffff;">Save Family Survey &amp; Health Cards</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- RIGHT: RECENTLY SURVEYED FAMILIES -->
+            <div class="form-box">
+              <h4 style="margin-bottom: 12px; font-size: 14px; color: #0d1b2a;">Recent Village Health Surveys (Dindori Village)</h4>
+              
+              <div class="recent-list">
+                <div class="recent-item">
+                  <div class="r-icon">🏠</div>
+                  <div class="r-info">
+                    <strong>Gaikwad Family (5 Members)</strong>
+                    <span>House #14 • 5 Health Cards (ABHA) Created</span>
+                  </div>
+                  <span class="r-badge-synced">✓ Saved</span>
+                </div>
+                <div class="recent-item">
+                  <div class="r-icon">🏠</div>
+                  <div class="r-info">
+                    <strong>Thorat Family (4 Members)</strong>
+                    <span>House #22 • 4 Health Cards (ABHA) Created</span>
+                  </div>
+                  <span class="r-badge-synced">✓ Saved</span>
+                </div>
+                <div class="recent-item">
+                  <div class="r-icon">🏠</div>
+                  <div class="r-info">
+                    <strong>Pawar Family (6 Members)</strong>
+                    <span>House #05 • 6 Health Cards (ABHA) Created</span>
+                  </div>
+                  <span class="r-badge-synced">✓ Saved</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             TAB 4: HEALTH CHECKUP FOR LONG-TERM ILLNESS (BP, SUGAR & CANCER CHECKLIST)
+             ==================================================================== -->
+        <section id="tab-ncd" class="asha-panel" style="display: none;">
+          
+          <div class="asha-form-container">
+            
+            <div class="form-box" style="flex: 1.4;">
+              <h3 style="margin-bottom: 6px; font-size: 15px; color: #0d1b2a;" data-i18n="cbac_title">General Health Checkup for Blood Pressure &amp; Diabetes (आरोग्य तपासणी चेकलिस्ट)</h3>
+              <p style="font-size: 12px; color: #64748b; margin-bottom: 16px;">Standard 10-question community health check to detect blood pressure, high sugar, and early health risks.</p>
+
+              <form id="cbacForm" onsubmit="event.preventDefault(); submitCBACScreening();">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Patient Name &amp; Age (रुग्णाचे नाव व वय)</label>
+                    <input type="text" id="cbacName" class="field-input" value="Babanrao Shirole, 68 M" required>
+                  </div>
+                  <div class="field-group">
+                    <label>Health Card (ABHA ID)</label>
+                    <input type="text" class="field-input" value="91-9941-2091-8841">
+                  </div>
+                </div>
+
+                <div class="form-grid-3">
+                  <div class="field-group">
+                    <label>Age Group (वय गट)</label>
+                    <select class="field-select" id="cbacAge" onchange="calculateCBACScore()">
+                      <option value="0">0 - 29 Years</option>
+                      <option value="1">30 - 49 Years (+1)</option>
+                      <option value="2" selected>50+ Years (+2)</option>
+                    </select>
+                  </div>
+                  <div class="field-group">
+                    <label>Tobacco / Smoking (तंबाखू सेवन)</label>
+                    <select class="field-select" id="cbacTobacco" onchange="calculateCBACScore()">
+                      <option value="0">Never consumed</option>
+                      <option value="1">Used in past</option>
+                      <option value="2" selected>Daily consumer (+2)</option>
+                    </select>
+                  </div>
+                  <div class="field-group">
+                    <label>Daily Physical Activity</label>
+                    <select class="field-select" id="cbacActivity" onchange="calculateCBACScore()">
+                      <option value="0">Active &gt; 150 mins/week</option>
+                      <option value="1" selected>Less than 150 mins (+1)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label>Waist Measurement (कमरेचा घेर)</label>
+                    <select class="field-select" id="cbacWaist" onchange="calculateCBACScore()">
+                      <option value="0">Normal (Male &le;90cm / Female &le;80cm)</option>
+                      <option value="2" selected>High (Male &gt;90cm / Female &gt;80cm) (+2)</option>
+                    </select>
+                  </div>
+                  <div class="field-group">
+                    <label>Family History of Blood Pressure / Diabetes</label>
+                    <select class="field-select" id="cbacFamily" onchange="calculateCBACScore()">
+                      <option value="0">No known history</option>
+                      <option value="2" selected>Yes (Parents / Siblings have BP/Sugar) (+2)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- DYNAMIC HEALTH VULNERABILITY SCORE BANNER -->
+                <div class="cbac-score-box">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 800; color: #b91c1c; text-transform: uppercase;">Total Health Risk Score</div>
+                    <div class="cbac-score-value" id="cbacTotalScore">9 / 10</div>
+                  </div>
+                  <div style="flex: 1; font-size: 12px; color: #991b1b; line-height: 1.4;">
+                    <strong>High Health Risk (&gt; 4 points):</strong> Patient requires immediate doctor checkup at Primary Health Centre for blood pressure &amp; blood sugar testing.
+                  </div>
+                  <div class="risk-badge-high">High Priority Checkup</div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
+                  <button type="submit" class="btn-sync-action" style="background: #2563eb; color: #ffffff; border: none;">Save Checkup &amp; Book Doctor Consultation</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="form-box">
+              <h4 style="margin-bottom: 10px; font-size: 13px; color: #0d1b2a;">Health Checkup Guide for ASHA Workers</h4>
+              <p style="font-size: 11px; color: #64748b; line-height: 1.45; margin-bottom: 12px;">
+                Ask every adult over 30 years these 5 basic health questions to find high blood pressure or sugar early before heart or kidney complications occur.
+              </p>
+              <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px; font-size: 11px; color: #1e40af;">
+                ✓ <strong>Score 0 to 3:</strong> Low Risk (Encourage healthy diet &amp; annual checkup)<br>
+                ✓ <strong>Score 4 or higher:</strong> High Risk (Book PHC Doctor visit for BP &amp; Blood Sugar test)
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             TAB 5: HOSPITAL REFERRALS & CARE FOLLOW-UP TRACKER
+             ==================================================================== -->
+        <section id="tab-referrals" class="asha-panel" style="display: none;">
+          
+          <div class="field-table-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0;">🔄 Hospital Referrals &amp; Community Follow-Up Tracking</h3>
+                <p style="font-size: 11px; color: #64748b; margin: 2px 0 0 0;">Closed-loop tracking from Doctor consultation &amp; hospital eRx back to ASHA home care</p>
+              </div>
+              <div class="referral-kpi-strip">
+                <span class="ref-kpi-badge"><strong style="color: #2563eb;">4</strong> Active Referrals</span>
+                <span class="ref-kpi-badge"><strong style="color: #059669;">14</strong> Care Completed</span>
+              </div>
+            </div>
+
+            <!-- REFERRAL PATIENT CARDS LIST -->
+            <div class="referrals-cards-stack">
+              
+              <!-- 1. RAMESH PAWAR -->
+              <div class="referral-patient-card" id="refCardPawar">
+                <div class="ref-card-header">
+                  <div class="ref-patient-identity">
+                    <div class="ref-avatar" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">RP</div>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <strong>Ramesh Pawar (52 M)</strong>
+                        <span class="uhid-mini">UHID: MH-2026-004291</span>
+                        <span class="ref-status-badge synced">✓ Teleconsult Done</span>
+                      </div>
+                      <div class="ref-location">House #05 • Dindori Village (Token #A-042)</div>
+                    </div>
+                  </div>
+                  <div class="ref-date-tag">Referred: 10-Sep-2026</div>
+                </div>
+
+                <!-- Field Location & Home Visit Navigation -->
+                <div class="ref-home-location-box">
+                  <div class="ref-location-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Home Location:</strong> House #05, Shinde Galli, Dindori Village (Near Maruti Temple, Gate 2)</span>
+                  </div>
+                  <div class="ref-gps-meta">
+                    <span>🗺️ GPS: 20.1982° N, 73.8321° E (0.8 km)</span>
+                    <button class="btn-ref-nav" onclick="showToast('📍 Opening GPS map route to House #05 (Ramesh Pawar)...')">
+                      <i class="fas fa-location-arrow"></i> Home GPS
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ref-care-details">
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DOCTOR &amp; CLINIC</div>
+                    <div class="ref-val">Dr. Ramesh Patil (MD • Room 104 Internal Med)</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DIAGNOSIS &amp; eRx</div>
+                    <div class="ref-val">Uncontrolled T2DM + BP • Telmisartan 40mg + Metformin 500mg</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">ASHA HOME CARE TASK</div>
+                    <div class="ref-val" style="color: #b45309; font-weight: 600;">⚠️ Weekly Home BP/RBS test + verify drug intake</div>
+                  </div>
+                </div>
+
+                <div class="ref-actions-row">
+                  <span class="ref-task-status" id="refStatusTextPawar">⌛ Next Home Visit: Tomorrow 10:00 AM</span>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn-ref-outline" onclick="showToast('Recorded Home BP 138/86, RBS 148 mg/dL. Synced with Dr. Ramesh Patil.')"><i class="fas fa-heartbeat"></i> Log Vitals</button>
+                    <button class="btn-ref-primary" onclick="markAshaFollowupDone('refCardPawar', 'refStatusTextPawar', 'Ramesh Pawar')"><i class="fas fa-check-circle"></i> Mark Follow-up Done</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. SUNITA GAIKWAD -->
+              <div class="referral-patient-card" id="refCardGaikwad">
+                <div class="ref-card-header">
+                  <div class="ref-patient-identity">
+                    <div class="ref-avatar" style="background: #fff1f2; color: #be123c; border: 1px solid #fecdd3;">SG</div>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <strong>Sunita Gaikwad (34 F • 32 Wks)</strong>
+                        <span class="uhid-mini">UHID: MH-2026-008129</span>
+                        <span class="ref-status-badge alert">🚨 High-Risk Pre-eclampsia</span>
+                      </div>
+                      <div class="ref-location">House #14 • Gaikwad Wadi</div>
+                    </div>
+                  </div>
+                  <div class="ref-date-tag">Emergency Admission: 09-Sep-2026</div>
+                </div>
+
+                <!-- Field Location & Home Visit Navigation -->
+                <div class="ref-home-location-box">
+                  <div class="ref-location-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Home Location:</strong> House #14, Gaikwad Wadi, North Block (Behind ZP Primary School)</span>
+                  </div>
+                  <div class="ref-gps-meta">
+                    <span>🗺️ GPS: 20.2045° N, 73.8410° E (1.4 km)</span>
+                    <button class="btn-ref-nav" onclick="showToast('📍 Opening GPS map route to House #14 (Sunita Gaikwad)...')">
+                      <i class="fas fa-location-arrow"></i> Home GPS
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ref-care-details">
+                  <div class="ref-detail-item">
+                    <div class="ref-label">HOSPITAL SPECIALIST</div>
+                    <div class="ref-val">Dr. Anil Kadam (MS OB-GYN • DH Nashik Room 108)</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">HOSPITAL TREATMENT</div>
+                    <div class="ref-val">BP Stabilized (Methyldopa 250mg) + IV Iron Sucrose completed</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">ASHA HOME CARE TASK</div>
+                    <div class="ref-val" style="color: #e11d48; font-weight: 600;">🚨 Bi-weekly BP checks + keep 108 ambulance contact ready</div>
+                  </div>
+                </div>
+
+                <div class="ref-actions-row">
+                  <span class="ref-task-status" id="refStatusTextGaikwad">● Active Observation • Delivery ETA: 22-Oct</span>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn-ref-outline" onclick="switchAshaTab('tab-emergency')"><i class="fas fa-ambulance"></i> 108 Dispatch</button>
+                    <button class="btn-ref-primary" onclick="markAshaFollowupDone('refCardGaikwad', 'refStatusTextGaikwad', 'Sunita Gaikwad')"><i class="fas fa-check-circle"></i> Complete Visit</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. BABANRAO SHIROLE -->
+              <div class="referral-patient-card" id="refCardShirole">
+                <div class="ref-card-header">
+                  <div class="ref-patient-identity">
+                    <div class="ref-avatar" style="background: #fefce8; color: #854d0e; border: 1px solid #fef08a;">BS</div>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <strong>Babanrao Shirole (68 M)</strong>
+                        <span class="uhid-mini">UHID: MH-2026-003310</span>
+                        <span class="ref-status-badge synced">✓ Clinic Checked</span>
+                      </div>
+                      <div class="ref-location">House #38 • Shirole Vasti</div>
+                    </div>
+                  </div>
+                  <div class="ref-date-tag">Referred: 08-Sep-2026</div>
+                </div>
+
+                <!-- Field Location & Home Visit Navigation -->
+                <div class="ref-home-location-box">
+                  <div class="ref-location-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Home Location:</strong> House #38, Shirole Vasti, East Farm Road (Near Water Tank)</span>
+                  </div>
+                  <div class="ref-gps-meta">
+                    <span>🗺️ GPS: 20.1890° N, 73.8245° E (2.1 km)</span>
+                    <button class="btn-ref-nav" onclick="showToast('📍 Opening GPS map route to House #38 (Babanrao Shirole)...')">
+                      <i class="fas fa-location-arrow"></i> Home GPS
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ref-care-details">
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DOCTOR &amp; CLINIC</div>
+                    <div class="ref-val">Dr. Sandeep Deshmukh (Emergency &amp; Chest Medicine)</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DIAGNOSIS &amp; eRx</div>
+                    <div class="ref-val">COPD Exacerbation • Salbutamol Metered Dose Inhaler (MDI)</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">ASHA HOME CARE TASK</div>
+                    <div class="ref-val" style="color: #059669; font-weight: 600;">✓ Inhaler technique check + SpO2 tracking (Target &gt;95%)</div>
+                  </div>
+                </div>
+
+                <div class="ref-actions-row">
+                  <span class="ref-task-status" id="refStatusTextShirole">✓ SpO2 Stable (96%) • Inhaler Used Correctly</span>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn-ref-outline" onclick="showToast('Recorded SpO2: 96%, HR: 74 bpm for Babanrao Shirole.')"><i class="fas fa-stethoscope"></i> Check SpO2</button>
+                    <button class="btn-ref-primary" onclick="markAshaFollowupDone('refCardShirole', 'refStatusTextShirole', 'Babanrao Shirole')"><i class="fas fa-check-circle"></i> Mark Completed</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. LATA THORAT -->
+              <div class="referral-patient-card" id="refCardThorat">
+                <div class="ref-card-header">
+                  <div class="ref-patient-identity">
+                    <div class="ref-avatar" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe;">LT</div>
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <strong>Lata Thorat (39 F)</strong>
+                        <span class="uhid-mini">UHID: MH-2026-006214</span>
+                        <span class="ref-status-badge synced">✓ Lab Infusion Done</span>
+                      </div>
+                      <div class="ref-location">House #22 • Navnath Nagar</div>
+                    </div>
+                  </div>
+                  <div class="ref-date-tag">Referred: 07-Sep-2026</div>
+                </div>
+
+                <!-- Field Location & Home Visit Navigation -->
+                <div class="ref-home-location-box">
+                  <div class="ref-location-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span><strong>Home Location:</strong> House #22, Navnath Nagar, Lane 3 (Opposite Anganwadi 02)</span>
+                  </div>
+                  <div class="ref-gps-meta">
+                    <span>🗺️ GPS: 20.1950° N, 73.8375° E (0.5 km)</span>
+                    <button class="btn-ref-nav" onclick="showToast('📍 Opening GPS map route to House #22 (Lata Thorat)...')">
+                      <i class="fas fa-location-arrow"></i> Home GPS
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ref-care-details">
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DAYCARE FACILITY</div>
+                    <div class="ref-val">Dindori PHC Daycare (Staff Nurse Anjali V.)</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">DIAGNOSIS &amp; TREATMENT</div>
+                    <div class="ref-val">Severe Anemia (Hb 7.1) • IV Iron Sucrose (2 Doses) Completed</div>
+                  </div>
+                  <div class="ref-detail-item">
+                    <div class="ref-label">ASHA HOME CARE TASK</div>
+                    <div class="ref-val" style="color: #2563eb; font-weight: 600;">✓ Supply monthly IFA tablets + verify dietary leafy vegetables</div>
+                  </div>
+                </div>
+
+                <div class="ref-actions-row">
+                  <span class="ref-task-status" id="refStatusTextThorat">✓ IFA Tablets Delivered • Next Hb Test in 3 Weeks</span>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn-ref-outline" onclick="showToast('IFA Tablet blister pack delivered to Lata Thorat.')"><i class="fas fa-pills"></i> Log IFA Pack</button>
+                    <button class="btn-ref-primary" onclick="markAshaFollowupDone('refCardThorat', 'refStatusTextThorat', 'Lata Thorat')"><i class="fas fa-check-circle"></i> Mark Completed</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             TAB 6: 108 EMERGENCY AMBULANCE & DOCTOR TELE-DISPATCH TERMINAL
+             ==================================================================== -->
+        <section id="tab-emergency" class="asha-panel" style="display: none;">
+          
+          <div class="dispatch-container-card">
+            
+            <div class="dispatch-header">
+              <div class="d-title">
+                <span class="siren-pulse">🚨</span>
+                <div>
+                  <h3 style="margin: 0; font-size: 16px; color: #ffffff;" data-i18n="dispatch_title">108 Emergency Ambulance &amp; Doctor Help (१०८ आपत्कालीन रुग्णवाहिका)</h3>
+                  <p style="margin: 2px 0 0 0; font-size: 12px; color: #cbd5e1;">One-touch GPS emergency ambulance dispatch for pregnant mothers in distress or critical patients.</p>
+                </div>
+              </div>
+              <span class="live-dispatch-badge">● 108 GPS NETWORK CONNECTED</span>
+            </div>
+
+            <div class="dispatch-body">
+              
+              <div class="form-grid-2" style="margin-bottom: 16px;">
+                <div class="field-group">
+                  <label>Emergency Patient / Pregnant Mother</label>
+                  <select class="field-select" id="emergencyPatientSelect" onchange="updateEmergencyPreset(this.value)">
+                    <option value="sunita" selected>Sunita Gaikwad (34 F • ANC Pre-eclampsia BP 154/98 • Gaikwad Wadi)</option>
+                    <option value="babanrao">Babanrao Shirole (68 M • Severe Breathing Distress SpO2 84% • Shirole Vasti)</option>
+                    <option value="lata">Lata Thorat (39 F • Severe Anemia Hb 7.1 • Navnath Nagar)</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label>Receiving Emergency Hospital Destination</label>
+                  <select class="field-select">
+                    <option selected>District Hospital Nashik (DH-04) • Emergency Crash Bay 1</option>
+                    <option>Dindori Rural Hospital (RH) • Maternity Emergency</option>
+                    <option>KEM Super-Specialty Medical Centre</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- LIVE GPS DISPATCH SIMULATION CARD -->
+              <div class="gps-tracking-box">
+                <div class="gps-map-mock">
+                  <div class="pulse-beacon">📍</div>
+                  <div class="ambulance-icon-moving">🚑 108 (MH-15-EG-1108)</div>
+                  <span class="map-label">Live GPS Link: Dindori Village Gaikwad Wadi &rarr; DH Nashik (Distance: 18.4 km)</span>
+                </div>
+
+                <div class="dispatch-telemetry-grid">
+                  <div class="t-box">
+                    <div class="lbl">NEAREST 108 AMBULANCE</div>
+                    <div class="val">MH-15-EG-1108 (ALS)</div>
+                  </div>
+                  <div class="t-box">
+                    <div class="lbl">ESTIMATED ARRIVAL (ETA)</div>
+                    <div class="val" style="color: #059669;">06 Mins (Approaching)</div>
+                  </div>
+                  <div class="t-box">
+                    <div class="lbl">DRIVER / PARAMEDIC</div>
+                    <div class="val">Santosh Shinde (+91 98221 44108)</div>
+                  </div>
+                  <div class="t-box">
+                    <div class="lbl">HOSPITAL BED STATUS</div>
+                    <div class="val" style="color: #2563eb;">Crash Bed 02 Ready</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 18px;">
+                <button type="button" class="btn-table-action" onclick="showToast('Calling 108 Dispatch Supervisor...')">Call 108 Control Room</button>
+                <button type="button" class="btn-emergency-big" onclick="trigger108Dispatch()">
+                  <span>🚨</span>
+                  <span>CONFIRM 108 AMBULANCE GPS DISPATCH</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<!-- /#screenMainApp -->
+
+    </div>
+    <!-- /.phone-screen-scroll-body -->
+
+    <!-- Simulated Mobile Bottom Navigation Bar (Active in Mobile Mode) -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-bottom-tab active" data-bottom-tab="tab-overview" onclick="switchAshaTab('tab-overview')">
+        <i class="fas fa-home"></i>
+        <span>Today</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-anc" onclick="switchAshaTab('tab-anc')">
+        <i class="fas fa-baby"></i>
+        <span>Mothers</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-survey" onclick="switchAshaTab('tab-survey')">
+        <i class="fas fa-address-card"></i>
+        <span>Survey</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-ncd" onclick="switchAshaTab('tab-ncd')">
+        <i class="fas fa-stethoscope"></i>
+        <span>Health</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-referrals" onclick="switchAshaTab('tab-referrals')">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Tracking</span>
+      </button>
+      <button class="mobile-bottom-tab active-red" data-bottom-tab="tab-emergency" onclick="switchAshaTab('tab-emergency')">
+        <i class="fas fa-ambulance"></i>
+        <span>108 SOS</span>
+      </button>
+    </nav>
+
+  </div>
+  <!-- /#phoneDeviceFrame -->
+
+</div>
+<!-- /.asha-canvas-wrapper -->
+
+<script src="js/asha-worker.js"></script>
+</body>
+</html>

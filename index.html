@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="mr-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arogya Mitra — Healthcare Demo Suite</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Design Tokens -->
+  <link rel="stylesheet" href="css/theme.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Minimal Global Header */
+    .top-header {
+      background: #0f172a;
+      color: #ffffff;
+      border-bottom: 1px solid #334155;
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .top-header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-badge {
+      background: rgba(37, 99, 235, 0.18);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-flowchart-btn {
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 7px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 150ms ease;
+    }
+
+    .header-flowchart-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 36px 20px 50px 20px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Minimal Hero */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Uniform Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 992px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Minimal Portal Card */
+    .portal-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: 250px;
+      transition: all 180ms ease;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .portal-card:hover {
+      border-color: #94a3b8;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .icon-doctor { background: #eff6ff; color: #2563eb; }
+    .icon-queue { background: #faf5ff; color: #7c3aed; }
+    .icon-admin { background: #ecfdf5; color: #059669; }
+    .icon-citizen { background: #f0f9ff; color: #0284c7; }
+    .icon-asha { background: #fff1f2; color: #e11d48; }
+    .icon-tracker { background: #fef3c7; color: #d97706; }
+
+    .card-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .card-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .card-persona {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #2563eb;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 12.5px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    /* Minimal Buttons */
+    .btn-launch {
+      width: 100%;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 150ms ease;
+    }
+
+    .btn-doctor {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-doctor:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-queue {
+      background: #7c3aed;
+      color: #ffffff;
+    }
+    .btn-queue:hover {
+      background: #6d28d9;
+    }
+
+    .btn-admin {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-admin:hover {
+      background: #047857;
+    }
+
+    .btn-citizen {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-citizen:hover {
+      background: #0369a1;
+    }
+
+    .btn-asha {
+      background: #e11d48;
+      color: #ffffff;
+    }
+    .btn-asha:hover {
+      background: #be123c;
+    }
+
+    .btn-tracker {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .btn-tracker:hover {
+      background: #b45309;
+    }
+
+    /* Minimal Highlights Bar */
+    .highlights-bar {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* Minimal Footer */
+    .page-footer {
+      border-top: 1px solid #e2e8f0;
+      background: #ffffff;
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 11.5px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<!-- GLOBAL HEADER -->
+<header class="top-header">
+  <div class="top-header-inner">
+    <a href="index.html" class="brand-link">
+      <div class="brand-icon">
+        <img src="assets/arogya-mitra-logo.png" alt="Arogya Mitra Logo" style="width: 26px; height: 26px; object-fit: contain;">
+      </div>
+      <div class="brand-title">Arogya Mitra</div>
+    </a>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main-container">
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <h1 class="hero-title">Arogya Mitra</h1>
+    <p class="hero-subtitle">
+      Interactive concept demo connecting Doctors, OPD Triage, Hospital Dispatch, Citizens, and Frontline Field Workers.
+    </p>
+  </section>
+
+  <!-- ALL 6 PORTAL CARDS (EQUAL SIZE GRID) -->
+  <div class="cards-grid">
+    
+    <!-- CARD 1: DOCTOR -->
+    <div class="portal-card">
+      <div>
+        <div class="card-header-row">
+          <div class="card-icon icon-doctor">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <span class="card-badge">Profile 1</span>
+        </div>
+        <h3 class="card-title">Doctor Station</h3>
+        <div class="card-persona">Dr. Ramesh Patil (MD)</div>
+        <p class="card-desc">
+          OPD clinical consultations, CDSS alerts, ICD-10 diagnosis, digital prescriptions, video calls, and smart referrals.
+        </p>
+      </div>
+      <a href="dashboard.html" class="btn-launch btn-doctor">
+        <span>Launch Doctor Station</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- CARD 2: QUEUE DESK -->
+    <div class="portal-card">
+      <div>
+        <div class="card-header-row">
+          <div class="card-icon icon-queue">
+            <i class="fas fa-ticket-alt"></i>
+          </div>
+          <span class="card-badge">Profile 2</span>
+        </div>
+        <h3 class="card-title">Queue &amp; Walk-In Desk</h3>
+        <div class="card-persona" style="color: #7c3aed;">Queue Manager &amp; Dispatcher</div>
+        <p class="card-desc">
+          4-Tier ESI drag-and-drop triage matrix, real-time room queues, token calling, and voice announcements.
+        </p>
+      </div>
+      <a href="queue-ticket.html?profile=queue-manager" class="btn-launch btn-queue">
+        <span>Launch Queue Desk</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- CARD 3: HOSPITAL COMMAND -->
+    <div class="portal-card">
+      <div>
+        <div class="card-header-row">
+          <div class="card-icon icon-admin">
+            <i class="fas fa-hospital-alt"></i>
+          </div>
+          <span class="card-badge">Profile 3</span>
+        </div>
+        <h3 class="card-title">Hospital Command</h3>
+        <div class="card-persona" style="color: #059669;">Hospital Administrator</div>
+        <p class="card-desc">
+          Emergency bay telemetry, doctor duty rosters, central pharmacy stock, and facility capacity overview.
+        </p>
+      </div>
+      <a href="queue-ticket.html?profile=admin" class="btn-launch btn-admin">
+        <span>Launch Hospital Command</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- CARD 4: CITIZEN APP -->
+    <div class="portal-card">
+      <div>
+        <div class="card-header-row">
+          <div class="card-icon icon-citizen">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <span class="card-badge">Citizen Portal</span>
+        </div>
+        <h3 class="card-title">Citizen Patient App</h3>
+        <div class="card-persona" style="color: #0284c7;">Public Citizen &amp; Patients</div>
+        <p class="card-desc">
+          Live queue token tracking with wait estimation, digital prescription locker, and emergency assistance.
+        </p>
+      </div>
+      <a href="patient-app.html" class="btn-launch btn-citizen">
+        <span>Launch Citizen App</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- CARD 5: ASHA WORKER -->
+    <div class="portal-card">
+      <div>
+        <div class="card-header-row">
+          <div class="card-icon icon-asha">
+            <i class="fas fa-hand-holding-medical"></i>
+          </div>
+          <span class="card-badge">Frontline Field</span>
+        </div>
+        <h3 class="card-title">ASHA Frontline Station</h3>
+        <div class="card-persona" style="color: #e11d48;">ASHA Field Worker</div>
+        <p class="card-desc">
+          Offline field surveys, high-risk maternal ANC alerts, and home visit follow-up tracking with GPS navigation.
+        </p>
+      </div>
+      <a href="asha-worker.html" class="btn-launch btn-asha">
+        <span>Launch ASHA Portal</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- HIGHLIGHTS STRIP -->
+  <div class="highlights-bar">
+    <div class="highlight-item">
+      <i class="fas fa-id-card" style="color: #2563eb;"></i>
+      <span>Digital Health Records</span>
+    </div>
+    <div class="highlight-item">
+      <i class="fas fa-video" style="color: #059669;"></i>
+      <span>Video Teleconsultation</span>
+    </div>
+    <div class="highlight-item">
+      <i class="fas fa-pills" style="color: #7c3aed;"></i>
+      <span>Generic Drug Inventory</span>
+    </div>
+    <div class="highlight-item">
+      <i class="fas fa-ambulance" style="color: #e11d48;"></i>
+      <span>Emergency Triage &amp; SOS</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <p><strong>Arogya Mitra</strong> — Interactive Prototype Demo</p>
+</footer>
+
+</body>
+</html>

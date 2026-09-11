@@ -1,0 +1,1746 @@
+/* ==========================================================================
+   MCCPHP - Hospital-Wide Queue Management & Digital Triage Workstation CSS
+   Master Unified Follow-Up Design System (Light Theme, Matte Finish)
+   ========================================================================== */
+
+/* Outer Canvas Wrapper */
+.queue-canvas-wrapper {
+  min-height: calc(100vh - 58px);
+  background-color: var(--bg-canvas, #f1f5f9);
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 16px 36px 16px;
+  width: 100%;
+}
+
+/* Main Floating Window Card */
+.queue-window-card {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  overflow: hidden;
+  min-height: 820px;
+  border: 1px solid #cbd5e1;
+}
+
+/* Internal Slim Navy Sidebar Rail */
+.window-internal-sidebar {
+  width: 68px;
+  background: #0d1b2a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  flex-shrink: 0;
+  border-right: 1px solid #1e293b;
+}
+
+.window-logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.window-logo-mark:hover {
+  background: #f1f5f9;
+}
+
+.window-nav-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.window-icon-btn {
+  background: transparent;
+  border: none;
+  color: #778da9;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all var(--transition-fast, 150ms ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window-icon-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.window-icon-btn.active {
+  color: #ffffff;
+  background: #2563eb;
+  font-weight: 700;
+}
+
+.sidebar-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+}
+
+/* Window Main Content Body */
+.window-content-body {
+  flex: 1;
+  padding: 24px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  position: relative;
+  overflow-y: auto;
+  min-height: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.window-content-body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Top Navigation Bar */
+.window-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.window-breadcrumbs {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.window-breadcrumbs span.sep {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.top-bar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.room-selector-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 12px;
+  transition: border-color 150ms ease;
+}
+
+.room-selector-wrapper:hover {
+  border-color: #94a3b8;
+}
+
+.room-selector-wrapper label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.opd-room-select {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  outline: none;
+  cursor: pointer;
+  padding-right: 4px;
+}
+
+.btn-walkin-add {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 150ms ease;
+  box-shadow: 0 1px 2px rgba(22, 101, 52, 0.05);
+}
+
+.btn-walkin-add:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+.btn-live-call-cta {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 150ms ease;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.btn-live-call-cta:hover {
+  background: #1d4ed8;
+}
+
+/* Facility Live Stats Ticker Strip */
+.facility-ticker-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.ticker-icon {
+  font-size: 14px;
+}
+
+.ticker-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ticker-val {
+  font-weight: 800;
+  color: #0d1b2a;
+}
+
+.ticker-val.red { color: #e11d48; }
+.ticker-val.green { color: #059669; }
+/* Modern Segmented Tab Strip */
+.queue-tab-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 6px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.queue-tab-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  transition: all 150ms ease;
+  white-space: nowrap;
+  line-height: 1.4;
+  min-height: 36px;
+  box-sizing: border-box;
+}
+
+.queue-tab-item:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.queue-tab-item.active {
+  color: #2563eb;
+  background: #ffffff;
+  font-weight: 800;
+  border-color: #bfdbfe;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tab-pill-counter {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+.queue-tab-item.active .tab-pill-counter {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Inside phoneDeviceFrame in Desktop Expanded Mode */
+.phone-device-frame.desktop-mode .queue-window-card {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 100%;
+  min-height: 760px;
+  flex: 1;
+}
+
+.phone-device-frame.desktop-mode #screenMainApp {
+  width: 100%;
+  flex: 1;
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* Panels */
+.queue-content-panels {
+  flex: 1;
+}
+
+.queue-panel {
+  display: none;
+}
+
+.queue-panel.active {
+  display: block;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================================================
+   TAB 1: LIVE OPD QUEUE BOARD STYLING
+   ========================================================================== */
+
+/* Now Serving Hero Banner (Minimal Light Medical Theme) */
+.now-serving-banner {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #e2e8f0;
+  border-left: 4px solid #2563eb;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.serving-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.serving-token-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.serving-token-box .serving-label-mini {
+  font-size: 9px;
+  font-weight: 700;
+  color: #2563eb;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.token-digits-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.token-prefix {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.token-num {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: #1e3a8a;
+  letter-spacing: 0.5px;
+}
+
+.serving-patient-info {
+  flex: 1;
+}
+
+.serving-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.status-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.status-text-live {
+  font-size: 11px;
+  font-weight: 700;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.consult-timer-tag {
+  font-size: 11px;
+  color: #64748b;
+  font-family: var(--font-mono, monospace);
+}
+
+.serving-patient-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.serving-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.uhid-tag {
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.chief-complaint-tag {
+  font-size: 11px;
+  color: #9a3412;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.vitals-preview-strip {
+  display: inline-flex;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.vitals-preview-strip strong {
+  color: #0f172a;
+}
+
+/* Triage Pills */
+.triage-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+}
+
+.triage-red { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.triage-orange { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+.triage-yellow { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.triage-green { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.triage-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+/* Serving Action Buttons */
+.serving-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 170px;
+}
+
+.serving-actions-row {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-action-primary {
+  background: #2563eb;
+  color: #ffffff;
+  border: 1px solid #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 150ms ease;
+  flex: 1;
+}
+
+.btn-action-primary:hover {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.btn-action-outline {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background-color 150ms ease, border-color 150ms ease;
+  flex: 1;
+}
+
+.btn-action-outline:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.btn-action-ghost {
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background-color 150ms ease;
+  flex: 1;
+}
+
+.btn-action-ghost:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Patient / Staff Table Cell Styles */
+.patient-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patient-avatar-mini {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+.btn-action-ghost:hover {
+  color: #ffffff;
+  border-color: #64748b;
+}
+
+/* Audio Announcement Notification Toast Banner */
+.audio-announcement-banner {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.speaker-wave {
+  font-size: 20px;
+}
+
+.announcement-text {
+  font-size: 12px;
+  color: #1e40af;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* Filter Strip for Columns */
+.queue-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-chips-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-chip-btn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.filter-chip-btn:hover, .filter-chip-btn.active {
+  background: #0d1b2a;
+  border-color: #0d1b2a;
+  color: #ffffff;
+}
+
+.search-input-box {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 10px;
+  gap: 6px;
+  width: 220px;
+}
+
+.search-input-box input {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #0d1b2a;
+  outline: none;
+  width: 100%;
+}
+
+/* Drag & Drop Hint Banner */
+.drag-instruction-strip {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  font-size: 11.5px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag-instruction-strip strong {
+  color: #0f172a;
+}
+
+/* 4-Tier Columns Grid */
+.queue-grid-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1080px) {
+  .queue-grid-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .queue-grid-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.queue-column {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  transition: background-color 150ms ease, border-color 150ms ease;
+  min-height: 480px;
+}
+
+.red-column { border-top: 4px solid #ef4444; }
+.yellow-column { border-top: 4px solid #f59e0b; }
+.green-column { border-top: 4px solid #10b981; }
+.blue-column { border-top: 4px solid #3b82f6; }
+
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.col-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col-title-wrap h4 {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.triage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #f59e0b; }
+.dot-green { background: #10b981; }
+.dot-blue { background: #3b82f6; }
+
+.col-count-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+.badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+.badge-yellow { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+.badge-green { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
+.badge-blue { background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; }
+
+.col-subtitle {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.queue-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 220px;
+  padding: 4px;
+  border-radius: 10px;
+  transition: all 180ms ease;
+}
+
+/* Drag & Drop States */
+.queue-column.drag-over .queue-card-list,
+.queue-card-list.drag-over {
+  background: #f8fafc;
+  outline: 2px dashed #3b82f6;
+  outline-offset: -2px;
+}
+
+/* Patient Card inside Column */
+.queue-patient-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: grab;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease, opacity 150ms ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  user-select: none;
+}
+
+.queue-patient-card:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 3px 6px rgba(15, 23, 42, 0.05);
+}
+
+.queue-patient-card:active {
+  cursor: grabbing;
+}
+
+.queue-patient-card.active-focus {
+  border-color: #f59e0b;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.08);
+}
+
+.queue-patient-card.dragging {
+  opacity: 0.35;
+  transform: scale(0.96);
+  border: 1.5px dashed #2563eb !important;
+  box-shadow: none;
+}
+
+.queue-patient-card.drop-pulse {
+  animation: dropSuccess 400ms ease;
+}
+
+@keyframes dropSuccess {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.card-token-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size: 12px;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.card-wait-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+
+.wait-high { background: #fef2f2; color: #b91c1c; border: 1px solid #fee2e2; }
+.wait-med { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }
+.wait-low { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+.wait-fast { background: #eff6ff; color: #0369a1; border: 1px solid #dbeafe; }
+
+.card-patient-name {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 4px;
+  margin-bottom: 3px;
+  line-height: 1.25;
+}
+
+.card-complaint {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.card-dept {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.btn-call-inline {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.btn-call-inline:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.in-consult-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   TAB 2: DIGITAL TRIAGE MATRIX & ASSESSMENT CALCULATOR
+   ========================================================================== */
+
+.triage-container-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .triage-container-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.triage-eval-card, .triage-protocol-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.section-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.section-title-bar h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0d1b2a;
+  margin: 0;
+}
+
+.pill-badge-blue {
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 8px;
+}
+
+.section-subtext {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+/* Presets bar for quick clinical demo */
+.scenario-presets-bar {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+}
+
+.preset-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.preset-btn:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.triage-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  font-size: 12px;
+  color: #0d1b2a;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+}
+
+/* CDSS Triage Prediction Box */
+.triage-prediction-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #d97706;
+  border-radius: 9px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.prediction-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.prediction-details {
+  flex: 1;
+}
+
+.pred-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 3px;
+}
+
+.pred-rationale {
+  font-size: 11px;
+  color: #b45309;
+  line-height: 1.4;
+}
+
+.pred-route-badge {
+  background: #d97706;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.form-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-primary-flat {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 150ms ease;
+}
+
+.btn-primary-flat:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary-flat {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btn-secondary-flat:hover {
+  background: #f1f5f9;
+}
+
+/* ESI Protocol Cheat Sheet */
+.esi-tier-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.esi-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.esi-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+  width: 130px;
+  text-align: center;
+}
+
+.pill-red { background: #fee2e2; color: #b91c1c; }
+.pill-orange { background: #ffedd5; color: #c2410c; }
+.pill-yellow { background: #fef3c7; color: #b45309; }
+.pill-green { background: #dcfce7; color: #15803d; }
+.pill-blue { background: #e0f2fe; color: #0369a1; }
+
+.esi-desc {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+/* Recent Triage Log */
+.recent-triage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.triage-log-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.t-token {
+  font-family: var(--font-mono, monospace);
+  font-weight: 800;
+  font-size: 11px;
+  color: #0d1b2a;
+}
+
+.t-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 11px;
+}
+
+.t-info span {
+  font-size: 10px;
+  color: #64748b;
+}
+
+.t-time {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+/* ==========================================================================
+   TAB 3: FACILITY TELEMETRY & WAIT TIMES
+   ========================================================================== */
+
+.telemetry-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .telemetry-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.kpi-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0d1b2a;
+  margin-bottom: 6px;
+}
+
+.kpi-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.kpi-sub {
+  font-size: 10px;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.kpi-progress-bar {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+}
+
+.telemetry-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  margin-bottom: 18px;
+}
+
+.telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.telemetry-table th {
+  background: #f8fafc;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.telemetry-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+
+.queue-num-pill {
+  font-weight: 700;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.esi-dot-breakdown {
+  display: inline-flex;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.esi-dot-breakdown span {
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.b-red { background: #fee2e2; color: #b91c1c; }
+.b-yellow { background: #fef3c7; color: #b45309; }
+.b-green { background: #dcfce7; color: #15803d; }
+.b-blue { background: #e0f2fe; color: #0369a1; }
+
+.status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* Peak Hours Chart Container */
+.peak-hours-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.peak-bars-grid {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 120px;
+  padding-top: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.peak-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.peak-bar-fill {
+  width: 100%;
+  background: #2563eb;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.peak-bar-fill.peak-high { background: #ff6a38; }
+.peak-bar-fill.peak-moderate { background: #06d6a0; }
+
+.peak-time-label {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   TAB 4: PATIENT BOARDING PASS / PRINTABLE TOKEN STUB
+   ========================================================================== */
+
+.pass-wrapper-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+}
+
+.boarding-pass-card {
+  width: 100%;
+  max-width: 680px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.pass-header {
+  background: #0d1b2a;
+  color: #ffffff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pass-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pass-brand-icon {
+  font-size: 22px;
+}
+
+.pass-brand h4 {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #60a5fa;
+  margin: 0;
+}
+
+.pass-brand p {
+  font-size: 10px;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.pass-badge {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.pass-main-body {
+  display: flex;
+  position: relative;
+}
+
+.pass-left-details {
+  flex: 1;
+  padding: 18px;
+}
+
+.pass-token-display {
+  margin-bottom: 14px;
+}
+
+.pass-token-display .lbl {
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.big-token-text {
+  font-size: 34px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  color: #0d1b2a;
+  margin: 2px 0 0 0;
+}
+
+.pass-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.p-field {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.p-field .lbl {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.p-field strong {
+  font-size: 11px;
+  color: #1e293b;
+}
+
+.pass-notes-bilingual {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.pass-notes-bilingual p {
+  margin: 0 0 3px 0;
+}
+
+.pass-notes-bilingual p:last-child {
+  margin: 0;
+}
+
+/* QR Stub Right with Perforation */
+.pass-qr-stub {
+  width: 180px;
+  border-left: 1.5px dashed #cbd5e1;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #fafbfc;
+}
+
+.stub-notch-top {
+  position: absolute;
+  top: -10px;
+  left: -9px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 1px solid #cbd5e1;
+}
+
+.stub-notch-bottom {
+  position: absolute;
+  bottom: -10px;
+  left: -9px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 1px solid #cbd5e1;
+}
+
+.qr-box {
+  background: #ffffff;
+  padding: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.qr-caption {
+  font-size: 9px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+}
+
+.live-ticker-box {
+  margin-top: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  color: #1e40af;
+  text-align: center;
+}
+
+.pass-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 18px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #64748b;
+}
+
+.pass-action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Modal Popup Styling */
+.queue-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(13, 27, 42, 0.6);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.queue-modal-card {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 520px;
+  padding: 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #cbd5e1;
+}
+
+.modal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-header-row h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d1b2a;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+/* Specific Phone Simulator Rules for Queue & Triage */
+.phone-device-frame:not(.desktop-mode) .queue-content-body {
+  padding: 14px !important;
+}
+
+.phone-device-frame:not(.desktop-mode) .now-serving-hero-card {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.phone-device-frame:not(.desktop-mode) .serving-actions {
+  width: 100%;
+}
+
+.phone-device-frame:not(.desktop-mode) .serving-actions-row {
+  width: 100%;
+}
+
+.phone-device-frame:not(.desktop-mode) .btn-action-primary,
+.phone-device-frame:not(.desktop-mode) .btn-action-outline,
+.phone-device-frame:not(.desktop-mode) .btn-action-ghost {
+  flex: 1;
+}
+
+.phone-device-frame:not(.desktop-mode) .digital-token-pass {
+  max-width: 100%;
+}
+

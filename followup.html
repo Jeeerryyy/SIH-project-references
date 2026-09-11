@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="mr-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCCPHP - Patient Treatment Journey &amp; Follow-up Timeline</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Design Tokens & Styles -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/followup.css">
+</head>
+<body>
+
+<!-- Top Global Navigation Header -->
+<header style="background: #0D1B2A; color: #ffffff; border-bottom: 1px solid #334155; padding: 10px 24px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.12); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+        </div>
+        <div>
+          <h1 style="font-size: 15px; font-weight: 800; line-height: 1.2; color: #ffffff; margin: 0;">Treatment Progress &amp; Timeline</h1>
+          <p style="font-size: 11px; color: #93c5fd; margin: 0; font-weight: 500;">Patient Care Pathway • Ramesh Pawar (MH-2026-004291)</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick Actions & Links -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="background: #1e293b; padding: 4px 12px; border-radius: 9999px; border: 1px solid #334155; font-size: 11px; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #06d6a0;"></span>
+        <span>Timeline Active (Cycle: 6 Mos)</span>
+      </div>
+
+      <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #e2e8f0; background: #1e293b; padding: 6px 12px; border-radius: 8px; border: 1px solid #475569; text-decoration: none;">
+        <i class="fas fa-th-large"></i> Home Hub
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="followup-canvas">
+  <!-- Organic Background Graphic Shapes (from image) -->
+  <div class="canvas-shape-top-right"></div>
+  <div class="canvas-shape-bottom-left"></div>
+
+  <!-- Universal Device Mode Switcher Toolbar -->
+  <div class="view-mode-toolbar">
+    <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Screen Mode:</span>
+    <button id="btnViewMobile" class="view-mode-btn active" title="View in Smartphone Shell">
+      <i class="fas fa-mobile-alt"></i> Mobile App Simulator
+    </button>
+    <button id="btnViewDesktop" class="view-mode-btn" title="Expand layout for full desktop screen">
+      <i class="fas fa-desktop"></i> Desktop View (Expanded)
+    </button>
+    <button id="btnToggleLoginScreen" class="view-mode-btn login-btn-toggle" title="Toggle Care Coordinator Login">
+      <i class="fas fa-sign-in-alt"></i> <span id="lblLoginToggle">View Login Screen</span>
+    </button>
+  </div>
+
+  <!-- SMARTPHONE DEVICE FRAME / DESKTOP EXPANDED CONTAINER -->
+  <div id="phoneDeviceFrame" class="phone-device-frame">
+
+    <!-- SIMULATED MOBILE STATUS BAR (3:52, VoLTE, 5G, 63% Battery) -->
+    <div class="mobile-status-bar">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span>3:52</span>
+        <i class="far fa-comment-dots" style="font-size: 11px; opacity: 0.8;"></i>
+      </div>
+      <div class="status-bar-icons">
+        <span style="font-size: 9px; font-family: monospace;">26.8 KB/s</span>
+        <span style="font-size: 9px; font-weight: 700; border: 1px solid #cbd5e1; padding: 0 3px; border-radius: 3px;">VoLTE</span>
+        <i class="fas fa-signal" style="font-size: 11px;"></i>
+        <span style="font-size: 10px; font-weight: 700;">5G</span>
+        <span class="status-battery-pill">63</span>
+      </div>
+    </div>
+
+    <!-- SCROLLABLE SCREEN BODY -->
+    <div class="phone-screen-scroll-body">
+
+      <!-- ====================================================================
+           SCREEN 0: CARE COORDINATOR LOGIN SCREEN (screenLogin)
+           ==================================================================== -->
+      <div id="screenLogin" class="portal-login-screen" style="display: none;">
+        <div class="portal-login-card">
+          <div class="portal-brand-badge badge-blue">
+            <i class="fas fa-route"></i>
+          </div>
+          
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Care Coordinator Login</h2>
+            <p style="font-size: 12px; color: #64748b;">Patient Treatment Pathway &amp; Follow-up Management</p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); loginAsCoordinator();">
+            <div class="login-form-group">
+              <label>STAFF ID / HEALTHCARE ID</label>
+              <input type="text" class="login-input" value="COORD-MH-DH-104" placeholder="e.g. COORD-MH-DH-104">
+            </div>
+
+            <div class="login-form-group">
+              <label>PATIENT HEALTH ID (UHID / ABHA)</label>
+              <input type="text" class="login-input" value="MH-2026-004291 (Ramesh Pawar)" readonly style="background: #f8fafc;">
+            </div>
+
+            <div class="login-form-group">
+              <label>PASSWORD / 2FA OTP</label>
+              <input type="password" class="login-input" value="123456" placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="btn-login-submit" style="background: #2563eb;">
+              <i class="fas fa-sign-in-alt"></i> Access Care Pathway
+            </button>
+          </form>
+
+          <button type="button" class="login-quick-demo-btn" onclick="loginAsCoordinator()">
+            <span>⚡ 1-Click Fast Login (Care Pathway Coordinator)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SCREEN 1: MAIN TIMELINE DASHBOARD (screenMainApp)
+           ==================================================================== -->
+      <div id="screenMainApp" style="display: block; width: 100%;">
+
+        <!-- Mobile App Top Header (Visible in Mobile Simulator) -->
+        <div class="app-mobile-top-header">
+          <div class="app-mobile-user-info">
+            <div class="app-mobile-avatar" style="background: #2563eb;">
+              RP
+            </div>
+            <div>
+              <div class="app-mobile-greeting">Ramesh Pawar (52 M)</div>
+              <div class="app-mobile-status-subtitle">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                <span>MH-2026-004291 • Pathway Active</span>
+              </div>
+            </div>
+          </div>
+          <div class="app-mobile-header-actions">
+            <button class="mobile-header-action-btn" onclick="showToast('Treatment Pathway Progress: 75% Completed')" title="Pathway Progress">
+              📈
+            </button>
+            <button class="mobile-header-action-btn" onclick="showToast('Downloading Patient Summary PDF')" title="Download Summary">
+              <i class="fas fa-download" style="font-size: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- FLOATING MAIN APP WINDOW CARD -->
+        <div class="followup-window-card">
+    
+    <!-- SLIM NAVY INTERNAL SIDEBAR -->
+    <aside class="window-internal-sidebar">
+      <div>
+        <div class="window-logo-mark" title="Arogya Mitra • Home Hub" onclick="location.href='index.html'">
+          <img src="assets/arogya-mitra-logo.png" alt="Arogya Mitra Logo" style="width: 24px; height: 24px; object-fit: contain;">
+        </div>
+        
+        <div class="window-nav-icons">
+          <!-- 1. Treatment Progress & Milestones (Milestone Stepper) -->
+          <button class="window-icon-btn active" title="Treatment Progress Timeline & Milestones" onclick="showToast('Viewing Treatment Progress Timeline (Jan-Apr 2026)')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="3"></circle><circle cx="12" cy="18" r="3"></circle><circle cx="19" cy="8" r="3"></circle><path d="M7.5 7.5L9.5 16M14.5 16.5L16.5 9.5"></path></svg>
+          </button>
+          <!-- 2. Pregnancy & Mother Care Pathway (Maternal Heart) -->
+          <button class="window-icon-btn" title="Pregnancy & Mother Care Treatment Plan" onclick="showToast('Switched to Pregnancy & Mother Care High-Risk Treatment Plan')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+          </button>
+          <!-- 3. Long-Term Illness Plan (Diabetes & High BP) (Pulse Activity) -->
+          <button class="window-icon-btn" title="Long-Term Illness Care Plan (Diabetes & High Blood Pressure)" onclick="showToast('Switched to Long-Term Illness Care Plan')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </button>
+          <!-- 4. Hospital Transfer & Specialist Tracking (Referral Loop) -->
+          <button class="window-icon-btn" title="Hospital Transfer & Specialist Doctor Tracking" onclick="showToast('Viewing Hospital Transfer & Specialist Doctor Progress')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          </button>
+          <!-- 5. Digital Health Records & Lab Reports (Folder Documents) -->
+          <button class="window-icon-btn" title="Digital Health Records & Lab Test Reports" onclick="showToast('Opening Patient Digital Health Record & Test Locker')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-user-avatar" title="Dr. Ramesh Patil">
+        RP
+      </div>
+    </aside>
+
+    <!-- WINDOW MAIN CONTENT BODY -->
+    <div class="window-content-body">
+      
+      <!-- TOP BREADCRUMB & RED (+) ACTION -->
+      <div class="window-top-bar">
+        <div class="window-breadcrumbs">
+          <span>Treatment Journeys</span>
+          <span class="sep">/</span>
+          <span>Patient Health Journey & Treatment Progress</span>
+          <span class="sep">/</span>
+          <span style="color: #64748b;">Timeline View</span>
+        </div>
+
+        <button class="red-circle-add-btn" title="Add Milestone">+</button>
+      </div>
+
+      <!-- HORIZONTAL TAB NAVIGATION STRIP -->
+      <nav class="timeline-tab-strip">
+        <div class="timeline-tab-item">
+          <span>⬡</span>
+          <span>Care Details</span>
+        </div>
+        <div class="timeline-tab-item">
+          <span>📋</span>
+          <span>Next Action Steps</span>
+        </div>
+        <div class="timeline-tab-item active">
+          <span>⏱️</span>
+          <span>Timeline</span>
+        </div>
+        <div class="timeline-tab-item">
+          <span>📁</span>
+          <span>Medical Reports</span>
+        </div>
+        <div class="timeline-tab-item">
+          <span>🛡️</span>
+          <span>Doctor Notes</span>
+        </div>
+      </nav>
+
+      <!-- TIMELINE CARD WRAPPER -->
+      <div class="timeline-card-wrapper">
+        <h2 class="timeline-card-title">Patient Treatment Timeline (Ramesh Pawar • Health ID: MH-2026-004291)</h2>
+
+        <!-- HORIZONTAL PROGRESS STEPPER TRACK -->
+        <div class="timeline-horizontal-track">
+          <!-- Continuous Base Line & Green Progress Fill -->
+          <div class="timeline-base-line"></div>
+          <div class="timeline-progress-fill"></div>
+
+          <!-- Milestones Nodes Grid -->
+          <div class="timeline-milestones-grid">
+            
+            <!-- Milestone 1: Jan 20 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Jan 20</span>
+              <div class="milestone-badge-circle completed">🚀</div>
+              <div class="milestone-title-text">Start of Evaluation</div>
+              <div class="milestone-subtitle-text">First Hospital Visit</div>
+            </div>
+
+            <!-- Milestone 2: Feb 14 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Feb 14</span>
+              <div class="milestone-badge-circle completed">✓</div>
+              <div class="milestone-title-text">Health Check & Tests</div>
+              <div class="milestone-subtitle-text">Blood Pressure & Lab Samples</div>
+            </div>
+
+            <!-- Milestone 3: Mar 8 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Mar 8</span>
+              <div class="milestone-badge-circle">✓</div>
+              <div class="milestone-title-text">Doctor Safety Check</div>
+              <div class="milestone-subtitle-text">Medicine Compatibility Check</div>
+            </div>
+
+            <!-- Milestone 4: Apr 30 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Apr 30</span>
+              <div class="milestone-badge-circle">✓</div>
+              <div class="milestone-title-text">Digital Prescription</div>
+              <div class="milestone-subtitle-text">Medicines Issued & Picked Up</div>
+            </div>
+
+            <!-- Milestone 5: Jun 7 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Jun 7</span>
+              <div class="milestone-badge-circle">✓</div>
+              <div class="milestone-title-text">Video Doctor Call</div>
+              <div class="milestone-subtitle-text">Specialist Online Follow-up</div>
+            </div>
+
+            <!-- Milestone 6: Sep 16 -->
+            <div class="milestone-node-col">
+              <span class="milestone-date-label">Sep 16</span>
+              <div class="milestone-badge-circle active-percentage">18%</div>
+              <div class="milestone-title-text">Final Discharge</div>
+              <div class="milestone-subtitle-text">Care Cycle Complete</div>
+            </div>
+
+          </div>
+
+          <!-- Sub-events layer with flag pins -->
+          <div class="timeline-sub-events-layer">
+            <!-- Pin 1 (Green) -->
+            <div class="sub-event-flag-pin pin-1">
+              <div class="flag-icon-badge" style="color: #06d6a0;">🚩</div>
+              <div class="sub-event-date">Feb 5</div>
+              <div class="sub-event-desc">Frontline Worker Home Visit (BP Check)</div>
+            </div>
+
+            <!-- Pin 2 (Red) -->
+            <div class="sub-event-flag-pin pin-2">
+              <div class="flag-icon-badge" style="color: #ef4444;">🚩</div>
+              <div class="sub-event-date">May 23</div>
+              <div class="sub-event-desc">Lab Urgent Alert: Blood Test Review</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM DURATION SUMMARY -->
+        <div class="timeline-footer-summary">
+          <div class="time-left-chip">
+            <span class="clock-icon">⏱️</span>
+            <span>Left: 5 Months to Complete Care Cycle</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Floating help/chat bubble -->
+      <div class="floating-chat-bubble" title="Need Help / ASHA Guidance">
+        💬
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- /#screenMainApp -->
+
+    </div>
+    <!-- /.phone-screen-scroll-body -->
+
+    <!-- Simulated Mobile Bottom Navigation Bar (Active in Mobile Mode) -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-bottom-tab active" onclick="showToast('Viewing Timeline')">
+        <i class="fas fa-stream"></i>
+        <span>Timeline</span>
+      </button>
+      <button class="mobile-bottom-tab" onclick="showToast('Viewing Treatment Plan')">
+        <i class="fas fa-heartbeat"></i>
+        <span>Plan</span>
+      </button>
+      <button class="mobile-bottom-tab" onclick="showToast('Viewing Reports &amp; Labs')">
+        <i class="fas fa-file-medical-alt"></i>
+        <span>Reports</span>
+      </button>
+      <button class="mobile-bottom-tab" onclick="showToast('Viewing Doctor Notes')">
+        <i class="fas fa-user-md"></i>
+        <span>Doctor</span>
+      </button>
+    </nav>
+
+  </div>
+  <!-- /#phoneDeviceFrame -->
+
+</div>
+<!-- /.followup-canvas -->
+
+<script src="js/followup.js"></script>
+</body>
+</html>

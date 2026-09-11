@@ -1,0 +1,437 @@
+/* ==========================================================================
+   MCCPHP - Follow-Up Care Pathway & Timeline CSS
+   Replication of 'follow up process.jpeg'
+   ========================================================================== */
+
+/* Outer Canvas with Graphic Shapes */
+.followup-canvas {
+  min-height: calc(100vh - 58px);
+  background-color: #dbe4ef;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px 16px 40px 16px;
+  width: 100%;
+}
+
+/* Background Organic Shapes */
+.canvas-shape-top-right {
+  position: absolute;
+  top: -120px;
+  right: -100px;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  background: #3e5675;
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.canvas-shape-bottom-left {
+  position: absolute;
+  bottom: -150px;
+  left: 20px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: #06d6a0;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+/* Main White Floating Window */
+.followup-window-card {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  width: 100%;
+  max-width: 1180px;
+  display: flex;
+  overflow: hidden;
+  min-height: 640px;
+}
+
+/* Internal Sidebar for Window */
+.window-internal-sidebar {
+  width: 68px;
+  background: #0d1b2a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+
+.window-logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.window-nav-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.window-icon-btn {
+  background: transparent;
+  border: none;
+  color: #778da9;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+
+.window-icon-btn:hover, .window-icon-btn.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content inside Window */
+.window-content-body {
+  flex: 1;
+  padding: 32px 44px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  position: relative;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.window-content-body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Top Navigation Bar */
+.window-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.window-breadcrumbs {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.window-breadcrumbs span.sep {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.red-circle-add-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  color: #ef4444;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.red-circle-add-btn:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Tab Navigation Strip */
+.timeline-tab-strip {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 36px;
+  padding-bottom: 2px;
+}
+
+.timeline-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  padding-bottom: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.timeline-tab-item:hover {
+  color: #1e293b;
+}
+
+.timeline-tab-item.active {
+  color: #2563eb;
+}
+
+.timeline-tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #2563eb;
+  border-radius: 4px 4px 0 0;
+}
+
+/* Timeline Card Container */
+.timeline-card-wrapper {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.timeline-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 40px;
+}
+
+/* Horizontal Timeline Stepper Track */
+.timeline-horizontal-track {
+  position: relative;
+  margin: 30px 0 60px 0;
+  padding: 20px 0;
+}
+
+/* Continuous Horizontal Base Line */
+.timeline-base-line {
+  position: absolute;
+  top: 52px;
+  left: 30px;
+  right: 30px;
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: var(--radius-full);
+  z-index: 2;
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  top: 52px;
+  left: 30px;
+  width: 25%;
+  height: 6px;
+  background-color: #06d6a0;
+  border-radius: var(--radius-full);
+  z-index: 3;
+  transition: width 0.5s ease;
+}
+
+/* Milestones Grid */
+.timeline-milestones-grid {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 5;
+}
+
+.milestone-node-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 140px;
+}
+
+.milestone-date-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+/* Circular Node Badges */
+.milestone-badge-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 14px;
+  box-shadow: 0 0 0 4px #ffffff;
+  transition: all var(--transition-fast);
+}
+
+.milestone-badge-circle.completed {
+  background-color: #06d6a0;
+  border-color: #06d6a0;
+  color: #ffffff;
+}
+
+.milestone-badge-circle.active-percentage {
+  background-color: #06d6a0;
+  border-color: #06d6a0;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.milestone-title-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 3px;
+}
+
+.milestone-subtitle-text {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+/* Sub-Milestone Flag Pins */
+.timeline-sub-events-layer {
+  position: relative;
+  height: 70px;
+  margin-top: 15px;
+}
+
+.sub-event-flag-pin {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.sub-event-flag-pin.pin-1 {
+  left: 20%;
+}
+
+.sub-event-flag-pin.pin-2 {
+  left: 70%;
+}
+
+.flag-icon-badge {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.sub-event-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.sub-event-desc {
+  font-size: 10px;
+  color: #64748b;
+  max-width: 110px;
+}
+
+/* Bottom Left Duration Summary */
+.timeline-footer-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+.time-left-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.time-left-chip .clock-icon {
+  color: #06d6a0;
+  font-size: 16px;
+}
+
+/* Floating Help Bubble */
+.floating-chat-bubble {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+
+.floating-chat-bubble:hover {
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Specific Phone Simulator Rules for Follow-up Timeline */
+.phone-device-frame:not(.desktop-mode) .window-content-body {
+  padding: 14px !important;
+}
+
+.phone-device-frame:not(.desktop-mode) .timeline-track-container {
+  overflow-x: auto;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.phone-device-frame:not(.desktop-mode) .months-scale-row {
+  min-width: 580px;
+}
+
+.phone-device-frame:not(.desktop-mode) .events-diagram-row {
+  min-width: 580px;
+}
+
