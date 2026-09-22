@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arogya Mitra - Citizen Health Portal</title>
+  <meta name="description" content="Arogya Mitra Patient App - Digital Health Records, Teleconsultation, and Emergency Services.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN for utility alignment -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Design Tokens & Styles -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/patient-app.css">
+</head>
+<body>
+
+  <!-- Top Global Navigation Header -->
+  <header class="bg-[#0D1B2A] text-white border-b border-slate-700 py-2.5 px-6 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5 hover:opacity-80 transition">
+          <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          </div>
+          <div>
+            <h1 class="text-base font-bold tracking-tight text-white leading-tight">Arogya Mitra</h1>
+            <p class="text-[11px] text-blue-300 font-medium">Citizen Health &amp; Digital Services Portal</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Links & Mode Toggle -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-600 transition">
+          <i class="fas fa-th-large"></i> Home Hub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Canvas Container -->
+  <div class="patient-app-canvas">
+
+    <!-- Device Mode Switcher Toolbar -->
+    <div class="view-mode-toolbar">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">Screen Mode:</span>
+      <button id="btnViewMobile" class="view-mode-btn active" title="View in Smartphone Shell">
+        <i class="fas fa-mobile-alt"></i> Mobile App Simulator
+      </button>
+      <button id="btnViewDesktop" class="view-mode-btn" title="Expand layout for full desktop screen">
+        <i class="fas fa-desktop"></i> Desktop View (Expanded)
+      </button>
+      <!-- Quick toggle to view Login Screen -->
+      <button id="btnToggleLoginScreen" class="view-mode-btn text-blue-700 font-bold bg-blue-50 border border-blue-200" title="Toggle Login Screen View">
+        <i class="fas fa-sign-in-alt"></i> <span id="lblLoginToggle">View Login Screen</span>
+      </button>
+    </div>
+
+    <!-- SMARTPHONE DEVICE FRAME / DESKTOP EXPANDED CONTAINER -->
+    <div id="phoneDeviceFrame" class="phone-device-frame">
+
+      <!-- SIMULATED MOBILE STATUS BAR (3:52, 5G, 63% Battery) -->
+      <div class="mobile-status-bar">
+        <div class="flex items-center gap-1.5">
+          <span>3:52</span>
+          <i class="far fa-comment-dots text-xs opacity-90"></i>
+        </div>
+        <div class="status-bar-icons">
+          <span class="text-[10px] font-mono">28.2 KB/s</span>
+          <span class="text-[9px] font-bold border border-white/60 px-1 rounded">VoLTE</span>
+          <i class="fas fa-signal text-xs"></i>
+          <span class="text-[10px] font-bold">5G</span>
+          <span class="status-battery-pill">63</span>
+        </div>
+      </div>
+
+      <!-- SCROLLABLE APP BODY -->
+      <div class="app-screen-scroll-body">
+
+        <!-- ====================================================================
+             SCREEN 0: LOGIN & WELCOME SCREEN (screenLogin)
+             Features Prominent 1-Tap Emergency SOS for Unregistered/Public Citizens
+             ==================================================================== -->
+        <div id="screenLogin" class="app-view-screen" style="display: none;">
+          <div class="login-screen-wrapper">
+
+            <!-- Emblem & Branding -->
+            <div class="text-center my-6">
+              <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-3 shadow-md border border-slate-200 p-2">
+                <img src="assets/arogya-mitra-logo.png" alt="Arogya Mitra Logo" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <h2 class="text-2xl font-black text-slate-900">Arogya Mitra</h2>
+              <p class="text-xs text-slate-500 font-medium">Digital Health &amp; Citizen Care Portal</p>
+            </div>
+
+            <!-- Login Card -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Enter Your Mobile / Health Card ID</h3>
+              <p class="text-xs text-slate-500 mb-4">Login to view prescriptions, medical reports, or doctor appointments.</p>
+
+              <div class="space-y-3">
+                <div>
+                  <label class="text-[11px] font-bold text-slate-600 block mb-1">Mobile Number or 14-Digit ABHA</label>
+                  <div class="flex items-center bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5">
+                    <span class="text-xs font-bold text-slate-500 mr-2">+91</span>
+                    <input type="text" id="inputLoginUser" class="bg-transparent text-xs font-bold text-slate-800 outline-none w-full" value="98603 33616" placeholder="Enter Mobile or ABHA">
+                  </div>
+                </div>
+
+                <button id="btnQuickDemoLogin" class="w-full py-3 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-xl text-xs shadow-md transition flex items-center justify-center gap-2">
+                  <span>Sign In &amp; Open Health Dashboard</span>
+                  <i class="fas fa-arrow-right text-xs"></i>
+                </button>
+              </div>
+
+              <!-- Language Selection in Login -->
+              <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <span>App Language:</span>
+                <button onclick="document.getElementById('modalLanguageSelector').classList.add('active')" class="text-blue-700 font-bold hover:underline">
+                  🌐 English (बदला)
+                </button>
+              </div>
+            </div>
+
+            <!-- National Health Authority & Govt Trust Badges -->
+            <div class="text-center mt-6 text-[11px] text-slate-400">
+              <p>Government of Maharashtra • Public Health Dept</p>
+              <p class="text-[10px] mt-0.5">National Digital Health Mission (ABDM) Compliant</p>
+            </div>
+
+            <!-- Emergency SOS Button -->
+            <div class="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-rose-100 transition" onclick="triggerSosCountdown()" title="Tap for 108 Emergency Medical Assistance">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center text-sm">
+                  🚨
+                </div>
+                <div>
+                  <div class="font-bold text-xs text-rose-800">1-Tap Emergency SOS (108)</div>
+                  <div class="text-[10px] text-rose-600">No login needed for emergency ambulance</div>
+                </div>
+              </div>
+              <button class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-[11px] px-3 py-1 rounded-full shadow-xs">
+                Call 108
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ====================================================================
+             SCREEN 1: HOME DASHBOARD (screenHome)
+             ==================================================================== -->
+        <div id="screenHome" class="app-view-screen active">
+
+          <!-- Top App Header with In-App Emergency SOS Button -->
+          <div class="app-top-header pt-2">
+            <div>
+              <h2 class="app-user-greeting">Hi Parth!</h2>
+            </div>
+            <div class="app-header-actions">
+              <!-- In-App Quick SOS Button -->
+              <button onclick="triggerSosCountdown()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-[11px] px-3 py-1 rounded-full flex items-center gap-1.5" title="Tap for 108 Emergency Ambulance">
+                <span>🚨 SOS</span>
+              </button>
+
+              <!-- Language Switcher Trigger -->
+              <button id="btnOpenLanguageModal" class="header-action-icon-btn" title="Change Language (भाषा बदला)">
+                <i class="fas fa-language text-slate-700 text-[15px]"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero Welcome Block -->
+          <div id="secHomeTop" class="app-hero-welcome">
+            <div class="hero-welcome-sub">Welcome to</div>
+            <div class="hero-welcome-title">Aarogya Mitra</div>
+            <div class="hero-welcome-tagline">Your Complete Health &amp; Medical Records App</div>
+          </div>
+
+          <!-- ACTIVE APPOINTMENT QUEUE TOKEN BANNER (Shown on Home after booking) -->
+          <div id="homeActiveTokenBanner" class="active-token-banner" style="display: none;">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wide" id="homeTokenBadge">Live OPD Queue Token</span>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-700" id="homeTokenEstWait">~ 15 mins wait</span>
+            </div>
+
+            <div class="flex items-center justify-between mt-2">
+              <div>
+                <div class="text-2xl font-black font-mono text-slate-900 tracking-tight" id="homeTokenNumber">#TK-OPD-108</div>
+                <div class="text-xs font-bold text-slate-800 mt-0.5" id="homeTokenFacility">District Hospital, Nashik (Central OPD)</div>
+                <div class="text-[11px] text-slate-500" id="homeTokenDoctor">General Medicine (Room 104) • Dr. Ramesh Patil</div>
+              </div>
+              <button type="button" onclick="document.getElementById('modalAppointmentQueueTicket').classList.add('active')" class="p-2.5 bg-white rounded-xl shadow-xs border border-slate-200 hover:border-blue-400 transition flex flex-col items-center gap-1 cursor-pointer">
+                <i class="fas fa-qrcode text-xl text-blue-600"></i>
+                <span class="text-[9px] font-bold text-blue-700">View Pass</span>
+              </button>
+            </div>
+
+            <!-- Virtual Video Call Direct Launch Action -->
+            <button id="btnHomeJoinCall" type="button" onclick="startVideoCallSession()" class="mt-2.5 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition" style="display: none;">
+              <i class="fas fa-video animate-pulse"></i>
+              <span>Join Live Doctor Video Room</span>
+            </button>
+
+            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <div class="text-slate-600">
+                <span class="font-semibold text-slate-900" id="homeTokenPosition">#4 in Queue</span> • <span id="homeTokenSlot">Today, 10:30 AM</span>
+              </div>
+              <button type="button" onclick="cancelActiveToken(event)" class="text-[10px] text-rose-600 font-bold hover:underline cursor-pointer">
+                Cancel Token
+              </button>
+            </div>
+          </div>
+
+
+          <!-- HORIZONTAL 5 ACTION CARDS CAROUSEL (Simplified Plain Language) -->
+          <div class="horizontal-cards-carousel">
+            
+            <!-- Card 1: Fast Hospital Token (Scan QR) -->
+            <div class="action-carousel-card card-theme-scan-reg">
+              <div class="carousel-card-top">
+                <div class="carousel-card-text">
+                  <div class="carousel-card-title">Hospital Fast Token (Scan QR)</div>
+                  <div class="carousel-card-desc">Scan hospital counter QR code to get your checkup token instantly without standing in long queues</div>
+                </div>
+                <div class="carousel-card-illustration text-blue-700">
+                  <i class="fas fa-qrcode text-4xl"></i>
+                </div>
+              </div>
+              <button class="carousel-card-btn" data-route="screenScanner">
+                Scan Hospital QR
+              </button>
+            </div>
+
+            <!-- Card 2: Share Records with Doctor -->
+            <div class="action-carousel-card card-theme-scan-share">
+              <div class="carousel-card-top">
+                <div class="carousel-card-text">
+                  <div class="carousel-card-title">Share Records with Doctor</div>
+                  <div class="carousel-card-desc">Show your lab tests and past prescriptions to your doctor securely with a quick scan</div>
+                </div>
+                <div class="carousel-card-illustration text-emerald-700">
+                  <i class="fas fa-file-medical-alt text-4xl"></i>
+                </div>
+              </div>
+              <button class="carousel-card-btn" data-route="screenScanner">
+                Share My Records
+              </button>
+            </div>
+
+            <!-- Card 3: Permissions to Share Records -->
+            <div class="action-carousel-card card-theme-consent">
+              <div class="carousel-card-top">
+                <div class="carousel-card-text">
+                  <div class="carousel-card-title">Permissions to Share Records</div>
+                  <div class="carousel-card-desc">Approve or stop doctors from viewing your medical files whenever you choose</div>
+                </div>
+                <div class="carousel-card-illustration text-indigo-700">
+                  <i class="fas fa-shield-alt text-4xl"></i>
+                </div>
+              </div>
+              <button class="carousel-card-btn" data-route="screenConsents">
+                Check Permissions
+              </button>
+            </div>
+
+            <!-- Card 4: My Medical Records & Prescriptions -->
+            <div class="action-carousel-card card-theme-records">
+              <div class="carousel-card-top">
+                <div class="carousel-card-text">
+                  <div class="carousel-card-title">My Medical Records</div>
+                  <div class="carousel-card-desc">All your doctor prescriptions, blood tests, and hospital reports safely in one place</div>
+                </div>
+                <div class="carousel-card-illustration text-amber-700">
+                  <i class="fas fa-folder-plus text-4xl"></i>
+                </div>
+              </div>
+              <button class="carousel-card-btn" data-route="screenRecords">
+                View My Files
+              </button>
+            </div>
+
+            <!-- Card 5: Family Health Cards -->
+            <div class="action-carousel-card card-theme-family">
+              <div class="carousel-card-top">
+                <div class="carousel-card-text">
+                  <div class="carousel-card-title">Family Health Cards</div>
+                  <div class="carousel-card-desc">Manage health cards and medical checkups for your parents, spouse, and children</div>
+                </div>
+                <div class="carousel-card-illustration text-purple-700">
+                  <i class="fas fa-users text-4xl"></i>
+                </div>
+              </div>
+              <button class="carousel-card-btn" onclick="document.getElementById('modalSwitchAccount').classList.add('active');">
+                Manage Family
+              </button>
+            </div>
+
+          </div>
+
+          <!-- APPOINTMENT BOOKING HUB CARD (In-Person OPD & Virtual Video Teleconsult) -->
+          <div class="appointment-hub-card">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 uppercase tracking-wide">Fast-Track OPD</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wide">Video Consult</span>
+                </div>
+                <h3 class="font-extrabold text-base text-slate-900 leading-tight">Book Doctor Appointment</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Instant hospital queue token or online video consultation</p>
+              </div>
+              <div class="w-10 h-10 rounded-2xl bg-[#003366] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                <i class="fas fa-calendar-check text-lg"></i>
+              </div>
+            </div>
+
+            <!-- 2 Big Selection Buttons -->
+            <div class="grid grid-cols-2 gap-2.5 mt-3">
+              <!-- In-Person Option -->
+              <button type="button" onclick="openAppointmentBooking('inperson')" class="appointment-mode-card group">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <div class="mode-icon-box bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fas fa-hospital text-sm"></i>
+                  </div>
+                  <span class="font-bold text-xs text-slate-900 group-hover:text-blue-700">In-Person Visit</span>
+                </div>
+                <div class="text-[11px] text-slate-500 leading-snug">Hospital OPD with Live Queue Boarding Pass</div>
+                <div class="mt-2 text-[11px] font-bold text-blue-600 flex items-center gap-1">
+                  <span>Book OPD Token</span>
+                  <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                </div>
+              </button>
+
+              <!-- Virtual Option -->
+              <button type="button" onclick="openAppointmentBooking('virtual')" class="appointment-mode-card group">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <div class="mode-icon-box bg-emerald-100 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition">
+                    <i class="fas fa-video text-sm"></i>
+                  </div>
+                  <span class="font-bold text-xs text-slate-900 group-hover:text-emerald-700">Virtual Call</span>
+                </div>
+                <div class="text-[11px] text-slate-500 leading-snug">Arogya Mitra Online Doctor Consultation</div>
+                <div class="mt-2 text-[11px] font-bold text-emerald-600 flex items-center gap-1">
+                  <span>Start Teleconsult</span>
+                  <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- HEALTH SERVICES SECTION (3-GRID) -->
+          <div id="secGovServices" class="app-section-title-bar">
+            <h3 class="app-section-title">Government &amp; Health Services</h3>
+          </div>
+
+          <div class="health-services-grid">
+            <!-- Tile 1: Upload Health Record -->
+            <div class="health-service-tile" data-sheet-target="sheetRecords">
+              <span class="tile-ai-badge">Smart Scan</span>
+              <div class="tile-icon-box text-blue-600">
+                <i class="fas fa-file-upload text-2xl"></i>
+              </div>
+              <span class="tile-label-text">Upload Doctor<br>Prescription</span>
+            </div>
+
+            <!-- Tile 2: Free Medicine Centre -->
+            <div class="health-service-tile" onclick="showToast('Locating 12 nearby Government Generic Medicine Centres in Nashik...')">
+              <div class="tile-icon-box text-emerald-600">
+                <i class="fas fa-pills text-2xl"></i>
+              </div>
+              <span class="tile-label-text">Low-Cost Generic<br>Medicine Store</span>
+            </div>
+
+            <!-- Tile 3: Online Doctor Consultation -->
+            <div class="health-service-tile" onclick="openAppointmentBooking('virtual')">
+              <div class="tile-icon-box text-indigo-600">
+                <i class="fas fa-video text-2xl"></i>
+              </div>
+              <span class="tile-label-text">Online Doctor<br>Video Call</span>
+            </div>
+          </div>
+
+          <!-- MY HEALTH RECORDS (ABHA BANNER) -->
+          <div id="secConnectedRecords" class="app-section-title-bar">
+            <h3 class="app-section-title">My Connected Hospital Records</h3>
+          </div>
+
+          <div class="abha-records-find-banner" data-route="screenRecords">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-file-medical text-lg"></i>
+            </div>
+            <div class="flex-1">
+              <div class="banner-text">Find your digital records from District Hospital Nashik, AIIMS, and local PHCs</div>
+            </div>
+          </div>
+
+          <!-- MY CONSENTS PREVIEW -->
+          <div id="secAccessApprovals" class="app-section-title-bar">
+            <h3 class="app-section-title">Recent Doctor Access Approvals</h3>
+            <span class="app-section-link" data-route="screenConsents">View all <i class="fas fa-chevron-right text-xs ml-1"></i></span>
+          </div>
+
+          <div class="consent-item-card" data-route="screenConsents">
+            <div class="consent-card-header">
+              <div>
+                <div class="consent-subtitle-meta">Government Health Locker</div>
+                <div class="consent-title-main">DigiLocker Records Sync</div>
+              </div>
+              <span class="consent-status-pill-granted">Approved</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+              <span>Access Type: <strong class="text-slate-800">Your Own Access</strong></span>
+              <span class="text-slate-600 font-semibold">2 Mins Ago</span>
+            </div>
+          </div>
+
+          <!-- GOVERNMENT HEALTH PROGRAMS -->
+          <div id="secGovSchemes" class="app-section-title-bar">
+            <h3 class="app-section-title">Government Free Healthcare Schemes</h3>
+          </div>
+
+          <div class="gov-programs-grid">
+            <div class="gov-program-card" onclick="showToast('Ayushman Bharat PM-JAY Linked (Free Treatment Coverage: ₹5,00,000)')">
+              <div class="w-14 h-14 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-3xl font-bold mb-2 border border-orange-200">
+                <i class="fas fa-shield-virus"></i>
+              </div>
+              <div class="text-xs font-bold text-slate-900">PM-JAY Scheme</div>
+              <div class="text-[10px] text-slate-500">₹5 Lakh Free Hospital Cover</div>
+            </div>
+
+            <div class="gov-program-card" onclick="showToast('Mahatma Jyotirao Phule Jan Arogya Yojana (MJPJAY) Active')">
+              <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center text-3xl font-bold mb-2 border border-emerald-200">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <div class="text-xs font-bold text-slate-900">MJPJAY Scheme</div>
+              <div class="text-[10px] text-slate-500">Maharashtra State Cover</div>
+            </div>
+          </div>
+
+        </div><!-- End screenHome -->
+
+
+        <!-- ====================================================================
+             SCREEN: ACTIVE EMERGENCY SOS TRACKING SCREEN (screenActiveSosTracking)
+             ==================================================================== -->
+        <div id="screenActiveSosTracking" class="app-view-screen" style="display: none;">
+          <div class="screen-solid-header bg-rose-600">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-white hover:opacity-80" onclick="showScreen('screenHome')">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <div>
+                <h2 class="screen-solid-header-title text-white">Emergency 108 Dispatch</h2>
+                <p class="text-[10px] text-rose-100 font-medium">Live Emergency Help En Route</p>
+              </div>
+            </div>
+            <span class="text-[10px] bg-white text-rose-700 font-bold px-2.5 py-1 rounded-full shadow-sm">ACTIVE</span>
+          </div>
+
+          <!-- Minimal Emergency Tracking Body -->
+          <div class="p-4 space-y-3 pb-20">
+            
+            <!-- 1. Live ETA & GPS Summary Hero -->
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 shadow-sm">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-[11px] font-bold text-rose-600 uppercase tracking-wider block">Estimated Arrival</span>
+                  <div class="text-2xl font-black text-slate-900 mt-0.5">~ 5 Mins <span class="text-xs font-semibold text-slate-500 font-sans">(2.4 km away)</span></div>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-white border border-rose-200 text-rose-600 flex items-center justify-center text-2xl shadow-sm">
+                  🚑
+                </div>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-rose-100 flex items-center text-xs text-slate-700 gap-1.5">
+                <i class="fas fa-map-marker-alt text-rose-500 text-xs flex-shrink-0"></i>
+                <span class="truncate">Your GPS: <strong>Dwarka Circle, Old Agra Rd, Nashik</strong></span>
+              </div>
+            </div>
+
+            <!-- 2. Ambulance Driver Contact Card -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center text-lg flex-shrink-0">
+                  👨‍✈️
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">Santosh Shinde</div>
+                  <div class="text-[11px] text-slate-500 truncate">108 Driver • MH-15-EG-1108</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <button onclick="showToast('Calling Driver: +91 98221 44108...')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1">
+                  <i class="fas fa-phone-alt text-[10px]"></i>
+                  <span>Call</span>
+                </button>
+                <button onclick="showToast('Ambulance GPS: Approaching Shalimar Chowk (1.1 km away)')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold" title="Live Map GPS">
+                  <i class="fas fa-location-arrow text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Assigned Local ASHA Worker Card -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-pink-50 text-pink-700 flex items-center justify-center text-lg flex-shrink-0">
+                  👩‍⚕️
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">Savita Kadam</div>
+                  <div class="text-[11px] text-emerald-600 font-semibold truncate">ASHA Worker • 300m away</div>
+                </div>
+              </div>
+              <button onclick="showToast('Calling ASHA Savita Kadam: +91 98231 09842...')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1 flex-shrink-0">
+                <i class="fas fa-phone-alt text-[10px]"></i>
+                <span>Call</span>
+              </button>
+            </div>
+
+            <!-- 4. Receiving Hospital Readiness Note -->
+            <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start gap-2.5">
+              <span class="text-lg">🏥</span>
+              <div class="text-xs text-slate-700">
+                <div class="font-bold text-slate-900">District Hospital Nashik Ready</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Emergency Bed #02 reserved • ABHA medical profile shared.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ====================================================================
+             SCREEN 2: MY MEDICAL RECORDS (screenRecords)
+             ==================================================================== -->
+        <div id="screenRecords" class="app-view-screen" style="display: none;">
+          
+          <!-- Solid Navy Header -->
+          <div class="screen-solid-header">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-white hover:opacity-80">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <h2 class="screen-solid-header-title">My Medical Records</h2>
+            </div>
+            <button class="text-white hover:opacity-80 text-lg" onclick="showToast('Linking ABHA Network Facilities (KEM, AIIMS, District Hospital)...')">
+              <i class="fas fa-link"></i>
+            </button>
+          </div>
+
+          <!-- Segmented Pill Control -->
+          <div class="segmented-pill-container">
+            <button class="segmented-pill-btn active" data-record-segment="all">All Records</button>
+            <button class="segmented-pill-btn" data-record-segment="uploaded">My Uploads</button>
+            <button class="segmented-pill-btn" data-record-segment="linked">Hospital Linked</button>
+          </div>
+
+          <!-- Search Bar + Filter Funnel Icon Row -->
+          <div class="records-search-bar-row">
+            <div class="records-search-input-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="inputSearchRecords" placeholder="Search Hospital, Doctor, or Lab Test">
+            </div>
+            <button id="btnToggleRecordCategoryPills" class="records-filter-icon-btn" title="Toggle Category Filters">
+              <i class="fas fa-filter"></i>
+            </button>
+          </div>
+
+          <!-- CATEGORY FILTER PILLS -->
+          <div class="records-category-pills-row" id="recordsCategoryFilterRow">
+            <button class="record-filter-pill active" data-filter="all">All</button>
+            <button class="record-filter-pill" data-filter="prescription">Prescriptions</button>
+            <button class="record-filter-pill" data-filter="diagnostic">Scans &amp; X-Rays</button>
+            <button class="record-filter-pill" data-filter="lab">Blood Tests</button>
+            <button class="record-filter-pill" data-filter="discharge">Discharge Notes</button>
+          </div>
+
+          <!-- Toggle Demo Records View / Empty State -->
+          <div class="flex items-center justify-between mb-3 px-1">
+            <span class="text-[11px] font-semibold text-slate-500">Showing 3 Health Records:</span>
+            <button id="btnToggleRecordsDemoState" class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+              <i class="fas fa-exchange-alt mr-1"></i> Switch Empty / Synced View
+            </button>
+          </div>
+
+          <!-- 1. EMPTY STATE -->
+          <div id="recordsEmptyStateView" class="records-empty-state-card" style="display: none;">
+            <div class="empty-state-icon-large">
+              <i class="far fa-file-excel"></i>
+            </div>
+            <h3 class="empty-state-title">No records found</h3>
+            <p class="text-xs text-slate-400 mt-1">Tap the upload button below to add your prescriptions or lab tests.</p>
+          </div>
+
+          <!-- 2. SYNCED RECORDS LIST -->
+          <div id="recordsPopulatedListView" class="space-y-3 pb-16">
+            
+            <!-- Record 1: Blood Test -->
+            <div class="bg-white rounded-2xl p-4 text-slate-800 shadow-sm border border-slate-200" data-record-type="lab">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fas fa-vial"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-900">Complete Blood Test (CBC &amp; Sugar)</h4>
+                    <p class="text-[11px] text-slate-500">Metropolis Lab • 24 Aug 2026</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">SYNCED</span>
+              </div>
+              <p class="text-xs text-slate-600 mb-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                Hemoglobin 14.2 g/dL (Normal), Fasting Sugar 98 mg/dL (Normal). All healthy.
+              </p>
+              <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                <span class="text-slate-500 font-mono text-[10px]">Hospital Code: IN2710001892</span>
+                <div class="flex items-center gap-2">
+                  <button class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold" onclick="showToast('Downloading Blood_Test_Report.pdf')">
+                    <i class="fas fa-download mr-1"></i> PDF
+                  </button>
+                  <button class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold" onclick="showToast('Opening Share Permission dialog')">
+                    <i class="fas fa-share-alt mr-1"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Record 2: Doctor Prescription -->
+            <div class="bg-white rounded-2xl p-4 text-slate-800 shadow-sm border border-slate-200" data-record-type="prescription">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fas fa-prescription"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-900">Heart Checkup Prescription</h4>
+                    <p class="text-[11px] text-slate-500">Dr. R. Sharma (KEM Hospital) • 12 Aug 2026</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">DOCTOR SIGNED</span>
+              </div>
+              <p class="text-xs text-slate-600 mb-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                Tablet Atorvastatin 10mg once daily after dinner x 30 days. Advised low salt diet.
+              </p>
+              <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                <span class="text-slate-500 font-mono text-[10px]">Hospital Code: IN2710000412</span>
+                <div class="flex items-center gap-2">
+                  <button class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold" onclick="showToast('Downloading Doctor_Prescription.pdf')">
+                    <i class="fas fa-download mr-1"></i> PDF
+                  </button>
+                  <button class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold" onclick="showToast('Opening Share Dialog')">
+                    <i class="fas fa-share-alt mr-1"></i> Share
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Record 3: Digital Chest X-Ray -->
+            <div class="bg-white rounded-2xl p-4 text-slate-800 shadow-sm border border-slate-200" data-record-type="diagnostic">
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg">
+                    <i class="fas fa-x-ray"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-900">Chest X-Ray Digital Scan</h4>
+                    <p class="text-[11px] text-slate-500">AIIMS Diagnostic Centre • 02 Jul 2026</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">DIGITAL SCAN</span>
+              </div>
+              <p class="text-xs text-slate-600 mb-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                Clear lung fields bilaterally. Normal chest findings. No infection found.
+              </p>
+              <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                <span class="text-slate-500 font-mono text-[10px]">Hospital Code: IN0710009821</span>
+                <div class="flex items-center gap-2">
+                  <button class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold" onclick="showToast('Loading Digital X-Ray Image...')">
+                    <i class="fas fa-eye mr-1"></i> View Scan
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Floating Upload Button -->
+          <button class="records-floating-upload-btn" data-sheet-target="sheetRecords">
+            <i class="fas fa-arrow-up-from-bracket"></i>
+            <span>+ Add File</span>
+          </button>
+
+        </div><!-- End screenRecords -->
+
+
+        <!-- ====================================================================
+             SCREEN 3: MY CONSENTS / PERMISSIONS (screenConsents)
+             ==================================================================== -->
+        <div id="screenConsents" class="app-view-screen" style="display: none;">
+          
+          <div class="screen-solid-header">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-white hover:opacity-80">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <h2 class="screen-solid-header-title">Permissions to Share Records</h2>
+            </div>
+          </div>
+
+          <!-- Segmented Pill Control -->
+          <div class="segmented-pill-container">
+            <button class="segmented-pill-btn active" data-consent-segment="requests">Doctor Requests</button>
+            <button class="segmented-pill-btn" data-consent-segment="approved">Approved Access</button>
+          </div>
+
+          <!-- Underline Tabs Row -->
+          <div class="consent-underline-tabs-row">
+            <button class="consent-underline-tab active">All</button>
+            <button class="consent-underline-tab">Pending</button>
+            <button class="consent-underline-tab">Denied</button>
+            <button class="consent-underline-tab">Expired</button>
+          </div>
+
+          <!-- Consents Cards List -->
+          <div class="space-y-3">
+            
+            <!-- Card 1: DigiLocker Request -->
+            <div class="consent-detail-card">
+              <div class="consent-detail-header">
+                <div>
+                  <div class="consent-type-label">Government Locker Link</div>
+                  <div class="consent-service-name">DigiLocker Records Sync</div>
+                </div>
+                <div>
+                  <span class="consent-status-pill-granted">Approved</span>
+                  <div class="consent-timestamp-text">1 Min Ago</div>
+                </div>
+              </div>
+
+              <div>
+                <div class="consent-purpose-label">Purpose of Access</div>
+                <div class="consent-purpose-value">Self-Requested Health Sync</div>
+              </div>
+
+              <button class="consent-view-more-btn" onclick="showToast('Viewing Government Health Locker Permission Details')">
+                View Access Rules
+              </button>
+            </div>
+
+            <!-- Card 2: Doctor Request -->
+            <div class="consent-detail-card">
+              <div class="consent-detail-header">
+                <div>
+                  <div class="consent-type-label">Doctor Request for Consultation</div>
+                  <div class="consent-service-name">Dr. Arvind Mehta (Cardiologist)</div>
+                </div>
+                <div>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Pending Approval</span>
+                  <div class="consent-timestamp-text">10 Mins Ago</div>
+                </div>
+              </div>
+
+              <div>
+                <div class="consent-purpose-label">Reason Doctor is Requesting:</div>
+                <div class="consent-purpose-value">Review past heart test reports before prescribing medicines</div>
+              </div>
+
+              <div class="flex items-center gap-2 mt-2">
+                <button class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm" onclick="showToast('Permission granted to Dr. Arvind Mehta for 15 days'); this.parentElement.innerHTML = '<span class=\'text-xs font-bold text-emerald-600\'><i class=\'fas fa-check-circle mr-1\'></i> Permission Granted (15 Days)</span>';">
+                  Allow Access
+                </button>
+                <button class="px-4 py-2 border border-slate-300 text-slate-600 rounded-xl text-xs font-semibold" onclick="showToast('Access denied'); this.closest('.consent-detail-card').remove();">
+                  Deny
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- End screenConsents -->
+
+
+        <!-- ====================================================================
+             SCREEN 4: MY PROFILE (screenProfile)
+             ==================================================================== -->
+        <div id="screenProfile" class="app-view-screen" style="display: none;">
+          
+          <div class="screen-solid-header">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-white hover:opacity-80">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <h2 class="screen-solid-header-title">My Profile &amp; Health Card</h2>
+            </div>
+          </div>
+
+          <!-- Profile User Card -->
+          <div class="profile-user-card">
+            <div class="profile-avatar-large">
+              <span>PR</span>
+            </div>
+            <div>
+              <h3 class="profile-name-bold">Parth Raakeshh Racka</h3>
+              <p class="profile-meta-line">16-March-2006 | Male (20 Yrs)</p>
+              <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-600 mt-1">
+                <i class="fas fa-certificate text-emerald-500"></i>
+                <span>Government Identity Verified ✓</span>
+              </div>
+            </div>
+            <div class="profile-actions-icons">
+              <button class="profile-icon-circle-btn" onclick="showToast('Showing Health Card QR Code')" title="View QR">
+                <i class="fas fa-qrcode text-sm"></i>
+              </button>
+              <button class="profile-icon-circle-btn" onclick="showToast('Edit profile details')" title="Edit Profile">
+                <i class="fas fa-pen text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Switch Account Link -->
+          <div class="mb-4 px-1">
+            <button id="btnProfileSwitchAccount" class="flex items-center gap-2 text-xs font-semibold text-blue-900 hover:underline">
+              <i class="fas fa-sync-alt text-xs"></i>
+              <span>Switch to Family Member Profile</span>
+            </button>
+          </div>
+
+          <!-- ABHA Number & Address Card -->
+          <div class="abha-card-box">
+            <div class="text-[11px] text-slate-500 font-semibold">14-Digit Health Card Number (ABHA)</div>
+            <div class="flex items-center justify-between">
+              <span class="abha-number-val">91-2182-2174-6884</span>
+              <button id="btnCopyAbhaId" class="text-xs text-blue-600 hover:underline font-semibold">
+                <i class="far fa-copy mr-1"></i> Copy
+              </button>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100">
+              <div class="text-[11px] text-slate-500 font-semibold">Health Address (Digital Username)</div>
+              <div class="flex items-center justify-between mt-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-sm text-[#003366] font-mono">parthracka16@abdm</span>
+                  <span class="w-4 h-4 rounded-full bg-orange-500 text-white flex items-center justify-center text-[9px] font-bold">P</span>
+                </div>
+                <button id="btnCopyAbhaAddress" class="text-xs text-blue-600 hover:underline font-semibold">
+                  <i class="far fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aarogya Mitra Promo Banner -->
+          <div class="bg-[#0d1b2a] rounded-2xl p-4 text-white mb-4 flex items-center justify-between border border-slate-800">
+            <div class="flex-1 pr-3">
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="text-base">🧡</span>
+                <span class="font-bold text-sm text-white">Aarogya Mitra</span>
+              </div>
+              <p class="text-[10px] text-slate-300 leading-tight">
+                Your lifelong digital health companion under the Maharashtra Connected Care &amp; Public Health Platform (MCCPHP).
+              </p>
+            </div>
+            <div class="w-14 h-20 rounded-lg bg-white/10 flex items-center justify-center text-3xl border border-white/20">
+              📱
+            </div>
+          </div>
+
+          <!-- Manage Account -->
+          <div class="app-section-title-bar my-2">
+            <h3 class="app-section-title text-sm font-bold text-slate-900">Manage Account &amp; Family</h3>
+          </div>
+
+          <div class="manage-account-grid">
+            <div class="manage-account-tile" data-route="screenConsents">
+              <div class="tile-icon"><i class="fas fa-file-shield"></i></div>
+              <span class="tile-text">Doctor<br>Permissions</span>
+            </div>
+            <div class="manage-account-tile" onclick="showToast('Viewing Hospital Visits & Checkup History')">
+              <div class="tile-icon"><i class="fas fa-history"></i></div>
+              <span class="tile-text">Checkup<br>History</span>
+            </div>
+            <div class="manage-account-tile" onclick="document.getElementById('modalSwitchAccount').classList.add('active');">
+              <div class="tile-icon"><i class="fas fa-users"></i></div>
+              <span class="tile-text">Family<br>Members</span>
+            </div>
+            <div class="manage-account-tile" onclick="showToast('Government Health Locker Connected')">
+              <div class="tile-icon"><i class="fas fa-lock"></i></div>
+              <span class="tile-text">Health<br>Lockers</span>
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div class="app-section-title-bar my-2">
+            <h3 class="app-section-title text-sm font-bold text-slate-900">Settings &amp; Security</h3>
+          </div>
+
+          <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 divide-y divide-slate-100">
+            <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-50 rounded-xl" id="btnSettingsLanguage">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                  <i class="fas fa-language"></i>
+                </div>
+                <span class="text-xs font-semibold text-slate-800">Change App Language (भाषा बदला)</span>
+              </div>
+              <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </div>
+            <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-50 rounded-xl" onclick="showToast('Opening Health Card Security PIN Reset')">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-bold font-mono tracking-widest bg-slate-100 px-2 py-0.5 rounded text-slate-700">***</span>
+                <span class="text-xs font-semibold text-slate-800">Reset Security PIN / Password</span>
+              </div>
+              <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+            </div>
+            <!-- Logout link to test Login screen -->
+            <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-rose-50 rounded-xl text-rose-700 font-bold" onclick="showScreen('screenLogin')">
+              <div class="flex items-center gap-3">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="text-xs">Log Out / Switch to Login Screen</span>
+              </div>
+              <i class="fas fa-chevron-right text-rose-400 text-xs"></i>
+            </div>
+          </div>
+
+        </div><!-- End screenProfile -->
+
+
+        <!-- ====================================================================
+             SCREEN 5: QR SCANNER (screenScanner)
+             ==================================================================== -->
+        <div id="screenScanner" class="app-view-screen" style="display: none;">
+          
+          <div class="screen-solid-header">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-white hover:opacity-80">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <h2 class="screen-solid-header-title">Scan Hospital QR Code</h2>
+            </div>
+          </div>
+
+          <div class="relative w-full h-96 bg-slate-950 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col items-center justify-center p-6 text-center">
+            
+            <div class="absolute top-6 left-6 w-8 h-8 border-t-4 border-l-4 border-blue-400 rounded-tl-lg"></div>
+            <div class="absolute top-6 right-6 w-8 h-8 border-t-4 border-r-4 border-blue-400 rounded-tr-lg"></div>
+            <div class="absolute bottom-6 left-6 w-8 h-8 border-b-4 border-l-4 border-blue-400 rounded-bl-lg"></div>
+            <div class="absolute bottom-6 right-6 w-8 h-8 border-b-4 border-r-4 border-blue-400 rounded-br-lg"></div>
+
+            <div class="w-3/4 h-0.5 bg-cyan-400 opacity-60"></div>
+
+            <div class="z-10 mt-12 bg-black/60 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/10">
+              <p class="text-xs text-white font-medium">Point camera at Hospital Checkup QR Code</p>
+              <button id="btnSimulateHospitalScan" class="mt-2 text-[11px] font-bold bg-blue-600 text-white px-3 py-1 rounded-full shadow">
+                Simulate Scan (Get Token)
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-6 bg-white rounded-full p-2 shadow-md border border-slate-200 flex items-center justify-around max-w-xs mx-auto">
+            <button id="btnScannerFlash" class="w-12 h-12 rounded-full flex items-center justify-center text-slate-700 hover:text-amber-500 text-lg transition" title="Flashlight">
+              <i class="fas fa-bolt"></i>
+            </button>
+            <button class="w-12 h-12 rounded-full flex items-center justify-center text-blue-600 text-xl transition" onclick="showToast('Select QR code image from gallery')" title="Upload QR">
+              <i class="fas fa-image"></i>
+            </button>
+            <button class="w-12 h-12 rounded-full flex items-center justify-center text-slate-700 hover:text-blue-600 text-lg transition" onclick="showToast('Camera flipped')" title="Flip Camera">
+              <i class="fas fa-camera-rotate"></i>
+            </button>
+          </div>
+
+        </div><!-- End screenScanner -->
+
+
+        <!-- ====================================================================
+             SCREEN 6: DOCTOR VIDEO CALL & ONLINE CHECKUP (screenCreateCase)
+             ==================================================================== -->
+        <div id="screenCreateCase" class="app-view-screen" style="display: none;">
+          
+          <div class="flex items-center justify-between mb-3 text-slate-900">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-slate-800 hover:opacity-80">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <h2 class="text-lg font-bold text-slate-900">Doctor Video Call &amp; Consultation</h2>
+            </div>
+            <button class="text-slate-600 hover:opacity-80" onclick="showToast('Arogya Mitra Online Video Consultation System')">
+              <i class="fas fa-info-circle text-lg"></i>
+            </button>
+          </div>
+
+          <!-- Patient Details Summary Banner -->
+          <div class="case-patient-summary-banner">
+            <div class="font-bold text-sm text-slate-900 mb-1">Parth Raakeshh Racka (20 Yrs / Male)</div>
+            <div class="text-xs text-slate-700 space-y-0.5">
+              <div>Mobile: <span class="font-mono">9860333616</span></div>
+              <div>Health Card ID: <span class="font-mono text-emerald-900 font-bold">parthracka16@abdm</span></div>
+              <div>Address: Flat-U-703, Akruti Countrywoods, Nashik</div>
+            </div>
+          </div>
+
+          <!-- Completion Score Progress Bar -->
+          <div class="case-progress-wrap bg-white rounded-2xl p-3 shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-800">
+              <span>Information Completed:</span>
+              <span id="caseCompletionScoreText" class="font-mono">10.0%</span>
+            </div>
+            <div class="case-progress-bar">
+              <div id="caseCompletionScoreFill" class="case-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Follow-Up Consultation Radio -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 mb-3 text-xs">
+            <div class="font-bold text-slate-800 mb-2">Have you seen this doctor before for the same problem?*</div>
+            <div class="flex items-center gap-6">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="followup_radio" value="yes" class="text-blue-600">
+                <span class="font-medium text-slate-700">Yes (Follow-up)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="followup_radio" value="no" checked class="text-blue-600">
+                <span class="font-medium text-slate-700">No (First Time Checkup)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 5 Multi-Step Rows -->
+          <div class="space-y-2.5">
+            
+            <!-- Step 1: Chief Symptoms -->
+            <div class="case-step-row-item" data-sheet-target="sheetChiefComplaints">
+              <div class="flex items-center gap-3">
+                <div class="step-num-circle">1</div>
+                <div>
+                  <h4 class="font-bold text-sm text-slate-900">What symptoms do you have?<span class="text-rose-500">*</span></h4>
+                  <div id="selectedSymptomsTagsContainer" class="mt-0.5">
+                    <span class="text-xs text-slate-400 italic">Tap to add symptoms (Fever, Cough, Pain...)</span>
+                  </div>
+                </div>
+              </div>
+              <button class="step-action-plus-btn">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+
+            <!-- Step 2: Past Medical History -->
+            <div class="case-step-row-item" data-sheet-target="sheetHistory">
+              <div class="flex items-center gap-3">
+                <div class="step-num-circle">2</div>
+                <h4 class="font-bold text-sm text-slate-900">Past Health Conditions &amp; Allergies</h4>
+              </div>
+              <i class="fas fa-chevron-right text-blue-900 text-sm"></i>
+            </div>
+
+            <!-- Step 3: Current Medicines -->
+            <div class="case-step-row-item" data-sheet-target="sheetMedication">
+              <div class="flex items-center gap-3">
+                <div class="step-num-circle">3</div>
+                <h4 class="font-bold text-sm text-slate-900">Medicines you are taking currently</h4>
+              </div>
+              <button class="step-action-plus-btn">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+
+            <!-- Step 4: Attach Medical Reports -->
+            <div class="case-step-row-item" data-sheet-target="sheetProceedRecords">
+              <div class="flex items-center gap-3">
+                <div class="step-num-circle">4</div>
+                <h4 class="font-bold text-sm text-slate-900">Attach Lab Test / Prescription Photos</h4>
+              </div>
+              <button class="step-action-plus-btn">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+
+            <!-- Step 5: Notes for Doctor -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="step-num-circle">5</div>
+                <h4 class="font-bold text-sm text-slate-900">Your message for the doctor<span class="text-rose-500">*</span></h4>
+              </div>
+              <div class="relative">
+                <textarea rows="3" id="inputCaseQuery" placeholder="Explain your illness or questions for the doctor..." class="w-full p-3 rounded-xl bg-slate-50 text-slate-800 text-xs border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                <span class="absolute bottom-2 right-3 text-[10px] text-slate-400 font-mono">0/1500</span>
+              </div>
+            </div>
+
+            <!-- Final Submit CTA -->
+            <button id="btnSubmitCaseConsultation" class="w-full py-3.5 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs transition">
+              Book Video Consultation with Doctor
+            </button>
+
+          </div>
+
+        </div><!-- End screenCreateCase -->
+
+
+        <!-- ====================================================================
+             SCREEN 7: COMPLETE APPOINTMENT BOOKING FLOW (screenBookAppointment)
+             ==================================================================== -->
+        <div id="screenBookAppointment" class="app-view-screen" style="display: none;">
+          
+          <!-- Sub-screen Header -->
+          <div class="flex items-center justify-between mb-3 text-slate-900">
+            <div class="flex items-center gap-3">
+              <button class="app-sub-screen-back text-slate-800 hover:opacity-80 p-1" onclick="showScreen('screenHome')">
+                <i class="fas fa-chevron-left text-base"></i>
+              </button>
+              <div>
+                <h2 class="text-base font-bold text-slate-900 leading-tight">Book Doctor Appointment</h2>
+                <p class="text-[11px] text-slate-500">Government OPD &amp; Video Teleconsultation</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Health ID Verified ✓
+            </span>
+          </div>
+
+          <!-- STEP 1: APPOINTMENT TYPE TOGGLE TABS -->
+          <div class="bg-slate-100 p-1 rounded-2xl flex items-center gap-1 mb-3.5">
+            <button id="btnTabInPerson" onclick="switchAppointmentMode('inperson')" class="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-sm bg-white text-blue-700">
+              <i class="fas fa-hospital"></i>
+              <span>In-Person OPD Visit</span>
+            </button>
+            <button id="btnTabVirtual" onclick="switchAppointmentMode('virtual')" class="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition text-slate-600 hover:text-slate-900">
+              <i class="fas fa-video"></i>
+              <span>Virtual Teleconsult (Video)</span>
+            </button>
+          </div>
+
+          <!-- PATIENT IDENTITY SUMMARY CHIP -->
+          <div class="bg-blue-50/70 border border-blue-100 rounded-2xl p-3 mb-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">PR</div>
+              <div>
+                <div class="font-bold text-xs text-slate-900">Parth Raakeshh Racka <span class="text-slate-500 font-normal">(20 M)</span></div>
+                <div class="text-[10px] text-slate-500 font-mono">ABHA: parthracka16@abdm</div>
+              </div>
+            </div>
+            <button onclick="document.getElementById('modalSwitchAccount').classList.add('active');" class="text-[11px] font-bold text-blue-600 hover:underline">
+              Switch
+            </button>
+          </div>
+
+          <!-- SECTION 1: IN-PERSON HOSPITAL SELECTION (Shown when inperson) -->
+          <div id="bookingSectionInPerson" class="space-y-3 mb-3">
+            
+            <!-- Hospital / Clinic Dropdown -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200">
+              <label class="block text-xs font-bold text-slate-800 mb-1.5">
+                <i class="fas fa-hospital text-blue-600 mr-1"></i> Select Healthcare Facility / Hospital<span class="text-rose-500">*</span>
+              </label>
+              <select id="selectHospitalFacility" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="District Hospital, Nashik (Central OPD)" selected>📍 District Hospital, Nashik (Central OPD)</option>
+                <option value="Community Health Centre (CHC), Igatpuri">📍 Community Health Centre (CHC), Igatpuri</option>
+                <option value="Primary Health Centre (PHC), Trimbakeshwar">📍 Primary Health Centre (PHC), Trimbakeshwar</option>
+                <option value="Sub-District Hospital, Malegaon">📍 Sub-District Hospital, Malegaon</option>
+              </select>
+              <div class="mt-2 flex items-center gap-2 text-[11px] text-emerald-700 font-medium">
+                <i class="fas fa-check-circle"></i>
+                <span>Queue time estimation: <b>~12-18 mins</b></span>
+              </div>
+            </div>
+
+            <!-- Department / OPD Specialty -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200">
+              <label class="block text-xs font-bold text-slate-800 mb-1.5">
+                <i class="fas fa-stethoscope text-blue-600 mr-1"></i> Clinical Department &amp; Specialty<span class="text-rose-500">*</span>
+              </label>
+              <select id="selectDepartmentSpecialty" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="General Medicine (Room 104 - Dr. Ramesh Patil)" selected>🩺 General Medicine (Room 104 - Dr. Ramesh Patil)</option>
+                <option value="Pediatrics & Child Care (Room 108 - Dr. Sunita K.)">👶 Pediatrics &amp; Child Care (Room 108)</option>
+                <option value="Gynecology & Maternal ANC (Room 112 - Dr. Priya Deshmukh)">🤰 Gynecology &amp; Maternal ANC (Room 112)</option>
+                <option value="Orthopedics & Joint Clinic (Room 115 - Dr. V. Joshi)">🦴 Orthopedics &amp; Joint Clinic (Room 115)</option>
+                <option value="Cardiology & NCD Screening (Room 201)">❤️ Cardiology &amp; NCD Screening (Room 201)</option>
+                <option value="Ophthalmology / Eye Care (Room 205)">👁️ Ophthalmology / Eye Care (Room 205)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- SECTION 1B: VIRTUAL TELECONSULT SPECIALTY (Shown when virtual) -->
+          <div id="bookingSectionVirtual" class="space-y-3 mb-3" style="display: none;">
+            
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200">
+              <label class="block text-xs font-bold text-slate-800 mb-1.5">
+                <i class="fas fa-video text-emerald-600 mr-1"></i> Teleconsultation Specialty<span class="text-rose-500">*</span>
+              </label>
+              <select id="selectVirtualSpecialty" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="General Physician (Instant Video Consult Queue)" selected>🩺 General Physician (Live Video Consult Queue)</option>
+                <option value="Pediatrician & Child Health Specialist">👶 Pediatrician (Child Health)</option>
+                <option value="Psychiatry & Mental Health Wellness">🧠 Mental Health &amp; Stress Counselling</option>
+                <option value="Diabetes & Chronic Care Management">🩺 Diabetes &amp; Hypertension Management</option>
+                <option value="Women's Health & Maternal Care">🤰 Women's Health &amp; ANC Specialist</option>
+              </select>
+              <div class="mt-2 p-2 rounded-xl bg-emerald-50 text-[11px] text-emerald-800 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-emerald-600"></i>
+                <span>End-to-end encrypted video consultation authorized under ABDM</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- STEP 2: SELECT DATE & TIME SLOT -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 mb-3">
+            <label class="block text-xs font-bold text-slate-800 mb-2">
+              <i class="far fa-calendar-alt text-blue-600 mr-1"></i> Select Appointment Date<span class="text-rose-500">*</span>
+            </label>
+            
+            <!-- Date Selector Pills -->
+            <div class="grid grid-cols-3 gap-2 mb-3">
+              <button type="button" onclick="selectAppointmentDate(this, 'Today, 11 Sep')" class="appointment-date-pill active">
+                <span class="date-tag">Today</span>
+                <span class="date-val">11 Sep</span>
+                <span class="date-avail">Available</span>
+              </button>
+              <button type="button" onclick="selectAppointmentDate(this, 'Tomorrow, 12 Sep')" class="appointment-date-pill">
+                <span class="date-tag">Tomorrow</span>
+                <span class="date-val">12 Sep</span>
+                <span class="date-avail">Available</span>
+              </button>
+              <button type="button" onclick="selectAppointmentDate(this, 'Sat, 13 Sep')" class="appointment-date-pill">
+                <span class="date-tag">Saturday</span>
+                <span class="date-val">13 Sep</span>
+                <span class="date-avail">Fast OPD</span>
+              </button>
+            </div>
+
+            <!-- Time Slots -->
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">
+              <i class="far fa-clock text-blue-600 mr-1"></i> Choose Preferred Time Slot<span class="text-rose-500">*</span>
+            </label>
+            
+            <div class="space-y-2">
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Morning Slots</div>
+              <div class="grid grid-cols-3 gap-1.5">
+                <button type="button" onclick="selectAppointmentSlot(this, '09:30 AM - 10:00 AM')" class="appointment-slot-pill">09:30 AM</button>
+                <button type="button" onclick="selectAppointmentSlot(this, '10:30 AM - 11:00 AM')" class="appointment-slot-pill active">10:30 AM</button>
+                <button type="button" onclick="selectAppointmentSlot(this, '11:15 AM - 11:45 AM')" class="appointment-slot-pill">11:15 AM</button>
+              </div>
+
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-1">Afternoon / Evening Slots</div>
+              <div class="grid grid-cols-3 gap-1.5">
+                <button type="button" onclick="selectAppointmentSlot(this, '01:30 PM - 02:00 PM')" class="appointment-slot-pill">01:30 PM</button>
+                <button type="button" onclick="selectAppointmentSlot(this, '02:30 PM - 03:00 PM')" class="appointment-slot-pill">02:30 PM</button>
+                <button type="button" onclick="selectAppointmentSlot(this, '04:30 PM - 05:00 PM')" class="appointment-slot-pill">04:30 PM</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: SYMPTOMS & REASON FOR CONSULTATION -->
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200 mb-3">
+            <label class="block text-xs font-bold text-slate-800 mb-2">
+              <i class="fas fa-notes-medical text-blue-600 mr-1"></i> Reason for Visit / Primary Symptoms<span class="text-rose-500">*</span>
+            </label>
+
+            <!-- Quick Symptom Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-2.5" id="symptomTagsContainer">
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill active">Fever &amp; Body Ache</button>
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill">Cough &amp; Throat Pain</button>
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill">Blood Pressure Check</button>
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill">Diabetes Follow-up</button>
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill">Routine Health Checkup</button>
+              <button type="button" onclick="toggleSymptomTag(this)" class="symptom-tag-pill">Stomach Ache</button>
+            </div>
+
+            <textarea id="bookingDoctorNotes" rows="2" placeholder="Add additional details or questions for doctor (optional)..." class="w-full p-2.5 rounded-xl bg-slate-50 text-slate-800 text-xs border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+
+            <div class="mt-2.5 flex items-center gap-2">
+              <input type="checkbox" id="checkShareAbhaRecords" checked class="w-4 h-4 rounded text-blue-600 border-slate-300">
+              <label for="checkShareAbhaRecords" class="text-[11px] text-slate-600 cursor-pointer select-none">
+                Share past ABHA medical records &amp; lab reports with consulting doctor
+              </label>
+            </div>
+          </div>
+
+          <!-- FINAL SUBMISSION CTA BUTTON -->
+          <div class="mt-4 mb-6">
+            <button id="btnSubmitAppointment" onclick="submitAppointmentBooking()" class="w-full py-3.5 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
+              <i class="fas fa-ticket-alt"></i>
+              <span id="btnSubmitAppointmentText">Confirm Booking &amp; Generate Live Queue Token</span>
+            </button>
+            <p class="text-[10px] text-center text-slate-400 mt-2">Zero registration fees • National Health Mission (NHM)</p>
+          </div>
+
+        </div><!-- End screenBookAppointment -->
+
+
+        <!-- ====================================================================
+             SCREEN 8: TELECONSULTATION VIDEO CALL INTERFACE (screenVideoCall)
+             ==================================================================== -->
+        <div id="screenVideoCall" class="app-view-screen" style="display: none;">
+          <div class="video-call-container">
+            
+            <!-- Top Call Header Bar -->
+            <div class="video-call-top-bar">
+              <button type="button" class="call-minimize-btn" onclick="minimizeOrEndVideoCall()" title="Minimize / Return">
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <div class="call-info-badge">
+                <span class="call-pulse-dot"></span>
+                <span class="call-timer" id="callDurationTimer">00:00</span>
+                <span class="call-crypto-badge"><i class="fas fa-shield-alt text-[9px]"></i> TLS 1.3</span>
+              </div>
+              <button type="button" class="call-quality-btn" onclick="showToast('WebRTC Mesh: 1080p @ 60fps • Latency 38ms • Loss 0.0%')" title="Network Quality">
+                <i class="fas fa-signal text-emerald-400 text-xs"></i>
+                <span class="text-[10px] font-bold text-white">5G HD</span>
+              </button>
+            </div>
+
+            <!-- Main Doctor Video Stream Feed -->
+            <div class="video-main-feed" id="videoMainFeed">
+              
+              <!-- Doctor Video Stage -->
+              <div class="doctor-video-frame">
+                
+                <!-- Doctor Avatar & Speaking Animation Stage -->
+                <div class="doctor-video-avatar-stage">
+                  <div class="doc-speaking-indicator-ring"></div>
+                  <div class="doctor-avatar-circle">
+                    <i class="fas fa-user-md text-6xl text-blue-600"></i>
+                  </div>
+                </div>
+
+                <!-- Upper Tag Overlay -->
+                <div class="flex items-center justify-between">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] text-emerald-400 font-bold border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>Consulting Live</span>
+                  </div>
+                  <div class="text-[10px] font-mono text-slate-300 bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-md">
+                    OPD-RM-104
+                  </div>
+                </div>
+
+                <!-- Lower Doctor Overlay & Real-Time Captions -->
+                <div class="space-y-2">
+                  <!-- Doctor Feed Overlay Details -->
+                  <div class="doctor-feed-overlay">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <h3 class="font-extrabold text-sm text-white drop-shadow">Dr. Ramesh Patil (MD)</h3>
+                          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/90 text-white shadow-xs">Medical Officer</span>
+                        </div>
+                        <p class="text-[11px] text-slate-200 drop-shadow">District Hospital Nashik • General Medicine</p>
+                      </div>
+                      <div class="audio-wave-visualizer" title="Doctor Audio Stream Active">
+                        <span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Live Closed Caption Box -->
+                  <div class="live-consultation-caption-box" id="liveConsultationCaption">
+                    <div class="caption-speaker"><i class="fas fa-stethoscope text-emerald-400 text-xs"></i> Dr. Ramesh Patil (Live):</div>
+                    <div class="caption-text" id="liveCaptionText">"Namaste Parth! I'm reviewing your ABHA records. Your vitals logged by ASHA worker Sangita look stable. I'm updating your prescription now."</div>
+                  </div>
+
+                  <!-- In-Call Floating Prescription / Notes Toggle Tab -->
+                  <div class="in-call-floating-notes" id="inCallClinicalNotes">
+                    <div class="in-call-notes-header" onclick="toggleInCallNotes()">
+                      <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                        <i class="fas fa-file-prescription text-emerald-600"></i>
+                        <span>Live Doctor e-Prescription</span>
+                      </div>
+                      <span class="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">CDSS Verified ✓</span>
+                    </div>
+                    <div class="in-call-notes-body" id="inCallNotesBody" style="display: none;">
+                      <div class="text-[11px] space-y-1.5 text-slate-700">
+                        <div class="flex justify-between border-b pb-1 border-slate-100">
+                          <span class="font-semibold">Rx 1: Metformin 500mg</span>
+                          <span class="font-bold text-blue-700">1 - 0 - 1 (After Meals)</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-1 border-slate-100">
+                          <span class="font-semibold">Rx 2: Tab Telmisartan 40mg</span>
+                          <span class="font-bold text-blue-700">1 - 0 - 0 (Morning)</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 pt-0.5">
+                          📍 Auto-synced to ASHA Worker Sangita for home verification.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Self Picture-in-Picture (PiP) Stream -->
+              <div class="patient-pip-tile" id="patientPipTile" onclick="flipCameraPreview()" title="Tap to switch camera / self preview">
+                <div class="pip-video-inner" id="pipVideoInner">
+                  <div class="patient-avatar-mini-pip">PR</div>
+                  <div class="pip-name-tag">You (Parth)</div>
+                </div>
+                <button type="button" class="pip-flip-btn" title="Flip Camera">
+                  <i class="fas fa-sync-alt text-[9px]"></i>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- In-Call Control Dock (Glassmorphism) -->
+            <div class="video-call-dock-controls">
+              <!-- Mic Button -->
+              <button type="button" class="call-control-btn active" id="btnCallToggleMic" onclick="toggleCallMic()" title="Mute / Unmute Mic">
+                <i class="fas fa-microphone"></i>
+                <span id="lblCallMic">Mic On</span>
+              </button>
+
+              <!-- Camera Button -->
+              <button type="button" class="call-control-btn active" id="btnCallToggleCam" onclick="toggleCallCam()" title="Turn Camera On / Off">
+                <i class="fas fa-video"></i>
+                <span id="lblCallCam">Camera</span>
+              </button>
+
+              <!-- Share Reports Button -->
+              <button type="button" class="call-control-btn" id="btnCallShareRecords" onclick="openInCallReportShare()" title="Share ABHA Lab Reports">
+                <i class="fas fa-file-medical-alt"></i>
+                <span>Share Lab</span>
+              </button>
+
+              <!-- In-Call Chat Button -->
+              <button type="button" class="call-control-btn" id="btnCallChat" onclick="openInCallChat()" title="Chat with Doctor">
+                <i class="fas fa-comment-dots"></i>
+                <span>Chat</span>
+              </button>
+
+              <!-- End Call Button (Red) -->
+              <button type="button" class="call-control-btn end-call-btn" id="btnEndVideoCall" onclick="endVideoCallConsultation()" title="End Teleconsultation">
+                <i class="fas fa-phone-slash"></i>
+                <span>End Call</span>
+              </button>
+            </div>
+
+          </div>
+        </div><!-- End screenVideoCall -->
+
+
+      </div><!-- End app-screen-scroll-body -->
+
+
+      <!-- ====================================================================
+           NAVIGATION: DUAL-MODE (MOBILE CURVED BOTTOM BAR vs DESKTOP LEFT SIDEBAR)
+           ==================================================================== -->
+      <nav class="curved-bottom-nav-bar">
+        
+        <!-- Desktop Sidebar Brand Header (Shown only in Desktop Mode) -->
+        <div class="desktop-sidebar-brand" onclick="showScreen('screenHome')" style="cursor: pointer;" title="Arogya Mitra Home">
+          <div class="brand-logo-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+          </div>
+          <div>
+            <div class="brand-text-title">Arogya Mitra</div>
+            <div class="brand-text-sub">Citizen Health Portal</div>
+          </div>
+        </div>
+
+        <!-- Navigation Links Wrapper -->
+        <div class="desktop-nav-links-wrapper">
+          
+          <!-- Tab 1: Home Dashboard -->
+          <button class="bottom-nav-tab active" data-screen="screenHome" id="tabNavHome">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-home text-base"></i>
+            </div>
+            <span>Home</span>
+          </button>
+
+          <!-- Desktop Only: Government & Health Services -->
+          <button class="bottom-nav-tab desktop-only-tab" id="tabNavGovServices" onclick="navigateToPatientSection('secGovServices')">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-hospital-user text-base"></i>
+            </div>
+            <span>Health Services</span>
+          </button>
+
+          <!-- Tab 2: My Records -->
+          <button class="bottom-nav-tab" data-screen="screenRecords" id="tabNavRecords">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-file-medical text-base"></i>
+            </div>
+            <span>My Records</span>
+          </button>
+
+          <!-- CENTER FLOATING QR POD (Mobile) / Desktop Nav -->
+          <div id="floatingQrPod" class="center-floating-qr-pod" title="Scan Hospital QR Code">
+            <i class="fas fa-qrcode text-xl"></i>
+            <span class="qr-pod-label">Scan QR</span>
+          </div>
+
+          <!-- Tab 3: Permissions / Consents -->
+          <button class="bottom-nav-tab" data-screen="screenConsents" id="tabNavConsents">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-shield-alt text-base"></i>
+            </div>
+            <span>Permissions</span>
+          </button>
+
+          <!-- Desktop Only: Government Free Healthcare Schemes -->
+          <button class="bottom-nav-tab desktop-only-tab" id="tabNavGovSchemes" onclick="navigateToPatientSection('secGovSchemes')">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-user-shield text-base"></i>
+            </div>
+            <span>Govt Schemes</span>
+          </button>
+
+          <!-- Tab 4: My Profile -->
+          <button class="bottom-nav-tab" data-screen="screenProfile" id="tabNavProfile">
+            <div class="tab-icon-wrapper">
+              <i class="fas fa-user text-base"></i>
+            </div>
+            <span>My Profile</span>
+          </button>
+
+        </div>
+
+        <!-- Desktop Sidebar User Profile Footer (Shown only in Desktop Mode) -->
+        <div class="desktop-sidebar-footer">
+          <div class="user-avatar-mini" onclick="showScreen('screenAbhaCard')" style="cursor: pointer;" title="View Health ID Card">PR</div>
+          <div class="flex-1 overflow-hidden" onclick="showScreen('screenProfile')" style="cursor: pointer;">
+            <div class="text-xs font-bold text-white truncate">Parth Ranka</div>
+            <div class="text-[10px] text-emerald-400 font-mono truncate">parthracka16@abdm</div>
+          </div>
+          <!-- Desktop Emergency SOS Button -->
+          <button onclick="triggerSosCountdown()" class="w-8 h-8 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center text-xs" title="108 Emergency SOS">
+            🚨
+          </button>
+        </div>
+
+      </nav>
+
+
+  <!-- ====================================================================
+       🚨 EMERGENCY SOS 5-SECOND COUNTDOWN MODAL (MINIMAL & SIMPLE)
+       ==================================================================== -->
+  <div id="modalEmergencySos" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-xs w-full shadow-2xl text-center animate-fade-in border border-rose-100">
+      
+      <!-- Top Alert Badge -->
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-700 rounded-full text-xs font-bold mb-3 border border-rose-200">
+        <span>🚨</span>
+        <span>Calling 108 Emergency</span>
+      </div>
+
+      <h3 class="font-bold text-base text-slate-900 leading-tight">Emergency SOS</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Connecting ambulance &amp; hospital in</p>
+
+      <!-- Minimal Countdown Ring -->
+      <div class="sos-countdown-circle-wrap my-3.5">
+        <div class="sos-countdown-ring">
+          <span id="sosCountdownNumber" class="text-4xl font-extrabold font-mono text-rose-600">5</span>
+          <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block -mt-0.5">seconds</span>
+        </div>
+      </div>
+
+      <!-- Concise Dispatch Location Note -->
+      <div class="text-[11px] text-slate-600 bg-slate-50 py-2 px-3 rounded-xl border border-slate-200 mb-3.5 flex items-center justify-center gap-1.5">
+        <i class="fas fa-map-marker-alt text-rose-500 text-xs flex-shrink-0"></i>
+        <span class="truncate">Dispatching to <strong>District Hospital Nashik</strong></span>
+      </div>
+
+      <!-- Action Buttons: Immediate Call or Cancel -->
+      <div class="space-y-2">
+        <button onclick="launchEmergencyDispatch()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-bold rounded-xl text-xs shadow transition flex items-center justify-center gap-2">
+          <i class="fas fa-phone-alt text-xs"></i>
+          <span>Call 108 Immediately</span>
+        </button>
+
+        <button onclick="cancelEmergencySos()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i class="fas fa-times text-slate-400"></i>
+          <span>Cancel (I am safe)</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ====================================================================
+       BOTTOM SHEET MODALS
+       ==================================================================== -->
+  <div id="appBottomSheetOverlay" class="app-bottom-sheet-overlay">
+    
+    <!-- SHEET 1: ADD SYMPTOMS -->
+    <div id="sheetChiefComplaints" class="bottom-sheet-dialog-card" style="display: none;">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-header-title">
+        <span>Select Your Symptoms</span>
+        <button class="sheet-close-cross-btn close-bottom-sheet-btn"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <!-- Search Input -->
+      <div class="relative mb-4">
+        <i class="fas fa-search absolute left-4 top-3 text-slate-400"></i>
+        <input type="text" id="inputCustomSymptom" placeholder="Search symptom (e.g. Fever, Headache)" class="w-full pl-10 pr-20 py-2.5 rounded-full bg-white text-slate-800 text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button id="btnAddCustomSymptom" class="absolute right-2 top-1.5 bg-[#003366] text-white text-[11px] font-bold px-3 py-1 rounded-full">
+          Add
+        </button>
+      </div>
+
+      <!-- Symptom Tag Chips Grid -->
+      <div class="symptom-tag-chips-grid">
+        <button class="symptom-tag-chip">Fever (ताप)</button>
+        <button class="symptom-tag-chip">Headache (डोकेदुखी)</button>
+        <button class="symptom-tag-chip">Cough (खोकला)</button>
+        <button class="symptom-tag-chip">Joint pain (सांधेदुखी)</button>
+        <button class="symptom-tag-chip">Stomach Pain (पोटदुखी)</button>
+        <button class="symptom-tag-chip">Acidity / Heartburn</button>
+        <button class="symptom-tag-chip">Vomiting (उलटी)</button>
+        <button class="symptom-tag-chip">Breathing Trouble</button>
+        <button class="symptom-tag-chip border-dashed text-slate-500" onclick="document.getElementById('inputCustomSymptom').focus();">+ Add other symptom</button>
+      </div>
+
+      <button id="btnSaveChiefComplaints" class="w-full py-3 bg-[#475569] hover:bg-[#334155] text-white rounded-full text-xs font-bold shadow transition flex items-center justify-center gap-1.5">
+        <span>Save Symptoms &amp; Next</span>
+        <i class="fas fa-chevron-right text-[10px]"></i>
+      </button>
+    </div>
+
+    <!-- SHEET 2: HISTORY -->
+    <div id="sheetHistory" class="bottom-sheet-dialog-card" style="display: none;">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-header-title">
+        <span>Past Health &amp; Conditions</span>
+        <button class="sheet-close-cross-btn close-bottom-sheet-btn"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <div class="divide-y divide-slate-100 text-xs font-medium text-slate-800 mb-4">
+        <div class="py-3 cursor-pointer hover:text-blue-600 flex justify-between items-center" onclick="showToast('Past Health Condition: None'); window.closeBottomSheet(); updateCaseProgressScore();">
+          <span>Past Illnesses &amp; Hospital Admissions</span>
+          <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        </div>
+        <div class="py-3 cursor-pointer hover:text-blue-600 flex justify-between items-center" onclick="showToast('Family Health: Diabetes reported'); window.closeBottomSheet(); updateCaseProgressScore();">
+          <span>Family Health History (Blood Pressure / Sugar)</span>
+          <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        </div>
+        <div class="py-3 cursor-pointer hover:text-blue-600 flex justify-between items-center" onclick="showToast('Allergies: No known drug allergies'); window.closeBottomSheet(); updateCaseProgressScore();">
+          <span>Drug Allergies &amp; Food Sensitivities</span>
+          <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHEET 3: ADD MEDICINES -->
+    <div id="sheetMedication" class="bottom-sheet-dialog-card" style="display: none;">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-header-title">
+        <span>Add Current Medicines</span>
+        <button class="sheet-close-cross-btn close-bottom-sheet-btn"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <div class="space-y-3 mb-5 text-xs text-slate-700">
+        <div>
+          <select id="inputMedicineName" class="w-full p-3 rounded-xl bg-white text-slate-800 text-xs border border-slate-300">
+            <option value="">Select Medicine Name*</option>
+            <option value="Paracetamol 650mg">Paracetamol 650mg (Fever/Pain)</option>
+            <option value="Atorvastatin 10mg">Atorvastatin 10mg (Cholesterol)</option>
+            <option value="Metformin 500mg">Metformin 500mg (Diabetes)</option>
+            <option value="Amlodipine 5mg">Amlodipine 5mg (Blood Pressure)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <select class="w-full p-3 rounded-xl bg-white text-slate-800 text-xs border border-slate-300">
+            <option>How many times daily?*</option>
+            <option>Once a day (OD)</option>
+            <option>Twice a day (BD)</option>
+            <option>Three times a day (TDS)</option>
+          </select>
+          <select class="w-full p-3 rounded-xl bg-white text-slate-800 text-xs border border-slate-300">
+            <option>Dose*</option>
+            <option>1 Tablet</option>
+            <option>2 Tablets</option>
+            <option>5 ml Syrup</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="btnSaveMedication" class="w-full py-3 bg-[#000066] hover:bg-[#000044] text-white rounded-xl text-xs font-bold shadow">
+        Save Medicine
+      </button>
+    </div>
+
+    <!-- SHEET 4: ATTACH MEDICAL RECORDS -->
+    <div id="sheetProceedRecords" class="bottom-sheet-dialog-card" style="display: none;">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-header-title">
+        <span>Choose Records to Share</span>
+        <button class="sheet-close-cross-btn close-bottom-sheet-btn"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <div class="divide-y divide-slate-100 text-xs font-medium text-slate-800 mb-4">
+        <div class="py-3.5 cursor-pointer hover:text-blue-600 flex justify-between items-center" data-sheet-target="sheetRecords">
+          <span>Take a Photo / Upload Document</span>
+          <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        </div>
+        <div class="py-3.5 cursor-pointer hover:text-blue-600 flex justify-between items-center" onclick="showToast('Importing past 12 months records from ABHA...'); window.closeBottomSheet(); updateCaseProgressScore();">
+          <span>Import From Connected Hospitals (ABHA)</span>
+          <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHEET 5: UPLOAD FILES -->
+    <div id="sheetRecords" class="bottom-sheet-dialog-card" style="display: none;">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-header-title">
+        <span>Upload Doctor Prescription or Lab Test</span>
+        <button class="sheet-close-cross-btn close-bottom-sheet-btn"><i class="fas fa-times"></i></button>
+      </div>
+      
+      <div class="space-y-3 mb-4 text-xs text-slate-700">
+        <div class="p-5 border-2 border-dashed border-slate-300 rounded-2xl text-center cursor-pointer hover:bg-slate-50" onclick="showToast('Opening Phone Camera / Document Picker...')">
+          <i class="fas fa-camera text-3xl text-blue-600 mb-2"></i>
+          <span class="font-bold text-slate-800 block text-xs">Take Photo of Prescription or Select PDF</span>
+          <span class="text-[10px] text-slate-400">PDF, JPG, PNG up to 25MB</span>
+        </div>
+      </div>
+
+      <button id="btnSaveRecords" class="w-full py-3 bg-[#003366] text-white rounded-full text-xs font-bold shadow">
+        Attach to My Profile
+      </button>
+    </div>
+
+  </div><!-- End appBottomSheetOverlay -->
+
+
+  <!-- ====================================================================
+       FULL SCREEN MODALS SYSTEM
+       ==================================================================== -->
+
+  <!-- MODAL 1: 13-LANGUAGE SELECTOR -->
+  <div id="modalLanguageSelector" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl animate-fade-in max-h-[90vh] flex flex-col">
+      
+      <div class="flex items-center gap-3 bg-[#003366] text-white p-3 -m-5 mb-4 rounded-t-3xl">
+        <button class="modal-close-btn text-white hover:opacity-80">
+          <i class="fas fa-chevron-left text-sm"></i>
+        </button>
+        <h3 class="font-bold text-base text-white">Select Language (भाषा निवडा)</h3>
+      </div>
+
+      <div class="flex-1 overflow-y-auto pr-1">
+        <div class="lang-selector-grid">
+          <div class="lang-selector-tile selected">
+            <span class="lang-glyph-large">A</span>
+            <span class="lang-name-text">English</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">म</span>
+            <span class="lang-name-text">मराठी</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">अ</span>
+            <span class="lang-name-text">हिन्दी</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">ગુ</span>
+            <span class="lang-name-text">ગુજરાતી</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">বা</span>
+            <span class="lang-name-text">বাংলা</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">த</span>
+            <span class="lang-name-text">தமிழ்</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">ಕ</span>
+            <span class="lang-name-text">ಕನ್ನಡ</span>
+          </div>
+          <div class="lang-selector-tile">
+            <span class="lang-glyph-large">తె</span>
+            <span class="lang-name-text">తెలుగు</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 mt-2">
+        <button id="btnApplyLanguage" class="w-full py-3 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-full text-xs shadow transition">
+          Confirm Language
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: SWITCH FAMILY MEMBER -->
+  <div id="modalSwitchAccount" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl animate-fade-in">
+      <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+        <h3 class="font-bold text-base text-slate-900">Switch Family Member</h3>
+        <button class="modal-close-btn text-slate-400 hover:text-slate-600 p-1">
+          <i class="fas fa-times text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2 text-xs mb-4">
+        <div class="flex items-center justify-between p-3 rounded-xl border border-blue-500 bg-blue-50/50 cursor-pointer" onclick="showToast('Active: Parth Raakeshh Racka (Self)'); document.getElementById('modalSwitchAccount').classList.remove('active');">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">PR</div>
+            <div>
+              <span class="font-bold text-slate-900 block">Parth Raakeshh Racka (Self)</span>
+              <span class="text-[11px] text-slate-500 font-mono">91-2182-2174-6884</span>
+            </div>
+          </div>
+          <i class="fas fa-check-circle text-blue-600"></i>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer" onclick="showToast('Switched to: Ramesh Racka (Father)'); document.getElementById('modalSwitchAccount').classList.remove('active');">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold">RR</div>
+            <div>
+              <span class="font-bold text-slate-900 block">Ramesh Racka (Father)</span>
+              <span class="text-[11px] text-slate-500 font-mono">91-8812-4412-9901</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer" onclick="showToast('Switched to: Sunita Racka (Mother)'); document.getElementById('modalSwitchAccount').classList.remove('active');">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">SR</div>
+            <div>
+              <span class="font-bold text-slate-900 block">Sunita Racka (Mother)</span>
+              <span class="text-[11px] text-slate-500 font-mono">91-9921-1200-3321</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="w-full py-2.5 border-2 border-dashed border-blue-400 text-blue-700 hover:bg-blue-50 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition" onclick="showToast('Add new family member health card flow'); document.getElementById('modalSwitchAccount').classList.remove('active');">
+        <i class="fas fa-user-plus"></i> + Add Family Member Health Card
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SCAN SHARE TOKEN -->
+  <div id="modalScanShareToken" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center animate-fade-in">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fas fa-check"></i>
+      </div>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider">Fast-Track Checkup Token</span>
+      <h3 class="font-bold text-2xl text-slate-900 font-mono mt-2">#OPD-DH-042</h3>
+      <p class="text-xs font-bold text-slate-700 mt-1">District Hospital Nashik (DH-04)</p>
+      <p class="text-[11px] text-slate-500">Please proceed directly to Room 104 (Dr. Ramesh Patil)</p>
+
+      <div class="my-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 inline-block">
+        <i class="fas fa-qrcode text-7xl text-slate-800"></i>
+      </div>
+
+      <button class="modal-close-btn w-full py-3 bg-[#003366] text-white font-bold rounded-xl text-xs transition">
+        Done &amp; Save Token
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: MINIMAL DIGITAL QUEUE TICKET / BOARDING PASS -->
+  <div id="modalAppointmentQueueTicket" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl animate-fade-in relative overflow-hidden border border-slate-100">
+      
+      <!-- Top Accent Bar -->
+      <div id="ticketTopAccent" class="h-2 bg-blue-600 w-full"></div>
+
+      <!-- Close Button -->
+      <button onclick="closeQueueTicketModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center transition">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+
+      <!-- Main Ticket Body -->
+      <div class="p-5">
+        
+        <!-- Token Number & Facility -->
+        <div>
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Queue Token</div>
+          <div class="text-3xl font-black font-mono text-slate-900 tracking-tight" id="ticketTokenNumber">#TK-OPD-108</div>
+          <div class="text-xs font-semibold text-slate-800 mt-0.5" id="ticketFacilityName">District Hospital, Nashik (Central OPD)</div>
+          <div class="text-[11px] text-slate-500" id="ticketDoctorRoom">General Medicine (Room 104) • Dr. Ramesh Patil</div>
+        </div>
+
+        <!-- Perforated Divider with Side Notches -->
+        <div class="relative my-3.5">
+          <div class="border-t-2 border-dashed border-slate-200"></div>
+          <div class="absolute -left-8 -top-2.5 w-5 h-5 rounded-full bg-[#0d1b2a] shadow-inner"></div>
+          <div class="absolute -right-8 -top-2.5 w-5 h-5 rounded-full bg-[#0d1b2a] shadow-inner"></div>
+        </div>
+
+        <!-- Compact 2x2 Details Grid -->
+        <div class="grid grid-cols-2 gap-2 text-xs mb-3.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Queue Position</div>
+            <div class="font-extrabold text-slate-900 mt-0.5" id="ticketQueuePosition">#4 in Queue</div>
+            <div class="text-[10px] text-emerald-600 font-semibold" id="ticketEstimatedWait">~ 15 Mins wait</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase">Time Slot</div>
+            <div class="font-bold text-slate-900 mt-0.5" id="ticketDateSlot">Today, 10:30 AM</div>
+            <div class="text-[10px] text-slate-500 font-mono">UHID: MH-2026-004291</div>
+          </div>
+        </div>
+
+        <!-- Authentic Real-Looking Vector QR Code -->
+        <div class="bg-slate-50 rounded-2xl p-3 text-center border border-slate-200/80 mb-3.5">
+          <div class="inline-block p-2 bg-white rounded-xl shadow-xs border border-slate-200">
+            <svg class="w-32 h-32 mx-auto" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg">
+              <rect width="145" height="145" fill="#ffffff" />
+              <!-- Top-Left Finder Pattern -->
+              <rect x="10" y="10" width="35" height="35" rx="4" fill="#0f172a"/>
+              <rect x="15" y="15" width="25" height="25" rx="2" fill="#ffffff"/>
+              <rect x="20" y="20" width="15" height="15" rx="2" fill="#0f172a"/>
+              <!-- Top-Right Finder Pattern -->
+              <rect x="100" y="10" width="35" height="35" rx="4" fill="#0f172a"/>
+              <rect x="105" y="15" width="25" height="25" rx="2" fill="#ffffff"/>
+              <rect x="110" y="20" width="15" height="15" rx="2" fill="#0f172a"/>
+              <!-- Bottom-Left Finder Pattern -->
+              <rect x="10" y="100" width="35" height="35" rx="4" fill="#0f172a"/>
+              <rect x="15" y="105" width="25" height="25" rx="2" fill="#ffffff"/>
+              <rect x="20" y="110" width="15" height="15" rx="2" fill="#0f172a"/>
+              <!-- Timing Lines -->
+              <path d="M 50 25 h 45 M 25 50 v 45" stroke="#0f172a" stroke-width="4" stroke-dasharray="4,4" />
+              <!-- Real Data Modules / Matrix Pattern -->
+              <g fill="#0f172a">
+                <rect x="52" y="12" width="6" height="6" rx="1"/>
+                <rect x="64" y="12" width="6" height="6" rx="1"/>
+                <rect x="76" y="12" width="6" height="6" rx="1"/>
+                <rect x="88" y="12" width="6" height="6" rx="1"/>
+                <rect x="52" y="32" width="6" height="6" rx="1"/>
+                <rect x="70" y="32" width="6" height="6" rx="1"/>
+                <rect x="82" y="32" width="6" height="6" rx="1"/>
+                
+                <rect x="12" y="52" width="6" height="6" rx="1"/>
+                <rect x="24" y="52" width="6" height="6" rx="1"/>
+                <rect x="36" y="52" width="6" height="6" rx="1"/>
+                <rect x="48" y="52" width="6" height="6" rx="1"/>
+                <rect x="60" y="52" width="6" height="6" rx="1"/>
+                <rect x="72" y="52" width="6" height="6" rx="1"/>
+                <rect x="84" y="52" width="6" height="6" rx="1"/>
+                <rect x="96" y="52" width="6" height="6" rx="1"/>
+                <rect x="108" y="52" width="6" height="6" rx="1"/>
+                <rect x="120" y="52" width="6" height="6" rx="1"/>
+                <rect x="132" y="52" width="6" height="6" rx="1"/>
+
+                <rect x="12" y="64" width="6" height="6" rx="1"/>
+                <rect x="30" y="64" width="6" height="6" rx="1"/>
+                <rect x="48" y="64" width="6" height="6" rx="1"/>
+                <rect x="66" y="64" width="12" height="6" rx="1"/>
+                <rect x="84" y="64" width="6" height="6" rx="1"/>
+                <rect x="102" y="64" width="6" height="6" rx="1"/>
+                <rect x="126" y="64" width="6" height="6" rx="1"/>
+
+                <rect x="18" y="76" width="6" height="6" rx="1"/>
+                <rect x="36" y="76" width="6" height="6" rx="1"/>
+                <rect x="54" y="76" width="6" height="6" rx="1"/>
+                <rect x="72" y="76" width="6" height="6" rx="1"/>
+                <rect x="90" y="76" width="6" height="6" rx="1"/>
+                <rect x="114" y="76" width="6" height="6" rx="1"/>
+                <rect x="132" y="76" width="6" height="6" rx="1"/>
+
+                <rect x="12" y="88" width="6" height="6" rx="1"/>
+                <rect x="30" y="88" width="6" height="6" rx="1"/>
+                <rect x="48" y="88" width="6" height="6" rx="1"/>
+                <rect x="60" y="88" width="6" height="6" rx="1"/>
+                <rect x="78" y="88" width="6" height="6" rx="1"/>
+                <rect x="96" y="88" width="6" height="6" rx="1"/>
+                <rect x="120" y="88" width="6" height="6" rx="1"/>
+
+                <rect x="52" y="100" width="6" height="6" rx="1"/>
+                <rect x="70" y="100" width="6" height="6" rx="1"/>
+                <rect x="88" y="100" width="6" height="6" rx="1"/>
+                <rect x="106" y="100" width="6" height="6" rx="1"/>
+                <rect x="124" y="100" width="6" height="6" rx="1"/>
+
+                <rect x="52" y="112" width="6" height="6" rx="1"/>
+                <rect x="64" y="112" width="6" height="6" rx="1"/>
+                <rect x="82" y="112" width="6" height="6" rx="1"/>
+                <rect x="100" y="112" width="6" height="6" rx="1"/>
+                <rect x="118" y="112" width="6" height="6" rx="1"/>
+                <rect x="130" y="112" width="6" height="6" rx="1"/>
+
+                <rect x="52" y="124" width="6" height="6" rx="1"/>
+                <rect x="76" y="124" width="6" height="6" rx="1"/>
+                <rect x="94" y="124" width="6" height="6" rx="1"/>
+                <rect x="112" y="124" width="6" height="6" rx="1"/>
+                <rect x="124" y="124" width="6" height="6" rx="1"/>
+
+                <!-- Center Security Dot -->
+                <rect x="63" y="63" width="19" height="19" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+                <circle cx="72.5" cy="72.5" r="4.5" fill="#2563eb"/>
+              </g>
+            </svg>
+          </div>
+          <div class="text-[10px] font-semibold text-slate-500 mt-1.5" id="ticketScanNote">Scan at hospital counter for instant check-in</div>
+        </div>
+
+        <!-- Clean Action Buttons -->
+        <div class="space-y-1.5">
+          <!-- Virtual Video Call Enter Room Button (Shown only for Virtual appointments) -->
+          <button id="btnTicketJoinVideoRoom" onclick="startVideoCallSession()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-2xl text-xs shadow-md transition flex items-center justify-center gap-2" style="display: none;">
+            <i class="fas fa-video animate-pulse"></i>
+            <span>Enter Doctor Video Room Now</span>
+          </button>
+
+          <button onclick="downloadAppointmentPass()" class="w-full py-2.5 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs shadow transition flex items-center justify-center gap-2">
+            <i class="fas fa-download text-xs"></i>
+            <span>Download Queue Pass (PDF)</span>
+          </button>
+          
+          <button onclick="closeQueueTicketModal()" class="w-full py-2 text-slate-500 hover:text-slate-800 font-bold text-xs text-center transition">
+            Done &amp; Return to Home
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 5: IN-CALL REPORT SHARE DRAWER
+       ==================================================================== -->
+  <div id="modalInCallShareReports" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl animate-fade-in border border-slate-100">
+      <div class="flex items-center justify-between mb-3 border-b pb-2.5 border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-share-alt text-blue-600 text-sm"></i>
+          <h3 class="font-bold text-sm text-slate-900">Share Report with Dr. Ramesh</h3>
+        </div>
+        <button onclick="document.getElementById('modalInCallShareReports').classList.remove('active')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+
+      <p class="text-[11px] text-slate-500 mb-3">Select connected ABHA diagnostic record to stream to doctor's clinical screen:</p>
+
+      <div class="space-y-2 text-xs mb-4 max-h-56 overflow-y-auto">
+        <div class="p-2.5 rounded-xl border border-blue-400 bg-blue-50/60 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Blood Glucose & HbA1c Panel (6.8%)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs">🩸</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Blood Glucose &amp; HbA1c Panel</span>
+              <span class="text-[10px] text-slate-500">District Lab Nashik • 3 Days Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+
+        <div class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Digital ECG Rhythm Strip (Normal Sinus)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">📈</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Digital ECG 12-Lead Strip</span>
+              <span class="text-[10px] text-slate-500">Trimbak PHC • 1 Week Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+
+        <div class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-between cursor-pointer" onclick="shareReportWithDoctor('Previous Discharge Summary (Chest Infection)')">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs">📋</div>
+            <div>
+              <span class="font-bold text-slate-900 block text-[11px]">Hospital Discharge Summary</span>
+              <span class="text-[10px] text-slate-500">Sub-District Hospital • 1 Month Ago</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Share</span>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('modalInCallShareReports').classList.remove('active')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 6: IN-CALL LIVE TEXT CHAT
+       ==================================================================== -->
+  <div id="modalInCallChat" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl animate-fade-in border border-slate-100 flex flex-col h-[420px]">
+      <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">DR</div>
+          <div>
+            <h3 class="font-bold text-xs text-slate-900">Dr. Ramesh Patil</h3>
+            <span class="text-[10px] text-emerald-600 font-semibold">Online • Video Call Active</span>
+          </div>
+        </div>
+        <button onclick="document.getElementById('modalInCallChat').classList.remove('active')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Chat Messages Scroll Area -->
+      <div class="flex-1 overflow-y-auto py-3 space-y-2.5 text-xs" id="inCallChatMessages">
+        <div class="flex items-start gap-2">
+          <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center flex-shrink-0">DR</div>
+          <div class="bg-slate-100 p-2.5 rounded-2xl rounded-tl-none text-slate-800 max-w-[80%]">
+            Hello Parth, I am reviewing your blood pressure logs and current medications.
+          </div>
+        </div>
+        <div class="flex items-start gap-2 justify-end">
+          <div class="bg-blue-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[80%]">
+            Yes doctor, I have been feeling mild dizziness in the mornings.
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center flex-shrink-0">DR</div>
+          <div class="bg-slate-100 p-2.5 rounded-2xl rounded-tl-none text-slate-800 max-w-[80%]">
+            Understood. I will adjust the Telmisartan dosage and notify your local ASHA worker to check your morning BP.
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+        <input type="text" id="inputInCallChatMessage" placeholder="Type message to doctor..." class="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500" onkeydown="if(event.key==='Enter') sendInCallMessage()">
+        <button onclick="sendInCallMessage()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
+          <i class="fas fa-paper-plane text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 7: POST-CONSULTATION SUMMARY & e-PRESCRIPTION
+       ==================================================================== -->
+  <div id="modalPostCallSummary" class="app-modal-overlay">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl animate-fade-in border border-emerald-100 text-center">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fas fa-check-circle"></i>
+      </div>
+
+      <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider">Teleconsultation Completed</span>
+      <h3 class="font-extrabold text-base text-slate-900 mt-2">Consultation Summary</h3>
+      <p class="text-xs text-slate-500 mt-0.5">Dr. Ramesh Patil (MD) • District Hospital Nashik</p>
+
+      <!-- Prescription Summary Card -->
+      <div class="my-3.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-left text-xs space-y-2">
+        <div class="flex justify-between items-center border-b pb-1.5 border-slate-200">
+          <span class="text-[11px] font-bold text-slate-700">Digital eRx Token:</span>
+          <span class="font-mono font-bold text-blue-700">#ERX-2026-0891</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+          <span class="text-slate-500">Prescription Status:</span>
+          <span class="font-bold text-emerald-700">Digitally Signed &amp; Synced ✓</span>
+        </div>
+        <div class="flex justify-between items-center text-[11px]">
+          <span class="text-slate-500">Community Continuum:</span>
+          <span class="font-bold text-purple-700">ASHA Task Created (GPS-tagged)</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="downloadDigitalPrescription()" class="w-full py-3 bg-[#003366] hover:bg-[#002244] text-white font-bold rounded-2xl text-xs shadow transition flex items-center justify-center gap-2">
+          <i class="fas fa-file-download"></i>
+          <span>Download Digitally Signed eRx (PDF)</span>
+        </button>
+        <button onclick="closePostCallSummary()" class="w-full py-2.5 text-slate-600 hover:text-slate-900 font-bold text-xs text-center transition">
+          Return to Health Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- End phone-device-frame -->
+
+</div><!-- End patient-app-canvas -->
+
+  <!-- Interactive Logic Controller -->
+  <script src="js/patient-app.js"></script>
+</body>
+</html>

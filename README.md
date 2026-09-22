@@ -202,6 +202,23 @@ npx serve .
 
 ---
 
+## 📁 Complete Repository Architecture & Modules
+
+The repository encompasses the complete end-to-end Arogya Mitra & MCCPHP healthcare ecosystem:
+
+| Directory / Module | Description | Key Components |
+| :--- | :--- | :--- |
+| [`arogya mitra/`](arogya%20mitra/) | **Production Full-Stack Application** | **Backend**: Python 3.11 FastAPI, SQLAlchemy, SQLite/PostgreSQL, ABDM/FHIR R4, CDSS rule engine, JWT RBAC, comprehensive test suite.<br/>**Frontend**: React 18, Vite, TypeScript, TailwindCSS/Custom CSS tokens, offline sync engine, bi-lingual i18n (English/Hindi). |
+| [`mccphp/`](mccphp/) | **MCCPHP Master Platform & Workstation Demos** | Interactive demo suite ([`mccphp/demo/`](mccphp/demo/)), design system specification ([`DESIGN_SYSTEM.md`](mccphp/DESIGN_SYSTEM.md)), and comprehensive architecture blueprints. |
+| [`mccphp docs/`](mccphp%20docs/) | **14 Master Architecture Specifications** | Detailed technical blueprints from 00 Master Executive Summary to 13 Electronic Prescriptions (eRx), FHIR interoperability, and offline sync engines. |
+| [`docs/`](docs/) | **Core Product & System Specifications** | Product Requirements Document (PRD), System Design Document, and Technical Requirements Document (TRD). |
+| [`HMS.md`](HMS.md) & [`HMS-updated.md`](HMS-updated.md) | **Enterprise HMS System Design** | Complete clinical workflow specifications, OPD/IPD flows, and database ER models. |
+| [`arogya_mitra_complete_system_chronology.md`](arogya_mitra_complete_system_chronology.md) | **System Chronology & Audit** | Full timeline of platform architecture, audit compliance, and feature roadmap. |
+| [`runbooks/`](runbooks/) & [`scripts/`](scripts/) | **Deployment & Automation** | Operations runbooks, setup automation, database seeders, and verification scripts. |
+| [`knowledge/`](knowledge/) & [`brain/`](brain/) | **Clinical & Engineering Knowledge Base** | Deep analyses of OpenMRS, Bahmni, architectural patterns, and autonomous agent orchestration configs. |
+
+---
+
 ## 🛡️ Security, Privacy & Standards Compliance
 
 * **DPDP Act 2023 Compliant:** Complete segregation of Personally Identifiable Information (PII) and protected health information (PHI).

@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="mr-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arogya Mitra — Hospital Queue &amp; Triage Station</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Design Tokens & Styles -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/queue.css">
+</head>
+<body>
+
+<!-- Top Global Navigation Header -->
+<header style="background: #0D1B2A; color: #ffffff; border-bottom: 1px solid #334155; padding: 10px 24px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.12); flex-shrink: 0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+        </div>
+        <div>
+          <h1 style="font-size: 15px; font-weight: 800; line-height: 1.2; color: #ffffff; margin: 0;">Hospital Waiting Line &amp; Triage Station</h1>
+          <p style="font-size: 11px; color: #c4b5fd; margin: 0; font-weight: 500;">District Hospital Nashik (DH-04) • Outpatient Department</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick Actions & Links -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button onclick="recallCurrentPatient()" style="background: #1e293b; border: 1px solid #7c3aed; color: #c4b5fd; padding: 5px 12px; border-radius: 9999px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="fas fa-volume-up"></i> Voice Call #A-042
+      </button>
+
+      <a href="index.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #e2e8f0; background: #1e293b; padding: 6px 12px; border-radius: 8px; border: 1px solid #475569; text-decoration: none;">
+        <i class="fas fa-th-large"></i> Home Hub
+      </a>
+    </div>
+  </div>
+</header>
+<div class="queue-canvas-wrapper">
+
+  <!-- Universal Top Toolbar with Separated Screen Mode (Left) and Station Profiles (Right) -->
+  <div class="universal-top-toolbar">
+    <!-- Left Cluster: Screen Display Mode -->
+    <div class="toolbar-cluster">
+      <span class="toolbar-cluster-label"><i class="fas fa-desktop"></i> DISPLAY:</span>
+      <div class="toolbar-pill-group">
+        <button id="btnViewDesktop" class="view-mode-btn active" title="Expand layout for full desktop screen">
+          <i class="fas fa-desktop"></i> Desktop View
+        </button>
+        <button id="btnViewMobile" class="view-mode-btn" title="View in Smartphone Shell">
+          <i class="fas fa-mobile-alt"></i> Mobile Simulator
+        </button>
+        <button id="btnToggleLoginScreen" class="view-mode-btn login-btn-toggle" title="Toggle Staff Login Screen">
+          <i class="fas fa-user-nurse"></i> <span id="lblLoginToggle">Staff Login</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Cluster: 3 Dedicated Station Profiles Switcher -->
+    <div class="toolbar-cluster">
+      <span class="toolbar-cluster-label"><i class="fas fa-hospital-user"></i> SHIFT STATION:</span>
+      <div class="toolbar-pill-group">
+        <a href="dashboard.html" id="btnProfileDoctor" class="view-mode-btn profile-pill-btn" style="text-decoration: none;">
+          🩺 Doctor Station
+        </a>
+        <button id="btnProfileQueue" class="view-mode-btn profile-pill-btn active" onclick="switchProfile('queue-manager')">
+          🎫 Queue &amp; Walk-In Desk
+        </button>
+        <button id="btnProfileAdmin" class="view-mode-btn profile-pill-btn" onclick="switchProfile('hospital-admin')">
+          🏥 Hospital Command
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMARTPHONE DEVICE FRAME / DESKTOP EXPANDED CONTAINER -->
+  <div id="phoneDeviceFrame" class="phone-device-frame desktop-mode">
+
+    <!-- SIMULATED MOBILE STATUS BAR (3:52, VoLTE, 5G, 63% Battery) -->
+    <div class="mobile-status-bar">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span>3:52</span>
+        <i class="far fa-comment-dots" style="font-size: 11px; opacity: 0.8;"></i>
+      </div>
+      <div class="status-bar-icons">
+        <span style="font-size: 9px; font-family: monospace;">48.1 KB/s</span>
+        <span style="font-size: 9px; font-weight: 700; border: 1px solid #cbd5e1; padding: 0 3px; border-radius: 3px;">VoLTE</span>
+        <i class="fas fa-signal" style="font-size: 11px;"></i>
+        <span style="font-size: 10px; font-weight: 700;">5G</span>
+        <span class="status-battery-pill">63</span>
+      </div>
+    </div>
+
+    <!-- SCROLLABLE SCREEN BODY -->
+    <div class="phone-screen-scroll-body">
+
+      <!-- ====================================================================
+           SCREEN 0: STAFF LOGIN SCREEN (screenLogin)
+           ==================================================================== -->
+      <div id="screenLogin" class="portal-login-screen" style="display: none;">
+        <div class="portal-login-card">
+          <div class="portal-brand-badge badge-purple">
+            <i class="fas fa-user-nurse"></i>
+          </div>
+          
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">OPD रांग व रुग्णालय प्रशासन लॉगिन</h2>
+            <p style="font-size: 12px; color: #64748b;">Hospital Queue &amp; Operations Command (DH Nashik)</p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); loginAsNurse();">
+            <div class="login-form-group">
+              <label>STAFF IDENTIFIER / HPR ID</label>
+              <input type="text" class="login-input" value="STAFF-MH-DH-04 (Suresh Shinde / Sister Anjali)" placeholder="e.g. STAFF-MH-DH-04">
+            </div>
+
+            <div class="login-form-group">
+              <label>COUNTER / DESK ASSIGNMENT</label>
+              <input type="text" class="login-input" value="Registration Counter 01 &amp; Central Queue Desk" readonly style="background: #f8fafc;">
+            </div>
+
+            <div class="login-form-group">
+              <label>SECURITY PASSCODE / PIN</label>
+              <input type="password" class="login-input" value="123456" placeholder="Enter PIN">
+            </div>
+
+            <button type="submit" class="btn-login-submit" style="background: #5438dc;">
+              <i class="fas fa-sign-in-alt"></i> ओपन वर्कस्टेशन (Launch Station)
+            </button>
+          </form>
+
+          <button type="button" class="login-quick-demo-btn" onclick="loginAsNurse()">
+            <span>⚡ 1-Click Fast Login (Queue &amp; Front Desk Lead)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           SCREEN 1: MAIN QUEUE & TRIAGE DASHBOARD (screenMainApp)
+           ==================================================================== -->
+      <div id="screenMainApp" style="display: block; width: 100%;">
+
+        <!-- Mobile App Top Header (Visible in Mobile Simulator) -->
+        <div class="app-mobile-top-header">
+          <div class="app-mobile-user-info">
+            <div class="app-mobile-avatar" id="mobileAvatarBadge" style="background: #5438dc;">
+              SS
+            </div>
+            <div>
+              <div class="app-mobile-greeting" id="mobileGreetingText">Suresh Shinde (Queue Lead)</div>
+              <div class="app-mobile-status-subtitle">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                <span id="mobileStatusSub">DH Nashik • Counter 01 Active</span>
+              </div>
+            </div>
+          </div>
+          <div class="app-mobile-header-actions">
+            <button class="mobile-header-action-btn" onclick="recallCurrentPatient()" title="Voice Call Next Patient">
+              📢
+            </button>
+            <button class="mobile-header-action-btn" onclick="switchQueueTab('tab-inperson-booking')" title="Book In-Person Patient">
+              <i class="fas fa-plus" style="font-size: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- FLOATING MAIN APP WINDOW CARD -->
+        <div class="queue-window-card">
+    
+    <!-- SLIM NAVY INTERNAL SIDEBAR -->
+    <aside class="window-internal-sidebar">
+      <div>
+        <div class="window-logo-mark" title="Arogya Mitra • Home Hub" onclick="location.href='index.html'">
+          <img src="assets/arogya-mitra-logo.png" alt="Arogya Mitra Logo" style="width: 24px; height: 24px; object-fit: contain;">
+        </div>
+        
+        <div class="window-nav-icons" id="sidebarNavIcons">
+          <!-- Dynamically populated based on active Profile -->
+        </div>
+      </div>
+
+      <div class="sidebar-user-avatar" id="sidebarUserAvatar" title="Active Staff Lead">
+        SS
+      </div>
+    </aside>
+
+    <!-- WINDOW MAIN CONTENT BODY -->
+    <div class="window-content-body">
+      
+      <!-- TOP BREADCRUMB & ACTION CONTROLS -->
+      <div class="window-top-bar">
+        <div class="window-breadcrumbs">
+          <span>District Hospital Nashik</span>
+          <span class="sep">/</span>
+          <span id="breadcrumbRoleHeader">OPD Registration &amp; Queue Hub</span>
+          <span class="sep">/</span>
+          <span id="breadcrumbSubHeader" style="color: #64748b;">In-Person Appointment Booking &amp; Room Dispatch</span>
+        </div>
+
+        <div class="top-bar-controls">
+          <!-- Room Selector (Queue Manager Profile) -->
+          <div class="room-selector-wrapper" id="roomSelectorWrap">
+            <label>ROOM:</label>
+            <select id="opdRoomSelect" class="opd-room-select" onchange="switchOPDRoom(this.value)">
+              <option value="room-104" selected>Room 104 - Dr. Ramesh Patil (Internal Med)</option>
+              <option value="room-102">Room 102 - Dr. Sneha Shinde (Pediatrics)</option>
+              <option value="room-108">Room 108 - Dr. Anil Kadam (OBGYN &amp; ANC)</option>
+              <option value="triage-bay">Emergency Urgent Care Bay</option>
+              <option value="lab-01">Diagnostics &amp; Blood Lab</option>
+              <option value="pharmacy-02">Government Pharmacy</option>
+            </select>
+          </div>
+
+          <!-- Quick Actions -->
+          <button class="btn-walkin-add" onclick="switchQueueTab('tab-inperson-booking')">
+            <i class="fas fa-plus"></i> In-Person Booking
+          </button>
+
+          <button class="btn-live-call-cta" id="btnCallNextTop" onclick="callNextPatient()">
+            <i class="fas fa-volume-up"></i> Call Next
+          </button>
+        </div>
+      </div>
+
+      <!-- FACILITY LIVE STATS TICKER STRIP -->
+      <div class="facility-ticker-strip">
+        <div class="ticker-item">
+          <span class="ticker-icon">⚡</span>
+          <span class="ticker-label">Active Doctor Rooms:</span>
+          <span class="ticker-val blue" id="tickerActiveRooms">12 / 14</span>
+        </div>
+        <div class="ticker-item">
+          <span class="ticker-icon">👥</span>
+          <span class="ticker-label">Total Waiting:</span>
+          <span class="ticker-val" id="tickerTotalWait">18 Patients</span>
+        </div>
+        <div class="ticker-item">
+          <span class="ticker-icon">⏱️</span>
+          <span class="ticker-label">Avg Wait Time:</span>
+          <span class="ticker-val green" id="tickerAvgWait">14.2 mins</span>
+        </div>
+        <div class="ticker-item">
+          <span class="ticker-icon">🚨</span>
+          <span class="ticker-label">Emergency Beds:</span>
+          <span class="ticker-val red" id="tickerRedCount">5 / 6 Avail</span>
+        </div>
+        <div class="ticker-item">
+          <span class="ticker-icon">💊</span>
+          <span class="ticker-label">Pharmacy Stock:</span>
+          <span class="ticker-val green" id="tickerJanAushadhi">98.4% Normal</span>
+        </div>
+      </div>
+
+      <!-- HORIZONTAL TAB NAVIGATION STRIP -->
+      <nav class="queue-tab-strip" id="queueTabStrip">
+        <!-- Dynamically rendered based on active profile -->
+      </nav>
+
+      <!-- TAB PANELS CONTAINER -->
+      <div class="queue-content-panels">
+        
+        <!-- ====================================================================
+             PROFILE 2 - TAB A: IN-PERSON APPOINTMENT BOOKING & TOKEN GENERATOR
+             ==================================================================== -->
+        <section id="tab-inperson-booking" class="queue-panel active">
+          
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px;">
+            <!-- Left: Fast Walk-in Booking Form -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;">
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0;">🏥 In-Person Walk-In Patient Registration</h3>
+                  <p style="font-size: 11px; color: #64748b; margin: 2px 0 0 0;">Generates instant ABDM digital queue pass &amp; physical print token</p>
+                </div>
+                <span class="form-pill-tag" style="background: #e0f2fe; color: #0369a1; font-weight: 700;">Desk KSK-01</span>
+              </div>
+
+              <form id="inpersonBookingForm" onsubmit="event.preventDefault(); bookInPersonPatient();">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Patient Full Name</label>
+                    <input type="text" id="bookPatientName" class="form-input" placeholder="e.g. Sanjay Shirole" value="Sanjay Shirole" required style="font-size: 12px;">
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Age &amp; Gender</label>
+                    <input type="text" id="bookPatientAgeGender" class="form-input" placeholder="e.g. 48 M" value="48 M" required style="font-size: 12px;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Mobile Number (SMS Token Pass)</label>
+                    <input type="tel" id="bookPatientMobile" class="form-input" placeholder="+91 98XXX XXXXX" value="+91 98221 44091" style="font-size: 12px;">
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">14-Digit ABHA ID (Optional)</label>
+                    <input type="text" id="bookPatientABHA" class="form-input" placeholder="e.g. 91-4421-9980-1209" value="91-4421-9980-1209" style="font-size: 12px; font-family: monospace;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Select OPD Department &amp; Room</label>
+                    <select id="bookDept" class="form-select" onchange="updateBookingDoctor(this.value)" style="font-size: 12px;">
+                      <option value="room-104">General Medicine (Room 104)</option>
+                      <option value="room-102">Pediatrics / Child Health (Room 102)</option>
+                      <option value="room-108">Obstetrics &amp; Maternal ANC (Room 108)</option>
+                      <option value="triage-bay">Emergency Urgent Care Bay</option>
+                      <option value="lab-01">Central Diagnostics &amp; Blood Lab</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Attending Medical Officer</label>
+                    <input type="text" id="bookDoctor" class="form-input" value="Dr. Ramesh Patil (MD)" readonly style="font-size: 12px; background: #f8fafc; font-weight: 600;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 16px;">
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Chief Complaint / Reason for Visit</label>
+                    <input type="text" id="bookComplaint" class="form-input" placeholder="e.g. Fever for 3 days &amp; severe body ache" value="Fever for 3 days &amp; severe body ache" required style="font-size: 12px;">
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Priority / Triage</label>
+                    <select id="bookTriage" class="form-select" style="font-size: 12px;">
+                      <option value="ESI 4 - General" selected>🟢 ESI 4 - General</option>
+                      <option value="ESI 3 - Urgent">🟡 ESI 3 - Urgent</option>
+                      <option value="ESI 2 - Priority">🔴 ESI 2 - Emergency</option>
+                      <option value="ESI 5 - Fast-Track">🔵 ESI 5 - Refill/Lab</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-primary-orange" style="width: 100%; justify-content: center; padding: 10px; font-size: 13px; font-weight: 800;">
+                  🎟️ Book In-Person Appointment &amp; Issue Token Slip
+                </button>
+              </form>
+            </div>
+
+            <!-- Right: Real-time Live Generated Token Slip Preview -->
+            <div style="background: #f8fafc; border: 1px dashed #94a3b8; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                  <span style="font-size: 11px; font-weight: 800; color: #0f172a; text-transform: uppercase;">Live Token Preview</span>
+                  <span class="status-chip active" style="font-size: 10px;">Ready to Print</span>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                  <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">Generated Queue Token</div>
+                  <div id="previewTokenId" style="font-size: 32px; font-weight: 900; color: #2563eb; font-family: monospace; margin: 4px 0;">#A-048</div>
+                  <div id="previewPatientTitle" style="font-size: 13px; font-weight: 800; color: #0f172a;">Sanjay Shirole (48 M)</div>
+                  <div id="previewDeptTitle" style="font-size: 11px; color: #64748b; margin-top: 2px;">General Medicine • Room 104</div>
+
+                  <div style="margin: 12px 0; padding: 8px; background: #eff6ff; border-radius: 8px; font-size: 11px; color: #1e40af;">
+                    📍 Estimated Wait: <strong>~ 12 Mins</strong> • 2 Patients Ahead
+                  </div>
+
+                  <div style="font-size: 10px; color: #94a3b8; font-family: monospace;">ABHA: 91-4421-9980-1209 • DH Nashik OPD</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 8px; margin-top: 14px;">
+                <button class="btn-secondary-white" style="flex: 1; font-size: 11px; padding: 8px;" onclick="window.print()">
+                  <i class="fas fa-print"></i> Print Slip
+                </button>
+                <button class="btn-secondary-white" style="flex: 1; font-size: 11px; padding: 8px;" onclick="showToast('Token SMS sent to patient mobile (+91 98221 44091)')">
+                  <i class="fas fa-sms"></i> Send SMS
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 2 - TAB B: LIVE OPD ROOM QUEUE DISPATCHER & VOICE CALL
+             ==================================================================== -->
+        <section id="tab-live-board" class="queue-panel" style="display: none;">
+          
+          <!-- CURRENTLY CALLING / NOW SERVING HERO BANNER -->
+          <div class="now-serving-banner" id="nowServingBanner">
+            <div class="serving-left">
+              <div class="serving-token-box">
+                <span class="serving-label-mini">NOW SERVING</span>
+                <div class="token-digits-row">
+                  <span class="token-prefix">#</span>
+                  <span class="token-num" id="currentActiveToken">A-042</span>
+                </div>
+              </div>
+
+              <div class="serving-patient-info">
+                <div class="serving-status-row">
+                  <span class="status-dot-pulse"></span>
+                  <span class="status-text-live" id="currentRoomLabel">ROOM 104 • INTERNAL MEDICINE</span>
+                  <span class="consult-timer-tag" id="consultTimer">Consult Elapsed: 07:14 min</span>
+                </div>
+                <h3 id="currentPatientName">Ramesh Pawar (52 M)</h3>
+                <div class="serving-meta">
+                  <span class="uhid-tag">UHID: MH-2026-004291</span>
+                  <span class="triage-pill triage-yellow" id="currentTriagePill">ESI 3 - Urgent</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="serving-actions">
+              <button class="btn-action-primary" onclick="recallCurrentPatient()">
+                <i class="fas fa-volume-up"></i> Voice Announce
+              </button>
+              <div class="serving-actions-row">
+                <button class="btn-action-outline" onclick="completeAndNext()">
+                  <i class="fas fa-check"></i> Complete &amp; Next
+                </button>
+                <button class="btn-action-ghost" onclick="reroutePatient('Diagnostics Lab')">
+                  <i class="fas fa-arrow-right"></i> To Lab
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AUDIO ANNOUNCEMENT TOAST NOTIFIER -->
+          <div id="audioAnnouncementBanner" class="audio-announcement-banner" style="display: none;">
+            <div class="speaker-wave">🔊</div>
+            <div class="announcement-text" id="announcementText">
+              <strong>मराठी:</strong> "कृपया टोकन क्रमांक A-042, रमेश पवार, रूम नंबर 104 मध्ये यावे."<br>
+              <strong>English:</strong> "Token number A-042, Ramesh Pawar, please proceed to Room 104."
+            </div>
+          </div>
+
+          <!-- QUEUE FILTER & SEARCH STRIP -->
+          <div class="queue-filter-bar">
+            <div class="filter-chips-wrap">
+              <button class="filter-chip-btn active" onclick="filterQueueByESI('all', this)">All Waiting (18)</button>
+              <button class="filter-chip-btn" onclick="filterQueueByESI('red', this)">🔴 Emergency (2)</button>
+              <button class="filter-chip-btn" onclick="filterQueueByESI('yellow', this)">🟡 Urgent (4)</button>
+              <button class="filter-chip-btn" onclick="filterQueueByESI('green', this)">🟢 General (7)</button>
+              <button class="filter-chip-btn" onclick="filterQueueByESI('blue', this)">🔵 Refills (5)</button>
+            </div>
+            <div class="search-input-box">
+              <input type="text" id="queueSearchInput" placeholder="Search Token, Name, Health ID..." oninput="searchQueuePatients(this.value)">
+            </div>
+          </div>
+
+          <!-- DRAG & DROP HINT STRIP -->
+          <div class="drag-instruction-strip">
+            <i class="fas fa-arrows-alt" style="color: #2563eb;"></i>
+            <span><strong>Interactive Triage Board:</strong> Drag and drop any patient card between columns to reassign urgency levels in real-time.</span>
+          </div>
+
+          <!-- 4-TIER DIGITAL TRIAGE QUEUE MATRIX -->
+          <div class="queue-grid-columns" id="queueGridColumns">
+            
+            <!-- COLUMN 1: RED EMERGENCY -->
+            <div class="queue-column red-column" data-tier="red" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'red')">
+              <div class="col-header">
+                <div class="col-title-wrap">
+                  <span class="triage-dot dot-red"></span>
+                  <h4>Emergency Critical</h4>
+                </div>
+                <span class="col-count-badge badge-red" id="redCount">2</span>
+              </div>
+              <div class="col-subtitle">Immediate attention (&lt; 5m)</div>
+
+              <div class="queue-card-list" id="redQueueList" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'red')">
+                <div class="queue-patient-card card-red" id="card-A-040" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="red" onclick="previewPatient('MH-2026-008910', 'Sunita Gaikwad', 'A-040', 'ESI-2')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-040</span>
+                    <span class="card-wait-badge wait-high">Wait: 2m</span>
+                  </div>
+                  <div class="card-patient-name">Sunita Gaikwad (34 F)</div>
+                  <div class="card-complaint">High Blood Pressure (154/98) • 8th Month ANC High-Risk</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">OB-GYN BAY</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-040', 'Sunita Gaikwad', 'ESI 2')">Call Now</button>
+                  </div>
+                </div>
+
+                <div class="queue-patient-card card-red" id="card-A-041" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="red" onclick="previewPatient('MH-2026-009941', 'Babanrao Shirole', 'A-041', 'ESI-1')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-041</span>
+                    <span class="card-wait-badge wait-high">Wait: 4m</span>
+                  </div>
+                  <div class="card-patient-name">Babanrao Shirole (68 M)</div>
+                  <div class="card-complaint">Low Oxygen (SpO2 84%) • Breathing Difficulty</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">EMERGENCY BAY 1</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-041', 'Babanrao Shirole', 'ESI 1')">Call Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMN 2: YELLOW URGENT -->
+            <div class="queue-column yellow-column" data-tier="yellow" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'yellow')">
+              <div class="col-header">
+                <div class="col-title-wrap">
+                  <span class="triage-dot dot-yellow"></span>
+                  <h4>Urgent Priority</h4>
+                </div>
+                <span class="col-count-badge badge-yellow" id="yellowCount">4</span>
+              </div>
+              <div class="col-subtitle">Target &lt; 15 mins</div>
+
+              <div class="queue-card-list" id="yellowQueueList" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'yellow')">
+                <div class="queue-patient-card card-yellow active-focus" id="card-A-042" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="yellow" onclick="previewPatient('MH-2026-004291', 'Ramesh Pawar', 'A-042', 'ESI-3')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-042</span>
+                    <span class="card-wait-badge wait-med">Wait: 9m</span>
+                  </div>
+                  <div class="card-patient-name">Ramesh Pawar (52 M)</div>
+                  <div class="card-complaint">Chest discomfort • T2DM Scheduled Review</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">ROOM 104</span>
+                    <span class="in-consult-tag">In Room</span>
+                  </div>
+                </div>
+
+                <div class="queue-patient-card card-yellow" id="card-A-043" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="yellow" onclick="previewPatient('MH-2026-004312', 'Kavita Jadhav', 'A-043', 'ESI-3')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-043</span>
+                    <span class="card-wait-badge wait-med">Wait: 12m</span>
+                  </div>
+                  <div class="card-patient-name">Kavita Jadhav (28 F)</div>
+                  <div class="card-complaint">High Fever (103°F) + Vomiting &amp; Weakness</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">ROOM 104</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-043', 'Kavita Jadhav', 'ESI 3')">Call In</button>
+                  </div>
+                </div>
+
+                <div class="queue-patient-card card-yellow" id="card-A-044" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="yellow" onclick="previewPatient('MH-2026-004333', 'Deepak More', 'A-044', 'ESI-3')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-044</span>
+                    <span class="card-wait-badge wait-med">Wait: 15m</span>
+                  </div>
+                  <div class="card-patient-name">Deepak More (44 M)</div>
+                  <div class="card-complaint">Severe Colic Pain • Post Ultrasound Review</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">ROOM 104</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-044', 'Deepak More', 'ESI 3')">Call In</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMN 3: GREEN GENERAL -->
+            <div class="queue-column green-column" data-tier="green" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'green')">
+              <div class="col-header">
+                <div class="col-title-wrap">
+                  <span class="triage-dot dot-green"></span>
+                  <h4>General Checkup</h4>
+                </div>
+                <span class="col-count-badge badge-green" id="greenCount">7</span>
+              </div>
+              <div class="col-subtitle">Routine OPD visits</div>
+
+              <div class="queue-card-list" id="greenQueueList" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'green')">
+                <div class="queue-patient-card card-green" id="card-A-045" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="green" onclick="previewPatient('MH-2026-004351', 'Vikas Deshmukh', 'A-045', 'ESI-4')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-045</span>
+                    <span class="card-wait-badge wait-low">Wait: 18m</span>
+                  </div>
+                  <div class="card-patient-name">Vikas Deshmukh (36 M)</div>
+                  <div class="card-complaint">Routine Blood Pressure Follow-up</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">ROOM 104</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-045', 'Vikas Deshmukh', 'ESI 4')">Call In</button>
+                  </div>
+                </div>
+
+                <div class="queue-patient-card card-green" id="card-A-046" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="green" onclick="previewPatient('MH-2026-004362', 'Pooja Salve', 'A-046', 'ESI-4')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-046</span>
+                    <span class="card-wait-badge wait-low">Wait: 22m</span>
+                  </div>
+                  <div class="card-patient-name">Pooja Salve (24 F)</div>
+                  <div class="card-complaint">Mild Cough &amp; Upper Respiratory Checkup</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">ROOM 104</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-046', 'Pooja Salve', 'ESI 4')">Call In</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMN 4: BLUE REFILL / LAB -->
+            <div class="queue-column blue-column" data-tier="blue" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'blue')">
+              <div class="col-header">
+                <div class="col-title-wrap">
+                  <span class="triage-dot dot-blue"></span>
+                  <h4>Quick Refill &amp; Lab</h4>
+                </div>
+                <span class="col-count-badge badge-blue" id="blueCount">5</span>
+              </div>
+              <div class="col-subtitle">Pharmacy &amp; Sample collection</div>
+
+              <div class="queue-card-list" id="blueQueueList" ondragover="handleQueueDragOver(event)" ondragleave="handleQueueDragLeave(event)" ondrop="handleQueueDrop(event, 'blue')">
+                <div class="queue-patient-card card-blue" id="card-A-048" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="blue" onclick="previewPatient('MH-2026-004381', 'Mangala Shinde', 'A-048', 'ESI-5')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-048</span>
+                    <span class="card-wait-badge wait-fast">Wait: 5m</span>
+                  </div>
+                  <div class="card-patient-name">Mangala Shinde (58 F)</div>
+                  <div class="card-complaint">Chronic Monthly Generic Drug Refill</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">DISPENSARY 02</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-048', 'Mangala Shinde', 'ESI 5')">Dispense</button>
+                  </div>
+                </div>
+
+                <div class="queue-patient-card card-blue" id="card-A-049" draggable="true" ondragstart="handleQueueDragStart(event)" ondragend="handleQueueDragEnd(event)" data-esi="blue" onclick="previewPatient('MH-2026-004394', 'Sanjay Shinde', 'A-049', 'ESI-5')">
+                  <div class="card-top-row">
+                    <span class="card-token-id">#A-049</span>
+                    <span class="card-wait-badge wait-fast">Wait: 8m</span>
+                  </div>
+                  <div class="card-patient-name">Sanjay Shinde (61 M)</div>
+                  <div class="card-complaint">Hypertension Routine Medication Refill</div>
+                  <div class="card-footer-row">
+                    <span class="card-dept">DISPENSARY 02</span>
+                    <button class="btn-call-inline" onclick="event.stopPropagation(); callSpecificToken('A-049', 'Sanjay Shinde', 'ESI 5')">Dispense</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 2 - TAB C: PATIENT TOKEN SLIP / PRINTABLE PASS
+             ==================================================================== -->
+        <section id="tab-patient-stub" class="queue-panel" style="display: none;">
+          <div class="pass-wrapper-center">
+            <div class="boarding-pass-card" id="printableBoardingPass">
+              <div class="pass-header">
+                <div class="pass-brand">
+                  <div class="pass-brand-icon">🏥</div>
+                  <div>
+                    <h4>GOVERNMENT OF MAHARASHTRA • PUBLIC HEALTH DEPT</h4>
+                    <p>District Hospital Nashik (DH-04) • MCCPHP Digital OPD</p>
+                  </div>
+                </div>
+                <div class="pass-badge">ABDM VERIFIED</div>
+              </div>
+
+              <div class="pass-main-body">
+                <div class="pass-left-details">
+                  <div class="pass-token-display">
+                    <span class="lbl">YOUR QUEUE TOKEN</span>
+                    <h1 class="big-token-text" id="passTokenText">#A-042</h1>
+                  </div>
+
+                  <div class="pass-info-grid">
+                    <div class="p-field">
+                      <span class="lbl">PATIENT NAME</span>
+                      <strong id="passPatientName">Ramesh Pawar (52/M)</strong>
+                    </div>
+                    <div class="p-field">
+                      <span class="lbl">ABHA ID / UHID</span>
+                      <strong id="passUHID">91-4421-9980-1209</strong>
+                    </div>
+                    <div class="p-field">
+                      <span class="lbl">DEPARTMENT</span>
+                      <strong>Internal Medicine (Room 104)</strong>
+                    </div>
+                    <div class="p-field">
+                      <span class="lbl">CLINICIAN</span>
+                      <strong>Dr. Ramesh Patil (MD)</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pass-qr-stub">
+                  <div class="stub-notch-top"></div>
+                  <div class="stub-notch-bottom"></div>
+                  <div class="qr-box">
+                    <i class="fas fa-qrcode" style="font-size: 72px; color: #0d1b2a;"></i>
+                  </div>
+                  <span class="qr-caption">ABDM Scan &amp; Share Pass</span>
+                </div>
+              </div>
+
+              <div class="pass-footer">
+                <span>Issued: 11-Sep-2026 • Counter KSK-01</span>
+                <span>Powered by MCCPHP ABDM Queue Engine</span>
+              </div>
+            </div>
+
+            <div class="pass-action-buttons">
+              <button class="btn-primary-flat" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Slip
+              </button>
+              <button class="btn-secondary-flat" onclick="showToast('Token Pass SMS sent to patient')">
+                <i class="fas fa-sms"></i> SMS Pass
+              </button>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 3 - TAB A: HOSPITAL WAITING LINE & URGENCY PRIORITY CHECK
+             ==================================================================== -->
+        <section id="tab-triage-matrix" class="queue-panel" style="display: none;">
+          <div class="triage-container-grid">
+            
+            <!-- LEFT: RAPID TRIAGE VITAL SIGNS EVALUATOR -->
+            <div class="triage-eval-card">
+              <div class="section-title-bar">
+                <h3>🚦 AI Rapid Triage &amp; Urgency Priority Check</h3>
+                <span class="pill-badge-blue">ABDM Protocol v2.6</span>
+              </div>
+              <p class="section-subtext">Automated priority level assessment across OPD, Emergency Bay, and Intensive Care.</p>
+
+              <!-- Quick Scenario Demo Presets -->
+              <div class="scenario-presets-bar">
+                <div class="preset-title">1-Click Clinical Demo Scenarios:</div>
+                <div class="preset-buttons">
+                  <button type="button" class="preset-btn" onclick="loadTriagePreset('preeclampsia')">🔴 Pre-eclampsia ANC</button>
+                  <button type="button" class="preset-btn" onclick="loadTriagePreset('hypoxia')">🔴 Acute Hypoxia</button>
+                  <button type="button" class="preset-btn" onclick="loadTriagePreset('fever')">🟡 High Fever</button>
+                  <button type="button" class="preset-btn" onclick="loadTriagePreset('routine')">🟢 Routine NCD</button>
+                </div>
+              </div>
+
+              <form id="triageEvalForm" class="triage-form" onsubmit="event.preventDefault(); calculateTriageScore();">
+                <div class="form-row-2">
+                  <div class="form-field">
+                    <label>Patient UHID / ABHA ID</label>
+                    <input type="text" id="triageUHID" class="form-input" value="MH-2026-009124">
+                  </div>
+                  <div class="form-field">
+                    <label>Patient Full Name &amp; Age</label>
+                    <input type="text" id="triageName" class="form-input" value="Lata Thorat, 39 F">
+                  </div>
+                </div>
+
+                <div class="form-row-3">
+                  <div class="form-field">
+                    <label>Heart Rate (BPM)</label>
+                    <input type="number" id="triageHR" class="form-input" value="118" oninput="liveUpdateTriagePreview()">
+                  </div>
+                  <div class="form-field">
+                    <label>SpO2 Saturation (%)</label>
+                    <input type="number" id="triageSpO2" class="form-input" value="91" oninput="liveUpdateTriagePreview()">
+                  </div>
+                  <div class="form-field">
+                    <label>Blood Pressure (mmHg)</label>
+                    <input type="text" id="triageBP" class="form-input" value="158/96" oninput="liveUpdateTriagePreview()">
+                  </div>
+                </div>
+
+                <!-- REAL-TIME CDSS TRIAGE PREDICTIVE SCORE BANNER -->
+                <div class="triage-prediction-box" id="triagePredictionBox">
+                  <div class="prediction-icon">⚠️</div>
+                  <div class="prediction-details">
+                    <div class="pred-title">RECOMMENDED TRIAGE: <strong id="predScoreLabel" style="color: #c2410c;">ESI Level 2 (Emergent Urgent)</strong></div>
+                    <div class="pred-rationale" id="predRationale">
+                      • Blood Pressure &gt; 140/90 in 3rd trimester ANC (Pre-eclampsia Alert)<br>
+                      • SpO2 91% (Hypoxic threshold) + HR 118 bpm
+                    </div>
+                  </div>
+                  <div class="pred-route-badge">Bay: OB-GYN Emergency</div>
+                </div>
+
+                <div class="form-actions-row">
+                  <button type="submit" class="btn-primary-flat">
+                    <i class="fas fa-check"></i> Assign Emergency Priority &amp; Enqueue
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- RIGHT: ESI PROTOCOL CHEAT-SHEET -->
+            <div class="triage-protocol-card">
+              <h4 style="margin-bottom: 10px; font-size: 13px; color: #0d1b2a;">Emergency Severity Index (ESI) State Standards</h4>
+              <div class="esi-tier-legend">
+                <div class="esi-legend-row">
+                  <span class="esi-pill pill-red">ESI 1: Resuscitation</span>
+                  <span class="esi-desc">Immediate life threat (Target &lt; 0m)</span>
+                </div>
+                <div class="esi-legend-row">
+                  <span class="esi-pill pill-orange">ESI 2: Emergent</span>
+                  <span class="esi-desc">High risk, severe pain, pre-eclampsia (Target &lt; 10m)</span>
+                </div>
+                <div class="esi-legend-row">
+                  <span class="esi-pill pill-yellow">ESI 3: Urgent</span>
+                  <span class="esi-desc">Stable requiring multiple resources (Target &lt; 30m)</span>
+                </div>
+                <div class="esi-legend-row">
+                  <span class="esi-pill pill-green">ESI 4: Less Urgent</span>
+                  <span class="esi-desc">Routine doctor review (Target &lt; 60m)</span>
+                </div>
+                <div class="esi-legend-row">
+                  <span class="esi-pill pill-blue">ESI 5: Non-Urgent</span>
+                  <span class="esi-desc">Refills and sample collections (Target &lt; 15m)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 3 - TAB B: DOCTOR & STAFF ON-DUTY ROSTER TRACKER
+             ==================================================================== -->
+        <section id="tab-staff-roster" class="queue-panel" style="display: none;">
+          
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+              <div>
+                <h3 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0;">👩‍⚕️ Hospital Medical Officers &amp; Staff Shift Roster</h3>
+                <p style="font-size: 11px; color: #64748b; margin: 2px 0 0 0;">District Hospital Nashik • Morning Shift (08:00 AM - 04:00 PM)</p>
+              </div>
+              <span class="status-chip active">12 Doctors On Active Duty</span>
+            </div>
+
+            <div class="data-table-container">
+              <table class="mccphp-data-table">
+                <thead>
+                  <tr>
+                    <th>Doctor / Staff Member</th>
+                    <th>Department &amp; Room</th>
+                    <th>Shift Timing</th>
+                    <th>Patients Seen Today</th>
+                    <th>Current Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar-mini" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe;">RP</div>
+                        <div>
+                          <strong>Dr. Ramesh Patil (MD)</strong>
+                          <div style="font-size: 10px; color: #64748b;">HPR: MH-9482 • General Medicine</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><strong>Room 104</strong> (General OPD)</td>
+                    <td>08:00 AM - 04:00 PM</td>
+                    <td><strong style="color: #2563eb;">28 Consults</strong></td>
+                    <td><span class="status-badge status-active">● In Consult</span></td>
+                    <td><button class="invite-action-pill" onclick="showToast('Connecting with Dr. Ramesh Patil (Room 104)...')">Intercom</button></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar-mini" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;">SS</div>
+                        <div>
+                          <strong>Dr. Sneha Shinde (DCH)</strong>
+                          <div style="font-size: 10px; color: #64748b;">HPR: MH-8812 • Pediatrics</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><strong>Room 102</strong> (Child Health)</td>
+                    <td>08:00 AM - 04:00 PM</td>
+                    <td><strong style="color: #059669;">19 Consults</strong></td>
+                    <td><span class="status-badge status-active">● In Consult</span></td>
+                    <td><button class="invite-action-pill" onclick="showToast('Connecting with Dr. Sneha Shinde (Room 102)...')">Intercom</button></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar-mini" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">AK</div>
+                        <div>
+                          <strong>Dr. Anil Kadam (MS)</strong>
+                          <div style="font-size: 10px; color: #64748b;">HPR: MH-7741 • OB-GYN</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><strong>Room 108</strong> (Maternal Care)</td>
+                    <td>08:00 AM - 04:00 PM</td>
+                    <td><strong style="color: #d97706;">22 Consults</strong></td>
+                    <td><span class="status-badge status-active">● In Consult</span></td>
+                    <td><button class="invite-action-pill" onclick="showToast('Connecting with Dr. Anil Kadam (Room 108)...')">Intercom</button></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar-mini" style="background: #fff1f2; color: #be123c; border: 1px solid #fecdd3;">SD</div>
+                        <div>
+                          <strong>Dr. Sandeep Deshmukh</strong>
+                          <div style="font-size: 10px; color: #64748b;">HPR: MH-1102 • Emergency Physician</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><strong>Emergency Bay</strong> (Crash Unit)</td>
+                    <td>24/7 On-Call</td>
+                    <td><strong style="color: #e11d48;">8 Critical Cases</strong></td>
+                    <td><span class="status-chip emergency">● Critical Ready</span></td>
+                    <td><button class="invite-action-pill" style="background: #e11d48;" onclick="showToast('Alerting Emergency Lead Dr. Sandeep Deshmukh...')">Emergency Call</button></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar-mini" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe;">AV</div>
+                        <div>
+                          <strong>Sister Anjali V. (Triage Lead)</strong>
+                          <div style="font-size: 10px; color: #64748b;">Nursing Lead • Staff ID #4402</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><strong>Central Triage Counter</strong></td>
+                    <td>07:00 AM - 03:00 PM</td>
+                    <td><strong>342 Triaged</strong></td>
+                    <td><span class="status-badge status-active">● On Station</span></td>
+                    <td><button class="invite-action-pill" onclick="showToast('Calling Triage Desk...')">Desk Call</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 3 - TAB C: GOVERNMENT GENERIC MEDICINE INVENTORY & LOW-STOCK ALERTS
+             ==================================================================== -->
+        <section id="tab-inventory-alerts" class="queue-panel" style="display: none;">
+          
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px;">
+            <div style="background: #fef2f2; border: 1px solid #fecdd3; border-radius: 14px; padding: 14px;">
+              <div style="font-size: 11px; font-weight: 800; color: #b91c1c; text-transform: uppercase;">⚠️ Critical Low Stock (2 Drugs)</div>
+              <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">Atorvastatin 10mg &amp; Inj. Paracetamol</div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Stock below 3-day buffer threshold.</div>
+              <button class="btn-primary-orange" style="margin-top: 10px; font-size: 11px; padding: 6px 12px; width: 100%; justify-content: center;" onclick="showToast('Emergency Replenishment Order Placed (#ORD-8829)')">
+                ⚡ 1-Click Fast Reorder
+              </button>
+            </div>
+
+            <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 14px; padding: 14px;">
+              <div style="font-size: 11px; font-weight: 800; color: #b45309; text-transform: uppercase;">📦 Next Scheduled Delivery</div>
+              <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">Today, 02:30 PM (Nashik Warehouse)</div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Invoice #MH-JA-2026-991 • 45 Boxes</div>
+              <button class="btn-secondary-white" style="margin-top: 10px; font-size: 11px; padding: 6px 12px; width: 100%;" onclick="showToast('Inbound supply truck tracked: Approaching Dwarka Circle')">
+                🚚 Track Supply Truck
+              </button>
+            </div>
+
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 14px;">
+              <div style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase;">✓ Overall Formulary Health</div>
+              <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 4px;">98.4% Essential Medicines In Stock</div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 2px;">248 / 252 Standard Government Generic Drugs.</div>
+              <button class="btn-secondary-white" style="margin-top: 10px; font-size: 11px; padding: 6px 12px; width: 100%;" onclick="showToast('Inventory audit log exported.')">
+                📋 Export Stock Audit
+              </button>
+            </div>
+          </div>
+
+          <!-- Medicine Stock Table -->
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <h3 style="font-size: 14px; font-weight: 800; color: #0f172a; margin: 0;">Central Pharmacy Drug Stock Registry</h3>
+              <input type="text" placeholder="Filter medicines..." class="form-input" style="max-width: 240px; font-size: 11px; padding: 5px 10px;">
+            </div>
+
+            <table class="mccphp-data-table">
+              <thead>
+                <tr>
+                  <th>Drug Molecule &amp; Strength</th>
+                  <th>Therapeutic Category</th>
+                  <th>DH Central Stock</th>
+                  <th>Dindori PHC</th>
+                  <th>Stock Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Tab. Metformin HCl 500mg</strong></td>
+                  <td>Antidiabetic</td>
+                  <td><strong>1,840 Tabs</strong></td>
+                  <td>450 Tabs</td>
+                  <td><span class="stock-pill-in">Optimal (24 Days)</span></td>
+                  <td><button class="invite-action-pill" onclick="showToast('Stock count verified')">Audit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Tab. Telmisartan 40mg</strong></td>
+                  <td>Antihypertensive</td>
+                  <td><strong>2,100 Tabs</strong></td>
+                  <td>320 Tabs</td>
+                  <td><span class="stock-pill-in">Optimal (30 Days)</span></td>
+                  <td><button class="invite-action-pill" onclick="showToast('Stock count verified')">Audit</button></td>
+                </tr>
+                <tr style="background: #fff1f2;">
+                  <td><strong>Tab. Atorvastatin 10mg</strong></td>
+                  <td>Lipid Lowering</td>
+                  <td><strong style="color: #b91c1c;">40 Tabs Left</strong></td>
+                  <td>10 Tabs</td>
+                  <td><span class="stock-pill-low">⚠️ Low Stock Alert</span></td>
+                  <td><button class="invite-action-pill" style="background: #e11d48;" onclick="showToast('Ordered 2,000 Tabs of Atorvastatin 10mg')">Reorder</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Cap. Amoxicillin 500mg</strong></td>
+                  <td>Antibiotic</td>
+                  <td><strong>1,400 Caps</strong></td>
+                  <td>600 Caps</td>
+                  <td><span class="stock-pill-in">Optimal (18 Days)</span></td>
+                  <td><button class="invite-action-pill" onclick="showToast('Stock count verified')">Audit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+
+        <!-- ====================================================================
+             PROFILE 3 - TAB D: EMERGENCY BAY & CRASH BEDS TRACKER
+             ==================================================================== -->
+        <section id="tab-crash-beds" class="queue-panel" style="display: none;">
+          
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+            <!-- Left: Crash Beds Matrix -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <div>
+                  <h3 style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0;">🏥 Emergency Crash Beds Status</h3>
+                  <p style="font-size: 11px; color: #64748b; margin: 2px 0 0 0;">District Hospital Nashik Emergency Bay • 6 Bed Capacity</p>
+                </div>
+                <span class="status-chip active">5 / 6 Beds Available</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <div style="background: #fff1f2; border: 2px solid #fecdd3; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #b91c1c;">CRASH BED #01</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Occupied</div>
+                  <div style="font-size: 10px; color: #b91c1c; margin-top: 2px;">Babanrao Shirole (SpO2 84%)</div>
+                  <span class="status-chip emergency" style="margin-top: 6px; font-size: 9px;">O2 Support Active</span>
+                </div>
+
+                <div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #1d4ed8;">CRASH BED #02</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Reserved</div>
+                  <div style="font-size: 10px; color: #1d4ed8; margin-top: 2px;">Inbound 108 SOS Patient</div>
+                  <span class="status-chip" style="margin-top: 6px; font-size: 9px; background: #dbeafe; color: #1e40af;">ETA 5 Mins</span>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #15803d;">CRASH BED #03</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Available</div>
+                  <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Cleaned &amp; Sanitized</div>
+                  <span class="status-chip" style="margin-top: 6px; font-size: 9px; background: #dcfce7; color: #15803d;">Ready</span>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #15803d;">CRASH BED #04</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Available</div>
+                  <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Cleaned &amp; Sanitized</div>
+                  <span class="status-chip" style="margin-top: 6px; font-size: 9px; background: #dcfce7; color: #15803d;">Ready</span>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #15803d;">CRASH BED #05</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Available</div>
+                  <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Cleaned &amp; Sanitized</div>
+                  <span class="status-chip" style="margin-top: 6px; font-size: 9px; background: #dcfce7; color: #15803d;">Ready</span>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 800; color: #15803d;">CRASH BED #06</div>
+                  <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 4px;">Available</div>
+                  <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Cleaned &amp; Sanitized</div>
+                  <span class="status-chip" style="margin-top: 6px; font-size: 9px; background: #dcfce7; color: #15803d;">Ready</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Oxygen Bank & 108 Ambulance Status -->
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">💨 Liquid Medical Oxygen (LMO)</div>
+                <div style="font-size: 20px; font-weight: 900; color: #059669;">86% <span style="font-size: 11px; font-weight: 600; color: #64748b;">(4,200 Litres)</span></div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Pressure: 4.2 Bar • Normal Operating Range</div>
+              </div>
+
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">🚑 108 Emergency Ambulance Fleet</div>
+                <div style="font-size: 12px; color: #334155; line-height: 1.6;">
+                  • <strong>MH-15-EG-1108</strong>: En Route Dwarka Circle (ETA 5m)<br>
+                  • <strong>MH-15-EG-1109</strong>: Standby at Base Hospital<br>
+                  • <strong>MH-15-EG-1110</strong>: Returning from Panchavati
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<!-- /#screenMainApp -->
+
+    </div>
+    <!-- /.phone-screen-scroll-body -->
+
+    <!-- Simulated Mobile Bottom Navigation Bar (Active in Mobile Mode) -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-bottom-tab active" data-bottom-tab="tab-live-board" onclick="switchQueueTab('tab-live-board')">
+        <i class="fas fa-list-ol"></i>
+        <span>Queue</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-triage-matrix" onclick="switchQueueTab('tab-triage-matrix')">
+        <i class="fas fa-traffic-light"></i>
+        <span>Triage</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-facility-telemetry" onclick="switchQueueTab('tab-facility-telemetry')">
+        <i class="fas fa-chart-bar"></i>
+        <span>Stats</span>
+      </button>
+      <button class="mobile-bottom-tab" data-bottom-tab="tab-patient-stub" onclick="switchQueueTab('tab-patient-stub')">
+        <i class="fas fa-ticket-alt"></i>
+        <span>Token</span>
+      </button>
+    </nav>
+
+  </div>
+  <!-- /#phoneDeviceFrame -->
+
+</div>
+<!-- /.queue-canvas-wrapper -->
+
+<!-- WALK-IN PATIENT REGISTRATION MODAL -->
+<div id="walkinModal" class="queue-modal-overlay" style="display: none;">
+  <div class="queue-modal-card">
+    <div class="modal-header-row">
+      <h3>🏥 Register Walk-In Patient & Generate Token</h3>
+      <button class="modal-close-btn" onclick="closeWalkinModal()">✕</button>
+    </div>
+    
+    <form id="walkinForm" onsubmit="event.preventDefault(); submitWalkinPatient();">
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Full Patient Name</label>
+          <input type="text" id="walkinName" class="form-input" placeholder="e.g. Anand Gokhale" required>
+        </div>
+        <div class="form-field">
+          <label>Age & Gender</label>
+          <input type="text" id="walkinAgeGender" class="form-input" placeholder="e.g. 45 M" required>
+        </div>
+      </div>
+
+      <div class="form-row-2" style="margin-top: 10px;">
+        <div class="form-field">
+          <label>Mobile Number (For SMS Pass)</label>
+          <input type="tel" id="walkinMobile" class="form-input" placeholder="+91 98XXX XXXXX" value="+91 98221 44091">
+        </div>
+        <div class="form-field">
+          <label>Department / Counter</label>
+          <select id="walkinDept" class="form-select">
+            <option value="Room 104">Internal Medicine (Room 104)</option>
+            <option value="Room 102">Pediatrics (Room 102)</option>
+            <option value="Room 108">Gynecology & ANC (Room 108)</option>
+            <option value="Dispensary 02">Government Pharmacy</option>
+            <option value="Lab Counter 1">Diagnostics Lab Counter</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-field" style="margin-top: 10px;">
+        <label>Chief Complaint / Symptoms</label>
+        <input type="text" id="walkinComplaint" class="form-input" placeholder="e.g. Mild fever and sore throat" required>
+      </div>
+
+      <div class="form-field" style="margin-top: 10px;">
+        <label>Estimated Triage Level</label>
+        <select id="walkinTriage" class="form-select">
+          <option value="ESI 4 - Standard Routine" selected>ESI 4 - Standard Routine</option>
+          <option value="ESI 3 - Urgent">ESI 3 - Urgent</option>
+          <option value="ESI 2 - High Priority">ESI 2 - High Priority</option>
+          <option value="ESI 1 - Resuscitation">ESI 1 - Resuscitation</option>
+          <option value="ESI 5 - Fast-Track">ESI 5 - Fast-Track</option>
+        </select>
+      </div>
+
+      <div class="form-actions-row" style="margin-top: 16px;">
+        <button type="button" class="btn-secondary-flat" onclick="closeWalkinModal()">Cancel</button>
+        <button type="submit" class="btn-primary-flat">Generate Token &amp; Enqueue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/queue.js"></script>
+</body>
+</html>
